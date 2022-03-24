@@ -12,10 +12,9 @@ ul {
     width: 100%;
 }
 
-ul li{
+ul li {
     margin-right: 5%;
 }
-
 
 
 nav a:hover {
@@ -23,22 +22,29 @@ nav a:hover {
     color: white;
 }
 
-a  img {
-        height:40px;
-        width:50px;
-        margin-bottom: 10px;
+a img {
+    height: 40px;
+    width: 50px;
+    margin-bottom: 10px;
 }
+
 a img:hover {
-        height:40px;
-        width:50px;
-        margin-bottom: 10px;
-        -webkit-filter: invert(1);
-        filter: invert(1);
+    height: 40px;
+    width: 50px;
+    margin-bottom: 10px;
+    -webkit-filter: invert(1);
+    filter: invert(1);
 }
-button:hover{
+
+button {
+    margin: 10px;
+    font-size: larger;
+}
+button:hover {
     background: #a79271;
     color: white;
 }
+
 
 body {
     margin-left: 10%;
@@ -54,10 +60,27 @@ main {
     min-height: 950px;
 }
 
+h1 {
+    margin: 3% 0 3% 0;
+}
 
 footer {
     color: white;
     text-align: center;
+}
+
+label {
+    width: 19%;
+}
+
+input{
+    color: black;
+    background-color: rgba(204, 204, 204, 0.2)
+}
+
+.content-div {
+    align-self: center;
+    margin: 0 5% 0 5%;
 }
 
 .inline {
@@ -82,11 +105,13 @@ footer {
     color: black;
     background-color: rgba(204, 204, 204, 0.2)
 }
-.margin-right{
+
+.margin-right {
     margin-right: 5%;
     width: 100%;
 }
-.margin-right-final{
+
+.margin-right-final {
     margin-right: 12%;
 }
 
@@ -95,6 +120,53 @@ hr {
     border-top: 5px solid black
 }
 
+.my_form_control-one-on-line {
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.my_form_control-two-on-line {
+    width: 28%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.date-form-control {
+    width: 10%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
 
 /*form {*/
 /*    text-align: center;*/

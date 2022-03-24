@@ -13,6 +13,7 @@
 
 <body>
 <nav class="navbar">
+    {#    NAVIGATION BAR#}
     <div class='nav-el-style'>
         <ul>
             <li class="inline">
@@ -27,18 +28,35 @@
         </ul>
     </div>
 
-    <div class="right-side  nav-el-style">Welcome, <a href="" class="margin-right">Velislav!</a>
-        <a href="" class="opacity-format margin-right-final">Login</a>
-        <br>
-        <a href="" class="opacity-format margin-right-final">You have a massage!</a>
+    {#    Authentication STUFF#}
+    {% if request.user.is_authenticated %}
+        {% if request.user.profile.full_name %}
+            <div class="right-side  nav-el-style">Welcome,
+            <a href="" class="margin-right">{{ request.user.profile.full_name }}!</a>
+        {% else %}
+            <div class="right-side  nav-el-style">Welcome,
+            <a href="" class="margin-right">{{ request.user.username }}!</a>
+        {% endif %}
+
+    <a href="{% url 'logout_user' %}" class="opacity-format margin-right-final">Logout</a>
+
+    <br>
+    <a href="" class="opacity-format margin-right-final">You have a massage!</a>
+    </div>
+    {% else %}
+        <div class="right-side  nav-el-style">
+        <a href="{% url 'create_user' %}" class="opacity-format margin-right">Register</a>
+        <a href="{% url 'login_user' %}" class="opacity-format margin-right-final">Login</a>
+    {% endif %}
     </div>
 </nav>
+
 <hr>
-
 <main>
-    {% block page_content %}
-
-    {% endblock %}
+    <div class="content-div">
+        {% block page_content %}
+        {% endblock %}
+    </div>
 </main>
 
 <footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
