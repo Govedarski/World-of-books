@@ -1,0 +1,157 @@
+html {
+    background: black;
+}
+
+nav {
+    display: inline-block;
+    background: transparent;
+}
+
+ul {
+    float: left;
+    width: 100%;
+}
+
+ul li{
+    margin-right: 5%;
+}
+
+
+
+nav a:hover {
+    background: #a79271;
+    color: white;
+}
+
+a  img {
+        height:40px;
+        width:50px;
+        margin-bottom: 10px;
+}
+a img:hover {
+        height:40px;
+        width:50px;
+        margin-bottom: 10px;
+        -webkit-filter: invert(1);
+        filter: invert(1);
+}
+button:hover{
+    background: #a79271;
+    color: white;
+}
+
+body {
+    margin-left: 10%;
+    background: url('https://wallpaperaccess.com/full/4868953.jpg') no-repeat top center;
+    background-size: 100% 90%;
+    min-height: 1200px;
+    width: 80%;
+    max-width: 2150px;
+}
+
+main {
+    text-align: center;
+    min-height: 950px;
+}
+
+
+footer {
+    color: white;
+    text-align: center;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.nav-el-style {
+    color: black;
+    font-size: medium;
+    margin: 40px 0 0 5%;
+    display: inline-block;
+    min-width: 46%;
+}
+
+.right-side {
+    text-align: right;
+    position: absolute;
+    right: 0;
+}
+
+.opacity-format {
+    color: black;
+    background-color: rgba(204, 204, 204, 0.2)
+}
+.margin-right{
+    margin-right: 5%;
+    width: 100%;
+}
+.margin-right-final{
+    margin-right: 12%;
+}
+
+hr {
+    margin-top: -20px;
+    border-top: 5px solid black
+}
+
+
+/*form {*/
+/*    text-align: center;*/
+
+/*}*/
+
+/*.form-div {*/
+/*    margin-top: 200px;*/
+/*    margin-left: 35%;*/
+/*    margin-right: 35%;*/
+/*}*/
+
+/*.right {*/
+/*    text-align: right;*/
+/*    margin: 25px;*/
+/*}*/
+
+/*.button-size {*/
+/*    width: 100px;*/
+/*    height: 50px;*/
+/*    font-size: larger;*/
+/*}*/
+
+/*.white {*/
+/*    color: white;*/
+/*    margin-bottom: 10px;*/
+/*}*/
+
+/*.player-format {*/
+/*    float: right;*/
+/*    width: 0;*/
+/*    margin-left: 30px;*/
+/*    vertical-align: bottom;*/
+/*    margin-bottom: 0;*/
+/*}*/
+
+/*.player_stats_form {*/
+/*    float: left;*/
+/*    width: 80px;*/
+/*    color: white;*/
+/*    font-size: x-small;*/
+/*    font-weight: bolder;*/
+/*    display: inline-block;*/
+/*}*/
+
+/*.small_input {*/
+/*    color: white;*/
+/*    text-align: center;*/
+/*    height: 25px;*/
+/*    font-size: x-small;*/
+/*}*/
+
+/*.button {*/
+/*    text-align: center;*/
+/*    float: right;*/
+/*}*/
+
+/*.margin {*/
+/*    margin: 0 10% 0 10%;*/
+/*}*/
