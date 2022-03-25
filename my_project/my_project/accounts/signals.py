@@ -7,23 +7,26 @@ from my_project.accounts.models import Profile, SensitiveInformation
 
 
 @receiver(signals.post_save, sender=get_user_model())
-def create_profile_with_registration(instance, **kwargs):
-    if Profile.objects.filter(user=instance):
+def create_profile_with_registration(instance, created, **kwargs):
+    if not created:
         return None
     profile = Profile(user=instance)
     profile.save()
 
 
 @receiver(signals.post_save, sender=get_user_model())
-def create_contact_form_with_registration(instance, **kwargs):
-    if SensitiveInformation.objects.filter(user=instance):
+def create_contact_form_with_registration(instance, created, **kwargs):
+    if not created:
         return None
     contact_form = SensitiveInformation(user=instance)
     contact_form.save()
 
 
 @receiver(signals.post_save, sender=SocialAccount)
-def fill_profile__with_google_account(instance, **kwargs):
+def fill_profile__with_google_account(instance, created, **kwargs):
+    if not created:
+        return None
+
     social_account = instance
     first_name = social_account.extra_data.get('given_name')
     last_name = social_account.extra_data.get('family_name')

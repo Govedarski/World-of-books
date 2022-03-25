@@ -11,11 +11,10 @@
                 <div class="d-inline p-2 w-50">
                 {% if user.profile.picture_upload %}
                     <img src="{{ user.profile.picture_upload.url }}" class="w-50 rounded d-block" alt="photo">
-
-
-                {% else %}
-                    <img src="{{ user.profile.picture_url }}" class="w-50 rounded d-block" alt="photo">
+                {% elif user.profile.picture_url%}
+                        <img src="{{ user.profile.picture_url }}" class="w-50 rounded d-block" alt="photo">
                 {% endif %}
+
                 <div class="text-left">
 
                 <h5><u>Username:</u> {{ user.username }}</h5>
