@@ -11,7 +11,7 @@ from my_project.accounts.managers import MyUserManager
 from my_project.common.helpers import custom_validators
 
 
-class MyUser(AbstractBaseUser, PermissionsMixin):
+class WorldOfBooksUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_MAX_LENGTH = 32
     USERNAME_VALIDATION_ERROR_MASSAGE = 'This username is already used by another user'
     EMAIL_VALIDATION_ERROR_MASSAGE = 'This email is already used by another user'
@@ -42,9 +42,9 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     objects = MyUserManager()
 
     def clean(self):
-        if MyUser.objects.filter(email=self.username).exists():
+        if WorldOfBooksUser.objects.filter(email=self.username).exists():
             raise ValidationError({'username': self.USERNAME_VALIDATION_ERROR_MASSAGE})
-        if MyUser.objects.filter(username=self.email).exists():
+        if WorldOfBooksUser.objects.filter(username=self.email).exists():
             raise ValidationError({'email': self.EMAIL_VALIDATION_ERROR_MASSAGE})
         super().clean()
 
@@ -74,7 +74,7 @@ class Profile(models.Model):
         blank=True,
         validators=[
             validators.MinLengthValidator(FIRST_NAME_MIN_LENGTH),
-            custom_validators.OnlyLetterValidator,
+            custom_validators.OnlyLetterValidator(),
         ],
     )
 
@@ -84,7 +84,7 @@ class Profile(models.Model):
         blank=True,
         validators=[
             validators.MinLengthValidator(LAST_NAME_MIN_LENGTH),
-            custom_validators.OnlyLetterValidator,
+            custom_validators.OnlyLetterValidator(),
         ],
     )
 
@@ -169,6 +169,6 @@ class SensitiveInformation(models.Model):
         blank=True,
         validators=[
             validators.MinLengthValidator(PHONE_NUMBER_MIN_LENGTH),
-            custom_validators.OnlyNumberValidator
+            custom_validators.OnlyNumberValidator()
         ]
     )

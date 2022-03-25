@@ -111,14 +111,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'accounts.MyUser'
+AUTH_USER_MODEL = 'accounts.WorldOfBooksUser'
 
 AUTHENTICATION_BACKENDS = [
     'my_project.accounts.backend.EmailOrUsernameModelBackend',
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-SITE_ID = 2
+SITE_ID = 3
 
 ACCOUNT_ADAPTER = 'my_project.accounts.adapter.MyAccountAdapter'
 
@@ -156,6 +156,9 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+MEDIA_URL = 'media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

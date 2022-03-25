@@ -1,69 +1,16 @@
-{% extends 'base/base.html' %}
-{% block content %}
+{% extends 'accounts/base.html' %}
+{% load my_tags %}
 
-    <!-- Profile Information -->
-    <div class="container">
-        <div class="row justify-content-center">
-            <h1>Your account information:</h1>
-
-            <div class="d-flex">
-                <div class="d-inline p-2 w-50">
-                    <img src="{{ user.profile.picture_url }}"
-                         class="w-50 rounded mx-auto d-block" alt="{{ profile.description }}">
-                    <div class="text-left">
-                        <h5><u>Username:</u> {{ user.username }}</h5>
-                        <h5><u>Email:</u> {{ user.email }} <a href="">Edit</a></h5>
-                    </div>
-                    <a href=" " class="btn btn-danger">Deactivate</a>
-                    <div class='text-left'>
-                        <h3>Contact form:</h3>
-                        <h5><u>City:</u> {{ user.sensitiveinformation.city }}</h5>
-                        <h5><u>Address:</u> {{ user.sensitiveinformation.address }}</h5>
-                        <h5><u>Phone number:</u> {{ user.sensitiveinformation.phone_number }}</h5>
-                    </div>
-                    <a href="" class="btn btn-primary">Edit</a>
-
-                </div>
+{% block email %}
+    {% email_info %}
+{% endblock email %}
 
 
-                <div class="d-inline p-2 w-50">
-                    <h3>Profile:</h3>
+{% block contact %}
+    {% contacts_info %}
+{% endblock contact %}
 
-                    <div class="d-flex flex-column text-left margin-left-final">
-                        <h5><u>Name:</u> {{ user.profile.full_name }}</h5>
-                        <!-- If Date of Birth -->
-                        <h5><u>Nationality:</u> {{ user.profile.nationality }}</h5>
-                        <h5><u>Birthdate:</u> {{ user.profile.date_of_birth|date:'N, d Y' }}</h5>
-                        <!-- If Gender is Chosen -->
-                        {% if user.profile.gender != 'Do not show' %}
-                            <h5><u>Gender:</u> {{ user.profile.gender }}</h5>
-                        {% endif %}
-                        <h5><u>Description:</u> {{ user.profile.description }}</h5>
 
-                    </div>
-                    <a href="" class="btn btn-primary">Edit</a>
-
-                </div>
-            </div>
-            <!-- End Profile Information -->
-
-            <!-- Pets Information -->
-            <h2 class="text-center">My Books</h2>
-            <div class="container mb-4">
-                <div class="d-flex justify-content-start mb-5">
-                    <!-- Info for First Pet -->
-                    {% for pet in pets %}
-                        <div style="width: 18rem;">
-                            <h5>{{ pet.name }}</h5>
-
-                            <p class="mt-2">Age: {% if pet.date_of_birth %}{{ pet }}{% endif %}</p>
-
-                            {#                        <a href="{% url 'edit_pet_url' pet.pk %}" class="btn btn-primary">Edit</a>#}
-                            {#                        <a href="{% url 'delete_pet_url' pet.pk %}" class="btn btn-danger">Delete</a>#}
-                        </div>
-                    {% endfor %}
-
-                </div>
-            </div>
-
-{% endblock %}
+{% block profile_info %}
+    {% profile_info %}
+{% endblock profile_info %}

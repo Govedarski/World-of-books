@@ -1,0 +1,21 @@
+{% extends 'accounts/base.html' %}
+{% load my_tags %}
+{% block email %}
+    <h5>
+        <form action="" method="POST">
+            {{ form }}
+            {% csrf_token %}
+            <button>save</button>
+        </form>
+    </h5>
+{% endblock email %}
+
+
+{% block contact %}
+    {% contacts_info %}
+{% endblock contact %}
+
+
+{% block profile_info %}
+    {% profile_info %}
+{% endblock profile_info %}

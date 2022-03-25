@@ -28,6 +28,7 @@ a img {
     margin-bottom: 10px;
 }
 
+
 a img:hover {
     height: 40px;
     width: 50px;
@@ -39,18 +40,24 @@ a img:hover {
 button {
     margin: 10px;
     font-size: larger;
+    color: black;
+    background-color: rgba(204, 204, 204, 0.2);
 }
+
 button:hover {
     background: #a79271;
     color: white;
 }
 
-
+.warning{
+    color: red;
+    text-align: left;
+}
 body {
     margin-left: 10%;
     background: url('https://wallpaperaccess.com/full/4868953.jpg') no-repeat top center;
-    background-size: 100% 90%;
-    min-height: 1200px;
+    background-size: 100% 100%;
+    min-height: 100%;
     width: 80%;
     max-width: 2150px;
 }
@@ -73,7 +80,7 @@ label {
     width: 19%;
 }
 
-input{
+input {
     color: black;
     background-color: rgba(204, 204, 204, 0.2)
 }
@@ -81,8 +88,11 @@ input{
 .content-div {
     align-self: center;
     margin: 0 5% 0 5%;
+    text-align: center;
 }
-
+.center{
+    align-self: center;
+}
 .inline {
     display: inline-block;
 }
@@ -123,11 +133,12 @@ hr {
     margin-top: -20px;
     border-top: 5px solid black
 }
-.text-left{
+
+.text-left {
     text-align: left;
 }
-.my_form_control-one-on-line {
-    width: 100%;
+
+.my_form_control {
     padding: .375rem .75rem;
     font-size: 1rem;
     font-weight: 400;
@@ -142,8 +153,19 @@ hr {
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
-.my_form_control-two-on-line {
+.width-28 {
     width: 28%;
+}
+
+.width-75 {
+    width: 60%;
+}
+
+.width-100 {
+    width: 100%;
+}
+
+.my_form_control-two-on-line {
     padding: .375rem .75rem;
     font-size: 1rem;
     font-weight: 400;
