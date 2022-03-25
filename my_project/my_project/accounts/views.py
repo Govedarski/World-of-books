@@ -10,6 +10,8 @@ from django.views.generic import CreateView, DetailView, TemplateView, UpdateVie
 from django.views.generic.base import ContextMixin
 
 from my_project.accounts.forms import CreateUserForm, CreateProfileForm, MyLoginForm, MySetPasswordForm
+from my_project.accounts.models import Profile
+from my_project.common.helpers.mixins import CustomLoginRequiredMixin
 
 
 class RegisterUserView(CreateView):
@@ -32,7 +34,8 @@ class RegisterUserView(CreateView):
         if profile.is_valid():
             redirect_to_success_url = super().form_valid(form)
             profile.save()
-            login(self.request, self.object)  # must addd backend
+            login(self.request, self.object,
+                  backend='my_project.accounts.backend.EmailOrUsernameModelBackend')  # must addd backend
             return redirect_to_success_url
         return self.form_invalid(form)
 
@@ -88,3 +91,16 @@ class MyPasswordChangeView(PasswordChangeView):
     def get_success_url(self):
         next_page = self.request.GET.get('next')
         return next_page if next_page else reverse_lazy('show_home')
+
+
+class AccountDetailsView(CustomLoginRequiredMixin, TemplateView):
+    template_name = 'accounts/account_details.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = get_user_model().objects.filter(pk=self.request.user.pk)
+        if user:
+            user = user[0]
+            context['user'] = user
+
+        return context

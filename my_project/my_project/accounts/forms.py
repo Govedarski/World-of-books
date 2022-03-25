@@ -15,6 +15,7 @@ class ModifyAuthFormMixin:
             field.widget.attrs.update({'class': 'my_form_control-one-on-line opacity-format'})
             field.help_text = None
 
+
 class CreateUserForm(ModifyAuthFormMixin, UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -36,10 +37,9 @@ class CreateProfileForm(forms.ModelForm):
             field.widget.attrs.update({'class': 'my_form_control-two-on-line opacity-format'})
         self.fields['date_of_birth'].widget.attrs.update({'class': 'date-form-control opacity-format'})
         self.fields['description'].widget.attrs.update({'class': 'my_form_control-one-on-line opacity-format'})
-
         self.fields['first_name'].widget.attrs.update({'placeholder': 'Enter first name'})
         self.fields['last_name'].widget.attrs.update({'placeholder': 'Enter last name'})
-        self.fields['city'].widget.attrs.update({'placeholder': 'Enter city you live'})
+        self.fields['nationality'].widget.attrs.update({'placeholder': 'Enter nationality'})
         self.fields['description'].widget.attrs.update({'placeholder': 'Enter description'})
 
     class Meta:
@@ -64,7 +64,6 @@ class MyLoginForm(AuthenticationForm):
 
 class MySetPasswordForm(ModifyAuthFormMixin, SetPasswordForm):
     pass
-
 
 #
 # class EditProfileForm(CreateProfileForm):

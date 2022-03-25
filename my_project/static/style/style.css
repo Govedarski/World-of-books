@@ -115,11 +115,17 @@ input{
     margin-right: 12%;
 }
 
+.margin-left-final {
+    margin-left: 5%;
+}
+
 hr {
     margin-top: -20px;
     border-top: 5px solid black
 }
-
+.text-left{
+    text-align: left;
+}
 .my_form_control-one-on-line {
     width: 100%;
     padding: .375rem .75rem;

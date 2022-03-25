@@ -10,9 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django.urls import reverse_lazy
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -36,8 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     # THIRD PARTY APPS
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 
     # MY APPS
     'my_project.common',
@@ -59,7 +67,7 @@ ROOT_URLCONF = 'my_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'templates', 'allauth')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -107,8 +115,25 @@ AUTH_USER_MODEL = 'accounts.MyUser'
 
 AUTHENTICATION_BACKENDS = [
     'my_project.accounts.backend.EmailOrUsernameModelBackend',
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
+SITE_ID = 2
+
+ACCOUNT_ADAPTER = 'my_project.accounts.adapter.MyAccountAdapter'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+ACCOUNT_SIGNUP_REDIRECT_URL = reverse_lazy('show_home')
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 

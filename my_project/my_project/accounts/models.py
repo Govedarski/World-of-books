@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
@@ -52,8 +54,8 @@ class Profile(models.Model):
     FIRST_NAME_MIN_LENGTH = 2
     LAST_NAME_MAX_LENGTH = 32
     LAST_NAME_MIN_LENGTH = 2
-    CITY_MAX_LENGTH = 32
     UPLOAD_PICTURE_MAX_SIZE_IN_MB = 2
+    NATIONALITY_MAX_LENGTH = 32
 
     class GenderChoices(models.TextChoices):
         MALE = "Male", "Male"
@@ -106,8 +108,8 @@ class Profile(models.Model):
                                   blank=True
                                   )
 
-    city = models.CharField(
-        max_length=CITY_MAX_LENGTH,
+    nationality = models.CharField(
+        max_length= NATIONALITY_MAX_LENGTH,
         null=True,
         blank=True,
     )
@@ -126,10 +128,20 @@ class Profile(models.Model):
     def full_name(self):
         first_name = f'{self.first_name} ' if self.first_name else ''
         last_name = self.last_name if self.last_name else ''
-        return first_name+last_name
+        return first_name + last_name
+
+    @property
+    def age(self):
+        if not self.date_of_birth:
+            return ""
+        today = date.today()
+        age = today.year - self.date_of_birth.year - (
+                    (today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
+        return age
 
 
 class SensitiveInformation(models.Model):
+    CITY_MAX_LENGTH = 32
     ADDRESS_MAX_LENGTH = 64
     PHONE_NUMBER_MIN_LENGTH = 9
     PHONE_NUMBER_MAX_LENGTH = 9
@@ -139,12 +151,22 @@ class SensitiveInformation(models.Model):
         on_delete=models.CASCADE,
         primary_key=True)
 
+    city = models.CharField(
+        max_length=CITY_MAX_LENGTH,
+        null=True,
+        blank=True,
+    )
+
     address = models.CharField(
-        max_length=ADDRESS_MAX_LENGTH
+        max_length=ADDRESS_MAX_LENGTH,
+        null=True,
+        blank=True,
     )
 
     phone_number = models.CharField(
         max_length=PHONE_NUMBER_MAX_LENGTH,
+        null=True,
+        blank=True,
         validators=[
             validators.MinLengthValidator(PHONE_NUMBER_MIN_LENGTH),
             custom_validators.OnlyNumberValidator
