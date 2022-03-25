@@ -59,6 +59,8 @@ class MyLoginForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'my_form_control-one-on-line opacity-format'})
+        self.fields["username"].label = 'Username or email'
+
 
 class MySetPasswordForm(ModifyAuthFormMixin, SetPasswordForm):
     pass
