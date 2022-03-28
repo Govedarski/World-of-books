@@ -11,8 +11,8 @@
                 <div class="d-inline p-2 w-50">
                 {% if user.profile.picture_upload %}
                     <img src="{{ user.profile.picture_upload.url }}" class="w-50 rounded d-block" alt="photo">
-                {% elif user.profile.picture_url%}
-                        <img src="{{ user.profile.picture_url }}" class="w-50 rounded d-block" alt="photo">
+                {% elif user.profile.picture_url %}
+                    <img src="{{ user.profile.picture_url }}" class="w-50 rounded d-block" alt="photo">
                 {% endif %}
 
                 <div class="text-left">
@@ -20,12 +20,13 @@
                 <h5><u>Username:</u> {{ user.username }}</h5>
                 {% block email %}
                 {% endblock email %}
+            {% else %}
+                <h1>{{ user }}'s account information:</h1>
             {% endif %}
 
             </div>
 
             {% if request.user == user %}
-
                 {% if request.user.has_usable_password %}
                     <a href="{% url 'change_password' %} " class="btn btn-primary">Change password</a>
                 {% endif %}
@@ -44,31 +45,12 @@
 
             <div class="d-inline p-2 w-50">
                 <h3>Profile:</h3>
+                <a href="">
+                    <h5 class="text-left margin-left-final"><u>Books: {{ user.book_set.all|length }}</u></h5>
+                </a>
                 {% block profile_info %}
                 {% endblock profile_info %}
             </div>
-            </div>
-        </div>
-        {% if request.user == user %}
-            <h2 class="text-center">My Books</h2>
-
-        {% else %}
-            <h2 class="text-center">{{ user.username }}'s Books</h2>
-        {% endif %}
-        <div class="container mb-4">
-            <div class="d-flex justify-content-start mb-5">
-
-                <!-- Info for First Pet -->
-                {% for pet in pets %}
-                    <div style="width: 18rem;">
-                        <h5>{{ pet.name }}</h5>
-                        <p class="mt-2">Age: {% if pet.date_of_birth %}{{ pet }}{% endif %}</p>
-
-                        {#                        <a href="{% url 'edit_pet_url' pet.pk %}" class="btn btn-primary">Edit</a>#}
-                        {#                        <a href="{% url 'delete_pet_url' pet.pk %}" class="btn btn-danger">Delete</a>#}
-                    </div>
-                {% endfor %}
-
             </div>
         </div>
     </div>

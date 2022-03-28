@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+{% load library_tags %}
+{% block content %}
+    <h1>All books:</h1>
+    {% if request.GET %}
+    {% endif %}
+    <form action="{% url 'book_list' %}">
+        {{ form }}
+        <input type="hidden" name="ord" value="{{ ord }}">
+        <input type="hidden" name="ord_by" value="{{ ord_by }}">
+        {% csrf_token %}
+        <button>Search</button>
+    </form>
+    {% book_list %}
+{% endblock content %}

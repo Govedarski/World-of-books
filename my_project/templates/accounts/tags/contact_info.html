@@ -1,6 +1,6 @@
     <h5><u>City:</u> {{ user.sensitiveinformation.city }}</h5>
-    <h5><u>Address:</u> {{ user.sensitiveinformation.contacts.address }}</h5>
-    <h5><u>Phone number:</u> +359/{{ user.sensitiveinformation.contacts.phone_number }}</h5>
+    <h5><u>Address:</u> {{ user.sensitiveinformation.address }}</h5>
+    <h5><u>Phone number:</u> +359/{{ user.sensitiveinformation.phone_number }}</h5>
     <div class='content-div'>
 
         <a href="{% url 'edit_contacts' %}" class="btn btn-primary">Edit</a>

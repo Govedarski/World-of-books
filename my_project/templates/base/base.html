@@ -22,8 +22,9 @@
                          alt="Home">
                 </a>
             </li>
-            <li class="inline"><a href="" class="nav opacity-format margin-right">Library</a></li>
-            <li class="inline"><a href="" class="nav opacity-format margin-right">Books</a></li>
+            <li class="inline"><a href="{% url 'book_list' %}" class="nav opacity-format margin-right">Library</a></li>
+            <li class="inline"><a href="{% url 'show_books_dashboard' %}"
+                                  class="nav opacity-format margin-right">Books</a></li>
             <li class="inline"><a href="" class="nav opacity-format margin-right">Reviews</a></li>
         </ul>
     </div>
@@ -32,16 +33,24 @@
     {% if request.user.is_authenticated %}
         {% if request.user.profile.full_name %}
             <div class="right-side  nav-el-style">Welcome,
-            <a  href="{% url 'show_my_account_details' %}" class="opacity-format margin-right">{{ request.user.profile.full_name }}!</a>
+            <a href="{% url 'show_my_account_details' %}"
+               class="opacity-format margin-right">{{ request.user.profile.full_name }}!</a>
         {% else %}
             <div class="right-side  nav-el-style">Welcome,
-            <a href="{% url 'show_my_account_details' %}" class="opacity-format margin-right">{{ request.user.username }}!</a>
+            <a href="{% url 'show_my_account_details' %}"
+               class="opacity-format margin-right">{{ request.user.username }}!</a>
         {% endif %}
 
     <a href="{% url 'logout_user' %}" class="opacity-format margin-right-final">Logout</a>
 
     <br>
-    <a href="" class="opacity-format margin-right-final">You have a massage!</a>
+    {% if not hide_notifications %}
+        <a href="{% url 'show_notifications' %}" class="opacity-format margin-right-final">
+            {% if request.user.receiver_messages.all %}
+                Notifications
+            {% endif %}
+        </a>
+    {% endif %}
     </div>
     {% else %}
         <div class="right-side  nav-el-style">

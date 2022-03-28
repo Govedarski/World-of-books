@@ -1,0 +1,57 @@
+<table>
+    <tr>
+
+        <td>
+            <a href="{% url 'book_list' %}?ord=
+{% if request.GET.ord == '-' %}
+{% else %}
+-
+{% endif %}&ord_by=title&search={{ search }}&search_by={{ search_by }}">title</a>
+        </td>
+
+        <td>
+            <a href="{% url 'book_list' %}?ord=
+{% if request.GET.ord == '-' %}
+{% else %}
+-
+{% endif %}&ord_by=author&search={{ search }}&search_by={{ search_by }}">author</a>
+        </td>
+
+        <td>
+            <a href="{% url 'book_list' %}?ord=
+{% if request.GET.ord == '-' %}
+{% else %}
+-
+{% endif %}&ord_by=category&search={{ search }}&search_by={{ search_by }}">Category</a>
+        </td>
+
+        <td>
+            <a href="{% url 'book_list' %}?ord=
+{% if request.GET.ord == '-' %}
+{% else %}
+-
+{% endif %}&ord_by=owner&search={{ search }}&search_by={{ search_by }}">owner</a>
+        </td>
+
+        <td>
+            <a href="{% url 'book_list' %}?ord=
+{% if request.GET.ord == '-' %}
+{% else %}
+-
+{% endif %}&ord_by=likes&search={{ search }}&search_by={{ search_by }}">likes</a>
+        </td>
+    </tr>
+
+    {% for book in books %}
+        <tr>
+            <td>
+                <a href="{% url 'book_details' book.pk %}">{{ book.title }}</a>
+            </td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.category }}</td>
+            <td>{{ book.owner }}</td>
+            <td>{{ book.likes }}</td>
+        </tr>
+
+    {% endfor %}
+</table>

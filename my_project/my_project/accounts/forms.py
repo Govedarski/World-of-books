@@ -7,29 +7,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, Pass
     PasswordChangeForm
 
 from my_project.accounts.models import Profile, SensitiveInformation
-
-
-class RemoveHelpTextMixin:
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.help_text = None
-
-
-class ModifyFormTwoOnLineMixin:
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs.update({'class': 'my_form_control-two-on-line opacity-format'})
-
-
-class AddCCSMixin:
-    def _add_ccs(self, *args):
-        for field in self.fields.values():
-            for klass in args:
-                if 'class' not in field.widget.attrs:
-                    field.widget.attrs['class'] = ''
-                field.widget.attrs['class'] += ' ' + klass
+from my_project.common.helpers.mixins import AddCCSMixin, RemoveHelpTextMixin
 
 
 class CreateUserForm(AddCCSMixin, RemoveHelpTextMixin, UserCreationForm):

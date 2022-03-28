@@ -1,0 +1,11 @@
+{% load static %}
+<h3>{{ book.title }}</h3>
+<p>Author: {{ book.author }}</p>
+    <p>{% if book.category %}Category: {{ book.category }}{% endif %}&nbsp</p>
+
+{% if book.image %}
+    <img src="{{ book.image.url }}" class="w-50 rounded mx-auto d-block" alt="photo">
+{% else %}
+
+<img src="{% static 'images/book-avatar.png' %}" class="w-50 rounded mx-auto d-block" alt="photo">
+{% endif %}

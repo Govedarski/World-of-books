@@ -11,7 +11,7 @@ from django.views.generic.base import ContextMixin
 
 from my_project.accounts.forms import CreateUserForm, ProfileForm, MyLoginForm, MySetPasswordForm, EditEmailForm, \
     MyPasswordChangeForm, EditContactForm
-from my_project.accounts.models import Profile, SensitiveInformation
+from my_project.accounts.models import Profile, SensitiveInformation, WorldOfBooksUser
 from my_project.common.helpers.mixins import CustomLoginRequiredMixin
 
 
@@ -29,7 +29,6 @@ class RegisterUserView(CreateView):
 
     def form_valid(self, form):
         user = form.save(commit=False)
-        p=1
         profile = ProfileForm(self.request.POST, self.request.FILES)
         profile.instance.user = user
 

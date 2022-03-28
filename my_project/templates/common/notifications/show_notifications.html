@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+{% load common_tags %}
+{% block content %}
+    <div class="text-left">
+        <ul>
+            {% for notification in notifications %}
+                <li>
+                    {% if not notification.is_read %}
+
+                        <strong>
+                            <a href="{% url 'notification_details' notification.pk %}">{{ notification }}</a> (unread)
+                        </strong>
+                    {% else %}
+                        <a href="{% url 'notification_details' notification.pk %}">{{ notification }}</a>
+                    {% endif %}
+                {% if not notification.is_answered %}
+                <strong>(Unanswered)</strong>
+                {% endif %}
+                </li>
+
+            {% endfor %}
+        </ul>
+    </div>
+    {% pagination %}
+{% endblock content %}

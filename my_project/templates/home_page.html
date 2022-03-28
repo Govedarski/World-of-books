@@ -14,8 +14,9 @@
         <div>Kniga 2</div>
         <div>Kniga 3</div>
     </div>
-    <form action="">
-        <input class="opacity-format" type="text">
+    <form action="{% url 'book_list' %}">
+        <input class="opacity-format" type="text" name="search">
+        <input value="title" type="hidden" name="search_by">
         <button class="opacity-format">Search</button>
     </form>
     <div>

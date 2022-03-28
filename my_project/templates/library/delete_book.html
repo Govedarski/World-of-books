@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+{% block content %}
+
+
+    <div class='content-div'>
+        <form action="" method="post">
+            <h1>I send this book to:</h1>
+            {% csrf_token %}
+            {{ form }}
+            <button class="btn btn-danger margin-left-final">Remove</button>
+        </form>
+    </div>
+
+
+{% endblock content %}

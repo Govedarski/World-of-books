@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     # MY APPS
     'my_project.common',
     'my_project.accounts',
+    'my_project.library',
 ]
 
 MIDDLEWARE = [
@@ -118,7 +119,7 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-SITE_ID = 3
+SITE_ID = 4
 
 ACCOUNT_ADAPTER = 'my_project.accounts.adapter.MyAccountAdapter'
 
