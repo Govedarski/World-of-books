@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3&ul(x3&ze^(!f3ze3+f@=-hf7j(z1=_2a8d&&*-)avtudy5d7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -197,20 +197,3 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'theworldofbooks.project@gmail.com'
 EMAIL_HOST_PASSWORD = 'lfmnleybhzboeutj'
 
-
-import logging
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
-        },
-    },
-}
