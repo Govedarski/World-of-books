@@ -6,6 +6,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.core import validators
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models.functions import Lower
 
 from my_project.accounts.managers import MyUserManager
 from my_project.common.helpers import custom_validators
@@ -47,6 +48,9 @@ class WorldOfBooksUser(AbstractBaseUser, PermissionsMixin):
         if WorldOfBooksUser.objects.filter(username=self.email).exists():
             raise ValidationError({'email': self.EMAIL_VALIDATION_ERROR_MASSAGE})
         super().clean()
+
+    class Meta:
+        ordering = [Lower('username')]
 
 
 class Profile(models.Model):
@@ -109,7 +113,7 @@ class Profile(models.Model):
                                   )
 
     nationality = models.CharField(
-        max_length= NATIONALITY_MAX_LENGTH,
+        max_length=NATIONALITY_MAX_LENGTH,
         null=True,
         blank=True,
     )
@@ -136,7 +140,7 @@ class Profile(models.Model):
             return ""
         today = date.today()
         age = today.year - self.date_of_birth.year - (
-                    (today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
+                (today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
         return age
 
 

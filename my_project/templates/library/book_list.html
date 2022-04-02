@@ -1,4 +1,5 @@
 {% extends 'base/base.html' %}
+{% load common_tags %}
 {% load library_tags %}
 {% block content %}
     <h1>All books:</h1>
@@ -12,4 +13,5 @@
         <button>Search</button>
     </form>
     {% book_list %}
+    {% pagination%}
 {% endblock content %}

@@ -1,18 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.urls import reverse_lazy
 
 from my_project.library.models import Book
+from my_project.offer.models import Offer
 
 
 class Notification(models.Model):
-    class TypeChoices(models.TextChoices):
-        CHANGE_OWNER = 'Change owner'
-        LIKED = 'Liked'
-        REVIEWED = 'Reviewed'
-        WANTED = 'Wanted'
-        OFFERED = 'Offered'
-        DEAL = 'Deal'
-
     sender = models.ForeignKey(
         get_user_model(),
         on_delete=models.DO_NOTHING,
@@ -27,12 +21,18 @@ class Notification(models.Model):
     book = models.ForeignKey(
         Book,
         on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
     )
 
-    type = models.CharField(
-        max_length=max(len(x.value) for x in TypeChoices),
-        choices=TypeChoices.choices,
+    offer = models.ForeignKey(
+        Offer,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
     )
+
+    massage = models.TextField()
 
     is_read = models.BooleanField(
         default=False
@@ -50,15 +50,7 @@ class Notification(models.Model):
         ordering = ['-received_date']
 
     def __str__(self):
-        if self.type == self.TypeChoices.CHANGE_OWNER:
-            return f'{self.sender} sent {self.book} to you?'
-        elif self.type == self.TypeChoices.LIKED:
-            pass
-        elif self.type == self.TypeChoices.REVIEWED:
-            pass
-        elif self.type == self.TypeChoices.WANTED:
-            pass
-        elif self.type == self.TypeChoices.OFFERED:
-            pass
-        elif self.type == self.TypeChoices.DEAL:
-            pass
+        return self.massage
+
+    def get_absolute_url(self):
+        return reverse_lazy('notification_details', kwargs={"pk": self.pk})

@@ -1,0 +1,40 @@
+{% extends 'base/base.html' %}
+{% block content %}
+    <div class="row justify-content-center">
+        <h1>
+            You cannot do this because offer {{ offer.pk }} is not active anymore!
+        </h1>
+        <div class="text-left margin-left-final">
+            {% if s_missing_books %}
+
+                <h3>This books are not more part of {{ offer.sender }}'s collection:</h3>
+                <ul>
+                    {% for book in s_missing_books %}
+                        <li><a href="{% url 'book_details' book.pk %}">{{ book }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+
+
+
+            {% if r_missing_books %}
+
+                <h3>This books are not more part of {{ offer.recipient }}'s collection:</h3>
+                <ul>
+
+                    {% for book in r_missing_books %}
+                        <li><a href="{% url 'book_details' book.pk %}">{{ book }}</a></li>
+                    {% endfor %}
+                </ul>
+
+            {% endif %}
+        </div>
+
+
+    </div>
+
+    </div>
+    <input type="button" onclick="location.href='{% url 'show_notifications' %}';"
+           value="Back to notifications"/>
+{% endblock content %}

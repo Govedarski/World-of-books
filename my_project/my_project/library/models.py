@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 # Create your models here.
+from django.db.models.functions import Lower
+
 from my_project.common.helpers import custom_validators
 
 
@@ -50,21 +52,53 @@ class Book(models.Model):
         ],
     )
 
-    available = models.BooleanField(
-        default=True,
-    )
-
     owner = models.ForeignKey(
         to=get_user_model(),
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
+        blank=True,
+        related_name='own_books',
+    )
+
+    ex_owners = models.ManyToManyField(
+        to=get_user_model(),
+        related_name='ex_books',
+        blank=True,
+
+    )
+
+    previous_owner = models.ForeignKey(
+        to=get_user_model(),
+        related_name='books_to_send',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+
+    next_owner = models.ForeignKey(
+        to=get_user_model(),
+        related_name='book_on_a_way',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+
+    likes = models.ManyToManyField(
+        to=get_user_model(),
+        related_name='liked_books',
         blank=True,
     )
 
+    is_available = models.BooleanField(
+        default=True,
+    )
+
+    @property
+    def likes_count(self):
+        return len(self.likes.all())
+
     def __str__(self):
-        return f'"{self.title}" by {self.author}'
-
-
+        return f'"{self.title}" by {self.author} OWNER:{self.owner}'
 
     class Meta:
-        ordering = ['title']
+        ordering = [Lower('title')]

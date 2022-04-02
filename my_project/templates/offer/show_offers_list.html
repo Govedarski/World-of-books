@@ -1,0 +1,27 @@
+{% extends 'base/base.html' %}
+{% load common_tags %}
+{% block content %}
+    <div class="text-left">
+        <ul>
+            {% for offer in offers %}
+                <li>
+                    {% if offer.is_active %}
+                        <strong>
+                    {% endif %}
+                    {% if offer.sender == request.user %}
+                        <a href="{% url 'show_offer_details' offer.pk %}">
+                            Your offer {{ offer.pk }} to {{ offer.recipient }}</a>
+
+                    {% else %}
+                        <a href="{% url 'show_offer_details' offer.pk %}">
+                            {{ offer.sender }}'s offer {{ offer.pk }} to you</a>
+
+                    {% endif %}
+                    </strong>
+                </li>
+
+            {% endfor %}
+        </ul>
+    </div>
+    {% pagination %}
+{% endblock content %}

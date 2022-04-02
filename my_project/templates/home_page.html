@@ -17,6 +17,7 @@
     <form action="{% url 'book_list' %}">
         <input class="opacity-format" type="text" name="search">
         <input value="title" type="hidden" name="search_by">
+        <input value="-" type="hidden" name="ord">
         <button class="opacity-format">Search</button>
     </form>
     <div>

@@ -22,7 +22,9 @@ nav a:hover {
     background: #a79271;
     color: white;
 }
-
+a{
+    color: black;
+}
 a img {
     height: 40px;
     width: 50px;
@@ -89,26 +91,29 @@ hr {
 }
 
 table, td, th {
-  border: 1px solid;
+    border: 1px solid;
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 
 .align-end {
-   position:absolute;
-                bottom:0;
-                right:0;
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
+
 
 .content-div {
     align-self: center;
     margin: 0 5% 0 5%;
     text-align: center;
 }
+
+
 
 .center {
     align-self: center;
@@ -132,6 +137,12 @@ table {
     right: 0;
 }
 
+.right-side-top {
+    position: absolute;
+    top: 30%;
+    right: 5%;
+}
+
 .opacity-format {
     color: black;
     background-color: rgba(204, 204, 204, 0.2)
@@ -153,7 +164,9 @@ table {
 .text-left {
     text-align: left;
 }
-
+.text-center{
+    text-align: center;
+}
 .my_form_control {
     text-align: center;
     padding: .375rem .75rem;
@@ -174,12 +187,26 @@ table {
     width: 28%;
 }
 
-.width-75 {
-    width: 60%;
+.width-60 {
+    width: 60%!important;
 }
 
 .width-100 {
     width: 100%;
+}
+
+.btn-link {
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+    color: black;
+    padding: 0;
+    text-decoration: underline;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: bold;
+
 }
 
 .warning {
@@ -196,12 +223,14 @@ table {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
+    min-height: 100%;
 }
+
 
 .myBooks {
     border-radius: 10px;
     text-align: center;
-    margin: 2rem;
+    margin: 1rem;
     position: relative;
     width: 25%;
     min-height: 40%;
@@ -209,6 +238,7 @@ table {
     box-shadow: -8px -2px 28px -8px #000000;
     align-items: center;
 }
+
 
 .myBooks:hover {
     box-shadow: 30px 30px 100px 10px #000000;
@@ -218,24 +248,20 @@ table {
     width: 60%;
     align-items: center;
 }
-
+img {
+    max-height: 10rem;
+}
 .book-information > .button {
     width: 30%;
     text-align: center;
 }
-
-.btn-link {
-    border: none;
-    outline: none;
-    background: none;
-    cursor: pointer;
-    color: black;
-    padding: 0;
-    text-decoration: underline;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: bold;
+.height-90{
+    justify-content: space-around;
+    flex-wrap: wrap;
+    min-height: 100%;
+    width: 100%;
 }
+
 
 /*form {*/
 /*    text-align: center;*/
@@ -292,7 +318,6 @@ table {
 /*    text-align: center;*/
 /*    float: right;*/
 /*}*/
-
 /*.margin {*/
 /*    margin: 0 10% 0 10%;*/
 /*}*/

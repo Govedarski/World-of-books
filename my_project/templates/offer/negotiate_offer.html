@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+{% load library_tags %}
+{% load static %}
+{% block content %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="row justify-content-center">
+            <h1>Negotiate with
+                <a href="{% url 'show_account_details' offer.sender.pk %}">{{ offer.sender }}</a>
+
+            </h1>
+            <div class="d-flex">
+                <div class="d-inline p-2 w-50">
+                    <h3>You offer:</h3>
+                    {{ form.sender_books }}
+                </div>
+
+                <div class="d-inline p-2 w-50 margin-left-final">
+                    <h3> You want: </h3>
+
+                        {{ form.recipient_books }}
+                </div>
+
+            </div>
+            <div class="text-center">
+                {% for error in form.errors.values %}
+                    {{ error }}
+                {% endfor %}
+
+                <button>Send</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base/base.html' %}
+{% load library_tags %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <h1>{{ book.title }}</h1>
+            <div class="d-flex">
+                <div class="d-inline p-2 w-50">
+                    {% if book.image %}
+                        <img src="{{ book.image.url }}" class="w-50 rounded d-block" alt="photo">
+                    {% else %}
+                        <img src="{% static 'images/book-avatar.png' %}" class="w-50 rounded d-block"
+                             alt="photo">
+                    {% endif %}
+                    <div class="text-left">
+                        <h5><u>Author:</u> {{ book.author }}</h5>
+
+                    </div>
+                </div>
+
+                <div class="d-inline p-2 w-50 text-left margin-left-final">
+
+                    <h5><u>Likes: {{ book.likes_count }} times</u></h5>
+                    <h3>You have to receive this book from <a
+                            href="{% url 'show_account_details' book.next_owner.pk %}">
+                        {{ book.next_owner }}</a></h3>
+                    <h3>{{ book.next_owner }}'s phone number:
+                        +359/{{ book.next_owner.sensitiveinformation.phone_number }}</h3>
+
+                </div>
+            </div>
+        </div>
+        <h2>Do you receive it?</h2>
+        <input type="button" onclick="location.href='{% url 'receive_book' book.pk %}';"
+               value="Confirm"/>
+    </div>
+{% endblock %}

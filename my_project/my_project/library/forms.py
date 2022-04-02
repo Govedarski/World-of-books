@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 from my_project.common.helpers.mixins import AddCCSMixin
-from my_project.library.models import Book, Category
+from my_project.library.models import Book
 
 
 class CreateBookForm(AddCCSMixin, forms.ModelForm):
@@ -13,7 +13,7 @@ class CreateBookForm(AddCCSMixin, forms.ModelForm):
 
     class Meta:
         model = Book
-        exclude = ['owner', 'available']
+        fields = ['title', 'author', 'category', 'image']
 
 
 class UsersListForm(AddCCSMixin, forms.Form):
@@ -24,8 +24,7 @@ class UsersListForm(AddCCSMixin, forms.Form):
 
     user = forms.ChoiceField(
         label='',
-        choices=[(0, 'nobody')] + [(user.pk, user.username) for user in
-                                   get_user_model().objects.all().order_by('username')],
+        choices=(),
     )
 
 

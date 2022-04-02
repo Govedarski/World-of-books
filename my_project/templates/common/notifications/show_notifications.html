@@ -8,14 +8,14 @@
                     {% if not notification.is_read %}
 
                         <strong>
-                            <a href="{% url 'notification_details' notification.pk %}">{{ notification }}</a> (unread)
+                            <a href="{{ notification.get_absolute_url }}">{{ notification }}</a> (unread)
                         </strong>
                     {% else %}
-                        <a href="{% url 'notification_details' notification.pk %}">{{ notification }}</a>
+                        <a href="{{ notification.get_absolute_url }}">{{ notification }}</a>
                     {% endif %}
-                {% if not notification.is_answered %}
-                <strong>(Unanswered)</strong>
-                {% endif %}
+                    {% if not notification.is_answered %}
+                        <strong>(Unanswered)</strong>
+                    {% endif %}
                 </li>
 
             {% endfor %}

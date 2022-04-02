@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.shortcuts import render
@@ -38,4 +38,6 @@ class DetailsNotificationView(DetailView):
         notification = self.get_object()
         notification.is_read = True
         notification.save()
+        if notification.offer:
+            return redirect('show_offer_details', pk=notification.offer.pk)
         return super().dispatch(request, *args, **kwargs)

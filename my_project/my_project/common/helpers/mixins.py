@@ -18,3 +18,11 @@ class AddCCSMixin:
                 if 'class' not in field.widget.attrs:
                     field.widget.attrs['class'] = ''
                 field.widget.attrs['class'] += ' ' + klass
+
+
+class PaginationShowMixin:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if len(self.object_list) > self.paginate_by:
+            context['see_more'] = True
+        return context

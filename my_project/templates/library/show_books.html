@@ -1,0 +1,45 @@
+{% extends 'base/base.html' %}
+{% load common_tags %}
+{% load library_tags %}
+{% block content %}
+
+
+        <h1>{{ title }}</h1>
+    {% if owner == request.user %}
+
+    <input type="button" onclick="location.href='{% url "show_books_dashboard" request.user.pk %}';"
+           value="My books"/>
+
+    <input type="button" onclick="location.href='{% url "create_book" %}';"
+           value="Add book"/>
+
+    <input type="button" onclick="location.href='{% url "show_books_on_a_way" %}';"
+           value="Receive book"/>
+
+    <input type="button" onclick="location.href='{% url "show_books_to_send" %}';"
+           value="Books to send"/>
+    {% endif %}
+    {% if not books %}
+        No books
+    {% else %}
+        <form action="{% url 'show_books_dashboard' owner.pk %}" class="text-left margin-left-final">
+            <input name="search" class="opacity-format" type="text" value="{{ search }}">
+            <button class="opacity-format">Search</button>
+        </form>
+        <div class='my-books-list'>
+            {% for book in books %}
+                <div class="book-information myBooks">
+                    <div class='right-side-top'>
+                        {% like_book %}
+                    </div>
+                    {% book_details book.pk %}
+                <input type="button" class="align-end" onclick="location.href='{% url 'book_details' book.pk %}';"
+       value="Details"/>
+                </div>
+            {% endfor %}
+        </div>
+        {% pagination %}
+
+    {% endif %}
+
+{% endblock content %}

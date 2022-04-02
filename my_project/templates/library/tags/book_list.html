@@ -3,7 +3,7 @@
 
         <td>
             <a href="{% url 'book_list' %}?ord=
-{% if request.GET.ord == '-' %}
+{% if ord == '-' %}
 {% else %}
 -
 {% endif %}&ord_by=title&search={{ search }}&search_by={{ search_by }}">title</a>
@@ -11,7 +11,7 @@
 
         <td>
             <a href="{% url 'book_list' %}?ord=
-{% if request.GET.ord == '-' %}
+{% if ord == '-' %}
 {% else %}
 -
 {% endif %}&ord_by=author&search={{ search }}&search_by={{ search_by }}">author</a>
@@ -19,7 +19,7 @@
 
         <td>
             <a href="{% url 'book_list' %}?ord=
-{% if request.GET.ord == '-' %}
+{% if ord == '-' %}
 {% else %}
 -
 {% endif %}&ord_by=category&search={{ search }}&search_by={{ search_by }}">Category</a>
@@ -27,7 +27,7 @@
 
         <td>
             <a href="{% url 'book_list' %}?ord=
-{% if request.GET.ord == '-' %}
+{% if ord == '-' %}
 {% else %}
 -
 {% endif %}&ord_by=owner&search={{ search }}&search_by={{ search_by }}">owner</a>
@@ -35,10 +35,10 @@
 
         <td>
             <a href="{% url 'book_list' %}?ord=
-{% if request.GET.ord == '-' %}
+{% if ord == '-' %}
 {% else %}
 -
-{% endif %}&ord_by=likes&search={{ search }}&search_by={{ search_by }}">likes</a>
+{% endif %}&ord_by=like_count&search={{ search }}&search_by={{ search_by }}">likes</a>
         </td>
     </tr>
 
@@ -49,9 +49,10 @@
             </td>
             <td>{{ book.author }}</td>
             <td>{{ book.category }}</td>
-            <td>{{ book.owner }}</td>
-            <td>{{ book.likes }}</td>
+            <td>
+                <a href="{% url 'show_account_details' book.owner.pk %}">{{ book.owner }}</a>
+            </td>
+            <td>{{ book.likes_count }}</td>
         </tr>
-
     {% endfor %}
 </table>

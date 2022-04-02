@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+{% load library_tags %}
+{% load static %}
+{% block content %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="row justify-content-center">
+            <h1>Offer to
+                <a href="{% url 'show_account_details' book.owner.pk %}">{{ book.owner }}</a>
+            </h1>
+            <div class="d-flex">
+                <div class="d-inline p-2 w-50">
+                    <h3>You offer:</h3>
+                    {{ form.sender_books }}
+                </div>
+
+                <div class="d-inline p-2 w-50 margin-left-final">
+                    <h3>You want:</h3>
+                    <div class="book-information">
+                        {% book_details book.pk %}
+                    </div>
+                    <details>
+                        <summary>Want more books</summary>
+                        {{ form.recipient_books }}
+                    </details>
+                </div>
+
+            </div>
+            <div class="text-center">
+                <button>Send</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

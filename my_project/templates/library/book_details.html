@@ -1,20 +1,24 @@
 {% extends 'base/base.html' %}
+{% load library_tags %}
 {% load static %}
 {% block content %}
     <div class="container">
         <div class="row justify-content-center">
-            <h1>{{ book.title }}{% if not book.available %}
-
-                <h5>(Disabled)</h5></h1>
-            {% endif %}
+            <h1>{{ book.title }}
+                {% if not book.owner == request.user %}
+                    {% like_book %}
+                {% endif %}
+                {% if not book.is_available %}
+                    <h5>(Not tradable)</h5></h1>
+                {% endif %}
             <form action="{% url 'book_details' book.pk %}" method="post">
                 {% csrf_token %}
                 {% if request.user == book.owner %}
 
-                    {% if book.available %}
-                        <button class="btn btn-danger">Disable</button>
+                    {% if book.is_available %}
+                        <button class="btn btn-danger">Not tradable</button>
                     {% else %}
-                        <button class="btn btn-success">Make it available</button>
+                        <button class="btn btn-success">Make it tradable</button>
                     {% endif %}
                     </form>
                 {% endif %}
@@ -30,6 +34,11 @@
                     {% endif %}
                     <div class="text-left">
                         <h5><u>Author:</u> {{ book.author }}</h5>
+                        {% if not book.owner == request.user %}
+                            <h5><u>Owner:</u> <a
+                                    href="{% url 'show_account_details' book.owner.pk %}">{{ book.owner }}</a></h5>
+
+                        {% endif %}
                     </div>
                     {% if request.user == book.owner %}
                         <a href="{% url 'edit_book' book.pk %}" class="btn btn-primary">Edit</a>
@@ -39,9 +48,27 @@
 
                 <div class="d-inline p-2 w-50 text-left margin-left-final">
 
+                    {% if book.is_available and not book.owner == request.user %}
+                        <div class="text-center">
+                            <a class="btn btn-success inline" href="{% url 'create_offer' book.pk %}">Make a offer</a>
+                        </div>
+                    {% endif %}
+                    <h5><u>Likes: {{ book.likes_count }} times</u>
+                        {% if request.user == book.owner %}
+                            {% if book.likes_count %}
 
-                    <h5><u>Likes:</u></h5>
-                    <h3>Wanted by:</h3>
+                                <details class='inline'>
+                                    <summary>by:</summary>                       {% for user in book.likes.all %}
+                                    <ul>
+                                        <li>
+                                            <a href="{% url 'show_books_dashboard' user.pk %}"><h5>{{ user }}</h5></a>
+                                        </li>
+                                    </ul>
+                                {% endfor %}</details>
+                            {% endif %}
+                            </h5>
+                        {% endif %}
+
                 </div>
             </div>
         </div>

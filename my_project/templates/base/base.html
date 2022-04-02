@@ -23,9 +23,13 @@
                 </a>
             </li>
             <li class="inline"><a href="{% url 'book_list' %}" class="nav opacity-format margin-right">Library</a></li>
-            <li class="inline"><a href="{% url 'show_books_dashboard' %}"
-                                  class="nav opacity-format margin-right">Books</a></li>
-            <li class="inline"><a href="" class="nav opacity-format margin-right">Reviews</a></li>
+            {% if request.user.is_authenticated %}
+
+                <li class="inline"><a href="{% url 'show_books_dashboard' request.user.pk %}"
+                                      class="nav opacity-format margin-right">My Books</a></li>
+            {% endif %}
+
+            <li class="inline"><a href="{% url 'show_offer_list' %}" class="nav opacity-format margin-right">My offers</a></li>
         </ul>
     </div>
 

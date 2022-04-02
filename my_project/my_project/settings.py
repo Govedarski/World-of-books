@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'my_project.common',
     'my_project.accounts',
     'my_project.library',
+    'my_project.offer',
 ]
 
 MIDDLEWARE = [
