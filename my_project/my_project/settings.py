@@ -129,7 +129,7 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-SITE_ID = 4
+SITE_ID = 5
 
 ACCOUNT_ADAPTER = 'my_project.accounts.adapter.MyAccountAdapter'
 
