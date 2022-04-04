@@ -15,6 +15,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 import cloudinary
+import dj_database_url
 from django.urls import reverse_lazy
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -96,13 +97,16 @@ WSGI_APPLICATION = 'my_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dc6lu8o4t631i0',
-        'USER': 'kskdgmvyxwlscx',
-        'PASSWORD': 'b33effb9a9b9b7780b8b07db03dcd4cdf4f8dbf9691053ace11406ec7ee0aad7',
-        'HOST': 'ec2-52-212-228-71.eu-west-1.compute.amazonaws.com',
+        'NAME': 'project_db',
+        'USER': 'postgres',
+        'PASSWORD': '1123QwER',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
+
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -144,6 +148,9 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+
+
 ACCOUNT_SIGNUP_REDIRECT_URL = reverse_lazy('show_home')
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
