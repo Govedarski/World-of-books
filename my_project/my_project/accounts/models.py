@@ -98,7 +98,6 @@ class Profile(models.Model):
         default=GenderChoices.DO_NOT_SHOW,
     )
 
-    # Todo upload profile picture
     picture_upload = models.ImageField(
         upload_to='profile',
         null=True,
