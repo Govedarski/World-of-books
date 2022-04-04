@@ -54,12 +54,9 @@ button:hover {
 
 
 body {
-    margin-left: 10%;
     background: url('https://wallpaperaccess.com/full/4868953.jpg') no-repeat top center;
     background-size: 100% 100%;
     min-height: 100%;
-    width: 80%;
-    max-width: 2150px;
 }
 
 main {
