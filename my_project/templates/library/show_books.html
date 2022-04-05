@@ -4,20 +4,18 @@
 {% block content %}
 
 
-        <h1>{{ title }}</h1>
+    <h1>{{ title }}</h1>
     {% if owner == request.user %}
 
-    <input type="button" onclick="location.href='{% url "show_books_dashboard" request.user.pk %}';"
-           value="My books"/>
+        <input type="button" onclick="location.href='{% url "show_books_dashboard" request.user.pk %}';"
+               value="My books"/>
+        <input type="button" onclick="location.href='{% url "show_books_on_a_way" %}';"
+               value="Books to recieve"/>
 
-    <input type="button" onclick="location.href='{% url "create_book" %}';"
-           value="Add book"/>
-
-    <input type="button" onclick="location.href='{% url "show_books_on_a_way" %}';"
-           value="Receive book"/>
-
-    <input type="button" onclick="location.href='{% url "show_books_to_send" %}';"
-           value="Books to send"/>
+        <input type="button" onclick="location.href='{% url "show_books_to_send" %}';"
+               value="Books to send"/>
+        <input type="button" onclick="location.href='{% url "create_book" %}';"
+               value="Add book"/>
     {% endif %}
     {% if not books %}
         No books
@@ -33,8 +31,8 @@
                         {% like_book %}
                     </div>
                     {% book_details book.pk %}
-                <input type="button" class="align-end" onclick="location.href='{% url 'book_details' book.pk %}';"
-       value="Details"/>
+                    <input type="button" class="align-end" onclick="location.href='{% url 'book_details' book.pk %}';"
+                           value="Details"/>
                 </div>
             {% endfor %}
         </div>

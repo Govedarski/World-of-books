@@ -23,10 +23,10 @@
 
                     <h5><u>Likes: {{ book.likes_count }} times</u></h5>
                     <h3>You have to receive this book from <a
-                            href="{% url 'show_account_details' book.next_owner.pk %}">
-                        {{ book.next_owner }}</a></h3>
-                    <h3>{{ book.next_owner }}'s phone number:
-                        +359/{{ book.next_owner.sensitiveinformation.phone_number }}</h3>
+                            href="{% url 'show_account_details' book.previous_owner.pk %}">
+                        {{ book.previous_owner }}</a></h3>
+                    <h3>{{ book.previous_owner }}'s phone number:
+                        +359/{{ book.previous_owner.sensitiveinformation.phone_number }}</h3>
 
                 </div>
             </div>

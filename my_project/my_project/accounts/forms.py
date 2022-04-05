@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm, SetPasswordForm, \
     PasswordChangeForm
 
-from my_project.accounts.models import Profile, SensitiveInformation
+from my_project.accounts.models import Profile, ContactForm
 from my_project.common.helpers.mixins import AddCCSMixin, RemoveHelpTextMixin
 
 
@@ -85,5 +85,5 @@ class EditContactForm(AddCCSMixin, forms.ModelForm):
         self._add_ccs('my_form_control', 'width-100', 'opacity-format')
 
     class Meta:
-        model = SensitiveInformation
+        model = ContactForm
         exclude = ['user']

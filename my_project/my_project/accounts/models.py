@@ -7,7 +7,7 @@ from django.core import validators
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.functions import Lower
-
+from cloudinary.models import CloudinaryField
 from my_project.accounts.managers import MyUserManager
 from my_project.common.helpers import custom_validators
 
@@ -98,13 +98,12 @@ class Profile(models.Model):
         default=GenderChoices.DO_NOT_SHOW,
     )
 
-    picture_upload = models.ImageField(
-        upload_to='profile',
+    picture_upload = CloudinaryField(
+        "Image",
         null=True,
         blank=True,
-        validators=[
-            custom_validators.MaxSizeInMBValidator(UPLOAD_PICTURE_MAX_SIZE_IN_MB)
-        ]
+        transformation={"quality": "auto:eco"},
+        overwrite=True,
     )
 
     picture_url = models.URLField(null=True,
@@ -143,7 +142,7 @@ class Profile(models.Model):
         return age
 
 
-class SensitiveInformation(models.Model):
+class ContactForm(models.Model):
     CITY_MAX_LENGTH = 32
     ADDRESS_MAX_LENGTH = 64
     PHONE_NUMBER_MIN_LENGTH = 9
@@ -175,3 +174,7 @@ class SensitiveInformation(models.Model):
             custom_validators.OnlyNumberValidator()
         ]
     )
+
+    @property
+    def is_completed(self):
+        return all([self.city, self.address])

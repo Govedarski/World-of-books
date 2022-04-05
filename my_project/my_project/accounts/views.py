@@ -1,18 +1,13 @@
-from django.contrib.auth import get_user_model, login, logout
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetConfirmView, \
     PasswordResetDoneView, PasswordResetCompleteView, PasswordChangeView
-from django.shortcuts import render
-
 # Create your views here.
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, TemplateView, UpdateView, DeleteView
-from django.views.generic.base import ContextMixin
+from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
 
 from my_project.accounts.forms import CreateUserForm, ProfileForm, MyLoginForm, MySetPasswordForm, EditEmailForm, \
     MyPasswordChangeForm, EditContactForm
-from my_project.accounts.models import Profile, SensitiveInformation, WorldOfBooksUser
-from my_project.common.helpers.mixins import CustomLoginRequiredMixin
+from my_project.accounts.models import Profile, ContactForm
 
 
 class RegisterUserView(CreateView):
@@ -100,11 +95,8 @@ class MyAccountDetailsView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Todo  must add books when they are ready
-        user = get_user_model().objects.filter(pk=self.request.user.pk)
-        if user:
-            user = user[0]
-            context['user'] = user
+        user = get_user_model().objects.get(pk=self.request.user.pk)
+        context['user'] = user
         return context
 
 
@@ -112,7 +104,6 @@ class AccountDetailsView(DetailView):
     model = get_user_model()
     template_name = 'accounts/account_details.html'
     context_object_name = 'user'
-
 
 
 class EditEmailView(UpdateView):
@@ -139,4 +130,4 @@ class EditContactsView(UpdateView):
     success_url = reverse_lazy('show_my_account_details')
 
     def get_object(self, queryset=None):
-        return SensitiveInformation.objects.get(user_id=self.request.user.pk)
+        return ContactForm.objects.get(user_id=self.request.user.pk)

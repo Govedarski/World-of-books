@@ -46,10 +46,8 @@ class CreateOfferView(CreateView):
 
     def __create_valid_form(self, form):
         wanted_book = self.__get_wanted_book()
-        sender = self.request.user
-        recipient = wanted_book.owner
-        form.instance.sender = sender
-        form.instance.recipient = recipient
+        form.instance.sender = self.request.user
+        form.instance.recipient = wanted_book.owner
         return form
 
     def __send_notification(self, offer):

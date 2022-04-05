@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 from django.db.models.functions import Lower
-
+from cloudinary.models import CloudinaryField
 from my_project.common.helpers import custom_validators
 
 
@@ -43,13 +43,12 @@ class Book(models.Model):
         on_delete=models.SET_DEFAULT,
     )
 
-    image = models.ImageField(
-        upload_to='books',
+    image = CloudinaryField(
+        "Image",
         null=True,
         blank=True,
-        validators=[
-            custom_validators.MaxSizeInMBValidator(UPLOAD_PICTURE_MAX_SIZE_IN_MB)
-        ],
+        transformation={"quality": "auto:eco"},
+        overwrite=True,
     )
 
     owner = models.ForeignKey(

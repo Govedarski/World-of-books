@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import signals
 from django.dispatch import receiver
 
-from my_project.accounts.models import Profile, SensitiveInformation
+from my_project.accounts.models import Profile, ContactForm
 
 
 @receiver(signals.post_save, sender=get_user_model())
@@ -18,7 +18,7 @@ def create_profile_with_registration(instance, created, **kwargs):
 def create_contact_form_with_registration(instance, created, **kwargs):
     if not created:
         return None
-    contact_form = SensitiveInformation(user=instance)
+    contact_form = ContactForm(user=instance)
     contact_form.save()
 
 

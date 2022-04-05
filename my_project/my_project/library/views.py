@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.db import ProgrammingError
 from django.db.models import Count
 from django.db.models.functions import Lower
 from django.http import Http404
@@ -21,42 +22,49 @@ class ShowBookListView(PaginationShowMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        order = self.request.GET.get("ord", '') if self.request.GET else '-'
-        ord_by = self.request.GET.get("ord_by", '')
-        search = self.request.GET.get("search", '')
-        search_by = self.request.GET.get("search_by", '')
         context['form'] = SearchForm(
             initial={
-                'search': search,
-                'search_by': search_by}
+                'search': self.search,
+                'search_by': self.search_by}
         )
-        context['ord'] = order
-        context['ord_by'] = ord_by
-        context['search'] = search
-        context['search_by'] = search_by
+        context['ord'] = self.order
+        context['ord_by'] = self.ord_by
+        context['search'] = self.search
+        context['search_by'] = self.search_by
         return context
 
     def get_queryset(self):
         query_set = super().get_queryset().filter(owner__isnull=False).annotate(like_count=Count('likes')).order_by(
-            '-like_count')
-        order = self.request.GET.get("ord", '')
-        order_by = self.request.GET.get("ord_by", '')
-        search = self.request.GET.get("search", '')
-        search_by = self.request.GET.get("search_by", '')
-
-        if search_by == SearchForm.SearchByChoices.owner:
-            owner = get_user_model().objects.filter(username__icontains=search)
+            '-like_count', 'title')
+        if self.search_by == SearchForm.SearchByChoices.owner:
+            owner = get_user_model().objects.filter(username__icontains=self.search)
             query_set = query_set.filter(owner__in=owner)
-        elif search_by:
-            query_filter = {f'{search_by}__icontains': search}
+        elif self.search_by:
+            query_filter = {f'{self.search_by}__icontains': self.search}
             query_set = query_set.filter(**query_filter)
-        if order_by:
-            if order:
-                query_set = query_set.order_by(Lower(order_by).desc())
-            else:
-                query_set = query_set.order_by(Lower(order_by))
-
+        if self.ord_by:
+            query_set = query_set.order_by(self.ord_by)
+            if self.order:
+                query_set = query_set.reverse()
         return query_set
+
+    @property
+    def order(self):
+        return self.request.GET.get("ord", '') if self.request.GET else '-'
+
+    @property
+    def ord_by(self):
+        return self.request.GET.get("ord_by", '')
+
+    @property
+    def search(self):
+        return self.request.GET.get("search", '')
+
+    @property
+    def search_by(self):
+        return self.request.GET.get("search_by", '')
+
+
 
 
 class ShowBookView(PaginationShowMixin, ListView):
@@ -143,7 +151,7 @@ class DetailsBookView(DetailView):
         if not book.owner and not book.next_owner:
             raise Http404("Book does not exist")
         if self.request.user == book.next_owner:
-            self.template_name = 'library/receive_book_info.html'
+            self.template_name = 'library/book_to_receive_info.html'
         if self.request.user == book.previous_owner:
             self.template_name = 'library/book_to_send_info.html'
         # Todo if self.request.user is not book owner -> not authorized

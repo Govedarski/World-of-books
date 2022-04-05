@@ -23,6 +23,7 @@ class AddCCSMixin:
 class PaginationShowMixin:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if len(self.object_list) > self.paginate_by:
+        query_set = self.get_queryset()
+        if len(query_set) > self.paginate_by:
             context['see_more'] = True
         return context

@@ -1,4 +1,4 @@
-{% if not book.owner == request.user and request.user.is_authenticated %}
+{% if book.owner and not book.owner == request.user and request.user.is_authenticated %}
 
 
     <a href="{% url 'like_book' book.pk %}?back={{ request.path }}">

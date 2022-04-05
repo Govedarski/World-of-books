@@ -220,10 +220,7 @@ table {
 }
 
 .my-books-list {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    min-height: 100%;
+
 }
 
 

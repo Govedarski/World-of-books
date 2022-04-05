@@ -47,9 +47,13 @@
                 <a href=" " class="btn btn-danger">Deactivate</a>
                 <div class='text-left'>
                     <h3>Contact form:</h3>
-                    <p class='warning'>
-                        <strong>You have to fill in the contact form to use full site functionality!</strong>
-                    </p>
+                    {% if not request.user.contactform.is_completed %}
+                        <p class='warning'>
+                            <strong>You have to fill city and address in the contact form to use full site
+                                functionality!</strong>
+                        </p>
+                    {% endif %}
+
                     {% block contact %}
                     {% endblock contact %}
                 </div>
