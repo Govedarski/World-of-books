@@ -23,11 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
+APP_ENVIRONMENT = os.getenv('APP_ENVIRONMENT')
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-3&ul(x3&ze^(!f3ze3+f@=-hf7j(z1=_2a8d&&*-)avtudy5d7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if APP_ENVIRONMENT else True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -60,6 +62,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'my_project.middlewares.handle_server_internal_error',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
