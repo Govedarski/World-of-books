@@ -1,7 +1,20 @@
-    <h5><u>City:</u> {{ user.contactform.city }}</h5>
-    <h5><u>Address:</u> {{ user.contactform.address }}</h5>
-    <h5><u>Phone number:</u> +359/{{ user.contactform.phone_number }}</h5>
-    <div class='content-div'>
+<h5><u>City:</u>
+    {% if user.contactform.city %}
+        {{ user.contactform.city }}
+    {% endif %}
+</h5>
+<h5><u>Address:</u>
+    {% if user.contactform.address %}
+        {{ user.contactform.address }}
+    {% endif %}
+</h5>
+<h5><u>Phone number:</u> +359/
+    {% if user.contactform.phone_number %}
 
-        <a href="{% url 'edit_contacts' %}" class="btn btn-primary">Edit</a>
-    </div>
+        {{ user.contactform.phone_number }}
+    {% endif %}
+</h5>
+<div class='content-div'>
+
+    <a href="{% url 'edit_contacts' %}" class="btn btn-primary">Edit</a>
+</div>

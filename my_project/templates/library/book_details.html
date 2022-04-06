@@ -34,6 +34,10 @@
                     {% endif %}
                     <div class="text-left">
                         <h5><u>Author:</u> {{ book.author }}</h5>
+                        {% if book.category %}
+                            <h5><u>Category:</u> {{ book.category }}</h5>
+                        {% endif %}
+
                         {% if not book.owner == request.user %}
                             <h5><u>Owner:</u> <a
                                     href="{% url 'show_account_details' book.owner.pk %}">{{ book.owner }}</a></h5>

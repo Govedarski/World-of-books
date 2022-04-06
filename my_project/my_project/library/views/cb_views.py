@@ -9,7 +9,7 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 from my_project.common.helpers.mixins import PaginationShowMixin, AuthorizationRequiredMixin
 from my_project.common.models import Notification
 from my_project.library.forms import SearchForm, CreateBookForm, UsersListForm
-from my_project.library.models import Book
+from my_project.library.models import Book, Category
 
 
 class ShowBookListView(PaginationShowMixin, ListView):
@@ -129,12 +129,21 @@ class CreateBookView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
+        form.instance.category = self._set_category(form)
         return super().form_valid(form)
 
     def get_success_url(self):
         pk = self.request.user.pk
         return reverse_lazy('show_books_dashboard', kwargs={'pk': pk})
 
+    @staticmethod
+    def _set_category(form):
+        category = form.cleaned_data.get('category')
+        category_name = form.cleaned_data.get('category_name')
+        if category or not category_name:
+            return category
+        new_category, created = Category.objects.get_or_create(name=category_name)
+        return new_category
 
 class DetailsBookView(DetailView):
     model = Book
@@ -203,4 +212,3 @@ class DeleteBookView(AuthorizationRequiredMixin, DeleteView):
 
     def __get_notification_massage(self):
         return f'{self.request.user} send {self.get_object()} to you without deal between you?'
-

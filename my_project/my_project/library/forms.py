@@ -3,17 +3,25 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 from my_project.common.helpers.mixins import AddCCSMixin
-from my_project.library.models import Book
+from my_project.library.models import Book, Category
 
 
 class CreateBookForm(AddCCSMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._add_ccs('my_form_control', 'width-100', 'opacity-format')
+        self.fields['category_name'].widget.attrs.update(
+            {'placeholder': 'If you cannot find right category in the dropdown menu add it here'})
+
+    category_name = forms.CharField(
+        max_length=Category.NAME_MAX_LENGTH,
+        label='',
+        required=False
+    )
 
     class Meta:
         model = Book
-        fields = ['title', 'author', 'category', 'image']
+        fields = ['title', 'author', 'image', 'category']
 
 
 class UsersListForm(AddCCSMixin, forms.Form):
