@@ -22,9 +22,11 @@ nav a:hover {
     background: #a79271;
     color: white;
 }
-a{
+
+a {
     color: black;
 }
+
 a img {
     height: 40px;
     width: 50px;
@@ -111,7 +113,6 @@ table {
 }
 
 
-
 .center {
     align-self: center;
 }
@@ -136,8 +137,8 @@ table {
 
 .right-side-top {
     position: absolute;
-    top: 30%;
-    right: 5%;
+    top: 2%;
+    right: 2%;
 }
 
 .opacity-format {
@@ -161,9 +162,11 @@ table {
 .text-left {
     text-align: left;
 }
-.text-center{
+
+.text-center {
     text-align: center;
 }
+
 .my_form_control {
     text-align: center;
     padding: .375rem .75rem;
@@ -185,7 +188,7 @@ table {
 }
 
 .width-60 {
-    width: 60%!important;
+    width: 60% !important;
 }
 
 .width-100 {
@@ -244,14 +247,15 @@ table {
     width: 60%;
     align-items: center;
 }
-img {
-    max-height: 10rem;
-}
+
+
+
 .book-information > .button {
     width: 30%;
     text-align: center;
 }
-.height-90{
+
+.height-90 {
     justify-content: space-around;
     flex-wrap: wrap;
     min-height: 100%;
@@ -259,61 +263,3 @@ img {
 }
 
 
-/*form {*/
-/*    text-align: center;*/
-
-/*}*/
-
-/*.form-div {*/
-/*    margin-top: 200px;*/
-/*    margin-left: 35%;*/
-/*    margin-right: 35%;*/
-/*}*/
-
-/*.right {*/
-/*    text-align: right;*/
-/*    margin: 25px;*/
-/*}*/
-
-/*.button-size {*/
-/*    width: 100px;*/
-/*    height: 50px;*/
-/*    font-size: larger;*/
-/*}*/
-
-/*.white {*/
-/*    color: white;*/
-/*    margin-bottom: 10px;*/
-/*}*/
-
-/*.player-format {*/
-/*    float: right;*/
-/*    width: 0;*/
-/*    margin-left: 30px;*/
-/*    vertical-align: bottom;*/
-/*    margin-bottom: 0;*/
-/*}*/
-
-/*.player_stats_form {*/
-/*    float: left;*/
-/*    width: 80px;*/
-/*    color: white;*/
-/*    font-size: x-small;*/
-/*    font-weight: bolder;*/
-/*    display: inline-block;*/
-/*}*/
-
-/*.small_input {*/
-/*    color: white;*/
-/*    text-align: center;*/
-/*    height: 25px;*/
-/*    font-size: x-small;*/
-/*}*/
-
-/*.button {*/
-/*    text-align: center;*/
-/*    float: right;*/
-/*}*/
-/*.margin {*/
-/*    margin: 0 10% 0 10%;*/
-/*}*/

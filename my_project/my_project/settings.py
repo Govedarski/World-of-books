@@ -20,15 +20,13 @@ from django.urls import reverse_lazy
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 APP_ENVIRONMENT = os.getenv('APP_ENVIRONMENT')
 
-# SECURITY WARNING: keep the secret key used in production secret!
+
 SECRET_KEY = 'django-insecure-3&ul(x3&ze^(!f3ze3+f@=-hf7j(z1=_2a8d&&*-)avtudy5d7'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = False if APP_ENVIRONMENT else True
 
 ALLOWED_HOSTS = [
@@ -36,7 +34,7 @@ ALLOWED_HOSTS = [
     'theworldofbooks.herokuapp.com',
 ]
 
-# Application definition
+
 
 INSTALLED_APPS = [
     # DJANGO APPS
@@ -94,9 +92,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'my_project.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -110,9 +105,6 @@ DATABASES = {
 
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
-
-# Password validation
-# https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -155,8 +147,6 @@ SOCIALACCOUNT_PROVIDERS = {
 
 
 ACCOUNT_SIGNUP_REDIRECT_URL = reverse_lazy('show_home')
-# Internationalization
-# https://docs.djangoproject.com/en/4.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -170,8 +160,6 @@ DATE_FORMAT = 'd N Y'
 
 USE_L10N = False
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 BASE_DIR_2 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -179,11 +167,10 @@ BASE_DIR_2 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = '/static/'
 
-# Extra places for collectstatic to find static files.
+
 STATICFILES_DIRS = (
     BASE_DIR / 'static',
 )
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = 'media/'
 
@@ -196,8 +183,6 @@ cloudinary.config(
     secure=True
 )
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

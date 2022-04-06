@@ -1,6 +1,7 @@
 {% load library_tags %}
 {% load static %}
-<h3>{{ book.title|truncatechars:15 }}</h3>
+<div class = 'margin-right-final'>
+<h3>{{ book.title|truncatechars:12 }}</h3>
 <p>Author: {{ book.author }}</p>
 
 
@@ -13,4 +14,5 @@
 
     <img src="{% static 'images/book-avatar.png' %}" class="w-50 rounded mx-auto d-block" alt="photo">
 {% endif %}
+</div>
 </div>
