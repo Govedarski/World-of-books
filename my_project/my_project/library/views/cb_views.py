@@ -8,7 +8,7 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 
 from my_project.common.helpers.mixins import PaginationShowMixin, AuthorizationRequiredMixin
 from my_project.common.models import Notification
-from my_project.library.forms import SearchForm, CreateBookForm, UsersListForm
+from my_project.library.forms import SearchForm, BookForm, UsersListForm
 from my_project.library.models import Book, Category
 
 
@@ -125,7 +125,7 @@ class ShowBooksToSendView(LoginRequiredMixin, ShowBookView):
 
 class CreateBookView(LoginRequiredMixin, CreateView):
     template_name = 'library/create_book.html'
-    form_class = CreateBookForm
+    form_class = BookForm
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -169,7 +169,7 @@ class DetailsBookView(DetailView):
 
 class EditBookView(LoginRequiredMixin, AuthorizationRequiredMixin, UpdateView):
     template_name = 'library/edit_book.html'
-    form_class = CreateBookForm
+    form_class = BookForm
     model = Book
     authorizing_fields = ['owner']
 

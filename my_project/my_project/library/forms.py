@@ -6,7 +6,7 @@ from my_project.common.helpers.mixins import AddCCSMixin
 from my_project.library.models import Book, Category
 
 
-class CreateBookForm(AddCCSMixin, forms.ModelForm):
+class BookForm(AddCCSMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._add_ccs('my_form_control', 'width-100', 'opacity-format')
