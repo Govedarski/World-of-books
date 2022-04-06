@@ -123,12 +123,12 @@ class ShowOfferDetailsView(LoginRequiredMixin, AuthorizationRequiredMixin, Detai
         return context
 
 
-class ShowOfferView(LoginRequiredMixin, PaginationShowMixin,  ListView):
+class ShowOfferView(LoginRequiredMixin, PaginationShowMixin, ListView):
     template_name = 'offer/show_offers_list.html'
     context_object_name = 'offers'
     model = Offer
     paginate_by = 40
 
     def get_queryset(self):
-        return Offer.objects.filter(Q(recipient=self.request.user) | Q(sender=self.request.user))
-
+        return Offer.objects.prefetch_related('recipient', 'sender').filter(
+            Q(recipient=self.request.user) | Q(sender=self.request.user))

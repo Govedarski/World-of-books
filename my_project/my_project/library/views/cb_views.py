@@ -32,7 +32,8 @@ class ShowBookListView(PaginationShowMixin, ListView):
         return context
 
     def get_queryset(self):
-        query_set = super().get_queryset().filter(owner__isnull=False).annotate(like_count=Count('likes')).order_by(
+        query_set = Book.objects.prefetch_related('owner', 'category', 'likes').filter(
+            owner__isnull=False).annotate(like_count=Count('likes')).order_by(
             '-like_count', 'title')
         if self.search_by == SearchForm.SearchByChoices.owner:
             owner = get_user_model().objects.filter(username__icontains=self.search)
@@ -80,18 +81,18 @@ class ShowBookView(PaginationShowMixin, ListView):
             f"{owner}'s book"
         return context
 
-    def _get_owner(self):
-        pk = self.kwargs.get('pk', self.request.user.pk)
-        return get_object_or_404(get_user_model(), pk=pk)
-
     def get_queryset(self):
         field = self._get_query_filter()
         owner = self._get_owner()
         search = self.request.GET.get("search", '')
         query_filter = {field: owner,
                         'title__icontains': search}
-        query_set = Book.objects.filter(**query_filter)
+        query_set = Book.objects.prefetch_related(field).filter(**query_filter)
         return query_set
+
+    def _get_owner(self):
+        pk = self.kwargs.get('pk', self.request.user.pk)
+        return get_object_or_404(get_user_model(), pk=pk)
 
     @staticmethod
     def _get_query_filter():
@@ -144,6 +145,7 @@ class CreateBookView(LoginRequiredMixin, CreateView):
             return category
         new_category, created = Category.objects.get_or_create(name=category_name)
         return new_category
+
 
 class DetailsBookView(DetailView):
     model = Book
