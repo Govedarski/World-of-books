@@ -1,8 +1,11 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from abc import abstractmethod
+
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
 class CustomLoginRequiredMixin(LoginRequiredMixin):
     is_login_required = True
+
 
 class RemoveHelpTextMixin:
     def __init__(self, *args, **kwargs):
@@ -27,3 +30,11 @@ class PaginationShowMixin:
         if len(query_set) > self.paginate_by:
             context['see_more'] = True
         return context
+
+
+class AuthorizationRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        obj = self.get_object()
+        authorized_users = [getattr(obj, field) for field in self.authorizing_fields]
+        return self.request.user in authorized_users
+

@@ -85,14 +85,18 @@
 
         </div>
         {% if offer.is_active %}
-            {% if not is_my_offer %}
-                <div class="text-center">
+            <div class="text-center">
+                {% if not is_my_offer %}
                     <input type="button" onclick="location.href='{% url 'accept_offer' offer.pk %}';" value="Accept"/>
                     <input type="button" onclick="location.href='{% url 'negotiate_offer' offer.pk %}';"
                            value="Negotiate"/>
                     <input type="button" onclick="location.href='{% url 'decline_offer' offer.pk %}';" value="Decline"/>
-                </div>
-            {% endif %}
+                    </div>
+                {% else %}
+                    <input type="button" onclick="location.href='{% url 'decline_offer' offer.pk %}';" value="Cancel"/>
+                {% endif %}
+            </div>
+
         {% else %}
 
             {% if offer.is_accept %}
@@ -103,10 +107,10 @@
         {% endif %}
 
 
-        <h3>
-            {% if offer.next_offer %}
-                <a href="{% url 'show_offer_details' offer.next_offer.pk %}">Counter offer</a> has been made!
-            {% endif %}
-        </h3>
+    <h3>
+        {% if offer.next_offer %}
+            <a href="{% url 'show_offer_details' offer.next_offer.pk %}">Counter offer</a> has been made!
+        {% endif %}
+    </h3>
     </div>
 {% endblock %}

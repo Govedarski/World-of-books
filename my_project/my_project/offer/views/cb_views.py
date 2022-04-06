@@ -1,18 +1,16 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.shortcuts import render, redirect
-
-# Create your views here.
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.views.generic import CreateView, UpdateView, DetailView, ListView
 
-from my_project.common.helpers.mixins import PaginationShowMixin
+from my_project.common.helpers.mixins import PaginationShowMixin, AuthorizationRequiredMixin
 from my_project.common.models import Notification
 from my_project.library.models import Book
-from my_project.offer.forms import NegotiateOfferForm, CreateOfferForm
+from my_project.offer.forms import CreateOfferForm, NegotiateOfferForm
 from my_project.offer.models import Offer
 
 
-class CreateOfferView(CreateView):
+class CreateOfferView(LoginRequiredMixin, CreateView):
     template_name = 'offer/create_offer.html'
     form_class = CreateOfferForm
     success_url = reverse_lazy('show_home')
@@ -65,12 +63,13 @@ class CreateOfferView(CreateView):
                f'{" and others" if len(offer.recipient_books.all()) > 1 else ""}'
 
 
-class NegotiateOfferView(UpdateView):
+class NegotiateOfferView(LoginRequiredMixin, AuthorizationRequiredMixin, UpdateView):
     template_name = 'offer/negotiate_offer.html'
     form_class = NegotiateOfferForm
     model = Offer
     context_object_name = 'offer'
-    success_url = reverse_lazy('show_notifications')  # Todo to change on deals
+    success_url = reverse_lazy('show_notifications')
+    authorizing_fields = ['recipient']
 
     def form_valid(self, form):
         """Deactivate old offer"""
@@ -108,12 +107,11 @@ class NegotiateOfferView(UpdateView):
         return Offer.objects.filter(pk=self.kwargs.get('pk')).first()
 
 
-class ShowOfferDetailsView(DetailView):
+class ShowOfferDetailsView(LoginRequiredMixin, AuthorizationRequiredMixin, DetailView):
     model = Offer
     context_object_name = 'offer'
     template_name = 'offer/show_offer_details.html'
-
-    # Todo if self.request.user is not book owner -> not authorized
+    authorizing_fields = ['sender', 'recipient']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -125,79 +123,7 @@ class ShowOfferDetailsView(DetailView):
         return context
 
 
-def deactivate_offer(pk):
-    offer = Offer.objects.filter(pk=pk).first()
-    offer.is_active = False
-    offer.save()
-    return offer
-
-
-def check_offer(request, offer):
-    '''Check if all books still belong to offer's sender and recipient'''
-    s_missing_books = [book for book in offer.sender_books.all() if not book.owner == offer.sender]
-    r_missing_books = [book for book in offer.recipient_books.all() if not book.owner == offer.recipient]
-    context = {'offer': offer}
-    if s_missing_books or r_missing_books:
-        context['s_missing_books'] = s_missing_books
-        context['r_missing_books'] = r_missing_books
-        return render(request, 'offer/inactive_offer.html', context)
-
-
-def change_books_owner(books, new_owner):
-    for book in books:
-        book.ex_owners.add(book.owner)
-        book.previous_owner = book.owner
-        book.next_owner = new_owner
-        book.owner = None
-        book.save()
-    return books
-
-
-def accept_offer_view(request, pk):
-    offer = deactivate_offer(pk)
-    redirect_to_inactive = check_offer(request, offer)
-    if redirect_to_inactive:
-        return redirect_to_inactive
-
-    change_books_owner(offer.sender_books.all(), offer.recipient)
-    change_books_owner(offer.recipient_books.all(), offer.sender)
-    offer.is_accept = True
-    offer.save()
-
-    '''Create new notification'''
-    recipient = offer.recipient if request.user == offer.sender else offer.sender
-    massage = f'{request.user} accept your offer {offer.pk}!'
-    notification = Notification(
-        sender=request.user,
-        recipient=recipient,
-        offer=offer,
-        massage=massage,
-        is_answered=True
-    )
-    notification.save()
-    '''Return to render'''
-    return redirect('show_offer_details', pk=pk)
-
-
-def decline_offer_view(request, pk):
-    '''Deactivate offer'''
-    offer = deactivate_offer(pk)
-    '''Create new notification'''
-    recipient = offer.recipient if request.user == offer.sender else offer.sender
-    massage = f'{request.user} declined your offer {offer.pk}!'
-    notification = Notification(
-        sender=request.user,
-        recipient=recipient,
-        offer=offer,
-        massage=massage,
-        is_answered=True
-    )
-    notification.save()
-    '''Return to notifications'''
-    return redirect('show_offer_details', pk=pk)
-
-
-class ShowOfferView(PaginationShowMixin, ListView):
+class ShowOfferView(LoginRequiredMixin, PaginationShowMixin,  ListView):
     template_name = 'offer/show_offers_list.html'
     context_object_name = 'offers'
     model = Offer
@@ -205,3 +131,4 @@ class ShowOfferView(PaginationShowMixin, ListView):
 
     def get_queryset(self):
         return Offer.objects.filter(Q(recipient=self.request.user) | Q(sender=self.request.user))
+

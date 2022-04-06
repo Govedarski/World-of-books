@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
-
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import redirect
 # Create your views here.
-from django.shortcuts import render
 from django.views import generic as views
 from django.views.generic import ListView, DetailView
 
+from my_project.common.helpers.mixins import AuthorizationRequiredMixin
 from my_project.common.models import Notification
 
 
@@ -12,7 +12,7 @@ class ShowHomePageView(views.TemplateView):
     template_name = 'home_page.html'
 
 
-class ShowNotificationsView(ListView):
+class ShowNotificationsView(LoginRequiredMixin, ListView):
     template_name = 'common/notifications/show_notifications.html'
     context_object_name = 'notifications'
     model = Notification
@@ -29,15 +29,18 @@ class ShowNotificationsView(ListView):
         return Notification.objects.filter(recipient=self.request.user)
 
 
-class DetailsNotificationView(DetailView):
+class DetailsNotificationView(LoginRequiredMixin, AuthorizationRequiredMixin, DetailView):
     model = Notification
     context_object_name = 'notification'
     template_name = 'common/notifications/notifications_details.html'
+    authorizing_fields = ['recipient']
 
     def dispatch(self, request, *args, **kwargs):
+        result = super().dispatch(request, *args, **kwargs)
         notification = self.get_object()
         notification.is_read = True
         notification.save()
         if notification.offer:
             return redirect('show_offer_details', pk=notification.offer.pk)
-        return super().dispatch(request, *args, **kwargs)
+        return result
+

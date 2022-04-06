@@ -1,16 +1,13 @@
 from django.contrib.auth import get_user_model
-from django.db import ProgrammingError
-from django.db.models import Count
-from django.db.models.functions import Lower
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
-from django.shortcuts import redirect
-# Create your views here.
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 
-from my_project.common.helpers.mixins import PaginationShowMixin
+from my_project.common.helpers.mixins import PaginationShowMixin, AuthorizationRequiredMixin
 from my_project.common.models import Notification
-from my_project.library.forms import CreateBookForm, UsersListForm, SearchForm
+from my_project.library.forms import SearchForm, CreateBookForm, UsersListForm
 from my_project.library.models import Book
 
 
@@ -65,8 +62,6 @@ class ShowBookListView(PaginationShowMixin, ListView):
         return self.request.GET.get("search_by", '')
 
 
-
-
 class ShowBookView(PaginationShowMixin, ListView):
     template_name = 'library/show_books.html'
     context_object_name = 'books'
@@ -85,9 +80,8 @@ class ShowBookView(PaginationShowMixin, ListView):
         return context
 
     def _get_owner(self):
-        owner = get_user_model().objects.filter(pk=self.kwargs.get('pk'))
-        owner = owner[0] if owner else self.request.user
-        return owner
+        pk = self.kwargs.get('pk', self.request.user.pk)
+        return get_object_or_404(get_user_model(), pk=pk)
 
     def get_queryset(self):
         field = self._get_query_filter()
@@ -99,7 +93,7 @@ class ShowBookView(PaginationShowMixin, ListView):
         return query_set
 
     @staticmethod
-    def _get_query_filter(self):
+    def _get_query_filter():
         return ''
 
 
@@ -108,7 +102,7 @@ class ShowBooksDashboardView(ShowBookView):
         return 'owner'
 
 
-class ShowBooksOnAWayView(ShowBookView):
+class ShowBooksOnAWayView(LoginRequiredMixin, ShowBookView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Books on a way to you'
@@ -118,7 +112,7 @@ class ShowBooksOnAWayView(ShowBookView):
         return 'next_owner'
 
 
-class ShowBooksToSendView(ShowBookView):
+class ShowBooksToSendView(LoginRequiredMixin, ShowBookView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Books you have to send!'
@@ -128,7 +122,7 @@ class ShowBooksToSendView(ShowBookView):
         return 'previous_owner'
 
 
-class CreateBookView(CreateView):
+class CreateBookView(LoginRequiredMixin, CreateView):
     template_name = 'library/create_book.html'
     form_class = CreateBookForm
 
@@ -149,12 +143,11 @@ class DetailsBookView(DetailView):
     def dispatch(self, request, *args, **kwargs):
         book = self.get_object()
         if not book.owner and not book.next_owner:
-            raise Http404("Book does not exist")
+            raise Http404()
         if self.request.user == book.next_owner:
             self.template_name = 'library/book_to_receive_info.html'
         if self.request.user == book.previous_owner:
             self.template_name = 'library/book_to_send_info.html'
-        # Todo if self.request.user is not book owner -> not authorized
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, *args, **kwargs):
@@ -164,19 +157,21 @@ class DetailsBookView(DetailView):
         return self.render_to_response(context={'book': book})
 
 
-class EditBookView(UpdateView):
+class EditBookView(LoginRequiredMixin, AuthorizationRequiredMixin, UpdateView):
     template_name = 'library/edit_book.html'
     form_class = CreateBookForm
     model = Book
+    authorizing_fields = ['owner']
 
     def get_success_url(self):
         return reverse_lazy('book_details', kwargs=self.kwargs)
 
 
-class DeleteBookView(DeleteView):
+class DeleteBookView(AuthorizationRequiredMixin, DeleteView):
     template_name = 'library/delete_book.html'
     model = Book
     form_class = UsersListForm
+    authorizing_fields = ['owner']
 
     def get(self, *args, **kwargs):
         choices = [(0, 'nobody')] + [(user.pk, user.username) for user in
@@ -208,64 +203,3 @@ class DeleteBookView(DeleteView):
     def __get_notification_massage(self):
         return f'{self.request.user} send {self.get_object()} to you without deal between you?'
 
-
-def like_book_view(request, pk):
-    book = Book.objects.get(pk=pk)
-    back = request.GET.get('back', '/')
-    if request.user == book.owner:
-        return redirect(back)
-
-    notification = Notification(
-        sender=request.user,
-        recipient=book.owner,
-        book=book,
-        is_answered=True,
-    )
-    if request.user in book.likes.all():
-        action = 'dislikes'
-        book.likes.remove(request.user)
-    else:
-        action = 'likes'
-        book.likes.add(request.user)
-
-    notification.massage = f'{request.user} {action} your book {book}'
-    book.save()
-    notification.save()
-
-    return redirect(back)
-
-
-def accept_delete_book_view(request, pk):
-    notification = Notification.objects.get(pk=pk)
-    if not notification.recipient == request.user:
-        return redirect('')  # Todo to unauthorized
-
-    notification.is_answered = True
-    notification.save()
-    book = notification.book
-    book.next_owner = request.user
-    book.previous_owner = book.ex_owners.last()
-    book.save()
-
-    return redirect('show_books_dashboard', pk=request.user.pk)
-
-
-def reject_delete_book_view(request, pk):
-    notification = Notification.objects.get(pk=pk)
-    if not notification.recipient == request.user:
-        return redirect('')  # Todo to unauthorized
-
-    notification.is_answered = True
-    notification.save()
-    return redirect('show_books_dashboard', pk=request.user.pk)
-
-
-def receive_book_view(request, pk):
-    book = Book.objects.get(pk=pk)
-    book.owner = book.next_owner
-    book.previous_owner = None
-    book.next_owner = None
-    if request.user in book.likes.all():
-        book.likes.remove(request.user)
-    book.save()
-    return redirect('show_books_dashboard', pk=request.user.pk)

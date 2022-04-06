@@ -10,7 +10,7 @@
         <input type="button" onclick="location.href='{% url "show_books_dashboard" request.user.pk %}';"
                value="My books"/>
         <input type="button" onclick="location.href='{% url "show_books_on_a_way" %}';"
-               value="Books to recieve"/>
+               value="Books to receive"/>
 
         <input type="button" onclick="location.href='{% url "show_books_to_send" %}';"
                value="Books to send"/>
@@ -18,7 +18,7 @@
                value="Add book"/>
     {% endif %}
     {% if not books %}
-        No books
+        <h3>No books</h3>
     {% else %}
         <form action="{% url 'show_books_dashboard' owner.pk %}" class="text-left margin-left-final">
             <input name="search" class="opacity-format" type="text" value="{{ search }}">

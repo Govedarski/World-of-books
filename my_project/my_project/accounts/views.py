@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetConfirmView, \
     PasswordResetDoneView, PasswordResetCompleteView, PasswordChangeView
 # Create your views here.
@@ -40,7 +41,7 @@ class RegisterUserView(CreateView):
         return super().form_invalid(form)
 
 
-class DoneRegistrationView(TemplateView):
+class DoneRegistrationView(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/done_registration.html'
 
 
@@ -90,7 +91,7 @@ class MyPasswordChangeView(PasswordChangeView):
         return next_page if next_page else reverse_lazy('show_home')
 
 
-class MyAccountDetailsView(TemplateView):
+class MyAccountDetailsView(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/account_details.html'
 
     def get_context_data(self, **kwargs):
@@ -106,7 +107,7 @@ class AccountDetailsView(DetailView):
     context_object_name = 'user'
 
 
-class EditEmailView(UpdateView):
+class EditEmailView(LoginRequiredMixin, UpdateView):
     template_name = 'accounts/edit_email.html'
     form_class = EditEmailForm
     success_url = reverse_lazy('show_my_account_details')
@@ -115,7 +116,7 @@ class EditEmailView(UpdateView):
         return get_user_model().objects.get(pk=self.request.user.pk)
 
 
-class EditProfileView(UpdateView):
+class EditProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'accounts/edit_profile.html'
     form_class = ProfileForm
     success_url = reverse_lazy('show_my_account_details')
@@ -124,7 +125,7 @@ class EditProfileView(UpdateView):
         return Profile.objects.get(user_id=self.request.user.pk)
 
 
-class EditContactsView(UpdateView):
+class EditContactsView(LoginRequiredMixin, UpdateView):
     template_name = 'accounts/edit_contacts.html'
     form_class = EditContactForm
     success_url = reverse_lazy('show_my_account_details')
