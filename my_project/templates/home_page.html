@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
-{%load static%}
+{% load library_tags %}
+{% load static %}
 {% block content %}
     <div>
         <h1>The world of books</h1>
@@ -8,25 +9,26 @@
             delectus hic maxime officia repellat voluptas.
         </p1>
     </div>
-    <div>
-        Suggestions:
-        TODO ON 1 line
-        <div>Kniga 1</div>
-        <div>Kniga 2</div>
-        <div>Kniga 3</div>
-    </div>
     <form action="{% url 'book_list' %}">
         <input placeholder="Search book by title" type="text" name="search">
         <input value="title" type="hidden" name="search_by">
         <input value="-" type="hidden" name="ord">
         <button class="opacity-format">Search</button>
     </form>
-    <div>
-        <h1>Article of a week</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam corporis debitis expedita explicabo
-            laudantium molestiae necessitatibus, provident, ratione saepe sequi similique vitae voluptates. Alias
-            delectus hic maxime officia repellat voluptas.</p>
-    </div>
+    <h1>Top most liked books:</h1>
+    <div class='my-books-list'>
+        {% for book in books_to_show %}
+            <div class="book-information myBooks">
+                <div class='right-side-top'>
+                    {% like_book %}
+                </div>
+                {% book_details book.pk %}
+                <input type="button" class="align-end" onclick="location.href='{% url 'book_details' book.pk %}';"
+                       value="Details"/>
+            </div>
+        {% endfor %}
 
+
+    </div>
 
 {% endblock content %}

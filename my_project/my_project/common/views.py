@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count
 from django.shortcuts import redirect
 # Create your views here.
 from django.views import generic as views
@@ -6,11 +7,21 @@ from django.views.generic import ListView, DetailView
 
 from my_project.common.helpers.mixins import AuthorizationRequiredMixin
 from my_project.common.models import Notification
+from my_project.library.models import Book
 
 
 class ShowHomePageView(views.TemplateView):
     template_name = 'home_page.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        books = Book.objects.prefetch_related('likes'). \
+                    filter(owner__isnull=False). \
+                    annotate(like_count=Count('likes')). \
+                    order_by('-like_count', 'title'). \
+                    all()[:3]
+        context['books_to_show'] = books
+        return context
 
 
 class ShowNotificationsView(LoginRequiredMixin, ListView):
@@ -44,4 +55,3 @@ class DetailsNotificationView(LoginRequiredMixin, AuthorizationRequiredMixin, De
         if notification.offer:
             return redirect('show_offer_details', pk=notification.offer.pk)
         return result
-
