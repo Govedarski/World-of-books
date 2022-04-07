@@ -20,11 +20,11 @@
 
                 <div class="text-left">
 
-                <h5><u>Username:</u> {{ user.username }}</h5>
+                <h5><u>Username:</u> {{ user.nickname }}</h5>
                 {% block email %}
                 {% endblock email %}
             {% else %}
-                <h1>{{ user }}'s account information:</h1>
+                <h1>{{ user.nickname }}'s account information:</h1>
                 <div class="d-flex">
                 <div class="d-inline p-2 w-50">
                     <img src="{{ user.profile.picture_url }}" class="w-50 rounded d-block"
@@ -37,7 +37,7 @@
                 {% if request.user.has_usable_password %}
                     <a href="{% url 'change_password' %} " class="btn btn-primary">Change password</a>
                 {% endif %}
-                <a href=" " class="btn btn-danger">Deactivate</a>
+                <a href="{% url 'deactivate_user' %}" class="btn btn-danger">Deactivate</a>
                 <div id='edit' class='text-left'>
                     <h3>Contact form:</h3>
                     {% if not request.user.contactform.is_completed %}

@@ -5,7 +5,8 @@ from django.urls import path, include
 
 from my_project.accounts.views import RegisterUserView, DoneRegistrationView, LoginUserView, LogoutUserView, \
     MyResetPasswordView, MyPasswordResetDoneView, MyPasswordResetConfirmView, MyPasswordResetCompleteView, \
-    MyPasswordChangeView, MyAccountDetailsView, EditEmailView, EditProfileView, EditContactsView, AccountDetailsView
+    MyPasswordChangeView, MyAccountDetailsView, EditEmailView, EditProfileView, EditContactsView, AccountDetailsView, \
+    DeactivateUserView
 
 urlpatterns = [
     path('registration/', RegisterUserView.as_view(), name='create_user'),
@@ -27,5 +28,6 @@ urlpatterns = [
     path('edit/profile/', EditProfileView.as_view(), name='edit_profile'),
     path('edit/contact/', EditContactsView.as_view(), name='edit_contacts'),
 
-    # TODO Deactivate user
+    path('deactivate/', DeactivateUserView.as_view(), name='deactivate_user'),
+
 ]

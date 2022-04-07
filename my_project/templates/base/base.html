@@ -44,7 +44,7 @@
         {% else %}
             <div class="right-side  nav-el-style">Welcome,
             <a href="{% url 'show_my_account_details' %}"
-               class="opacity-format margin-right">{{ request.user.username }}!</a>
+               class="opacity-format margin-right">{{ request.user.nickname }}!</a>
         {% endif %}
 
     <a href="{% url 'logout_user' %}" class="opacity-format margin-right-final">Logout</a>

@@ -7,11 +7,11 @@
         <h1>
             {% if is_my_offer %}
                 Offer to
-                <a href="{% url 'show_account_details' offer.recipient.pk %}">{{ offer.recipient }}</a>
+                <a href="{% url 'show_account_details' offer.recipient.pk %}">{{ offer.recipient.nickname }}</a>
 
             {% else %}
                 Offer from
-                <a href="{% url 'show_account_details' offer.sender.pk %}">{{ offer.sender }}</a>
+                <a href="{% url 'show_account_details' offer.sender.pk %}">{{ offer.sender.nickname }}</a>
 
             {% endif %}
         </h1>

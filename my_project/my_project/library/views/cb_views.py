@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.db.models import Count
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
@@ -33,7 +34,7 @@ class ShowBookListView(PaginationShowMixin, ListView):
 
     def get_queryset(self):
         query_set = Book.objects.prefetch_related('owner', 'category', 'likes').filter(
-            owner__isnull=False).annotate(like_count=Count('likes')).order_by(
+            owner__isnull=False, owner__is_active = True).annotate(like_count=Count('likes')).order_by(
             '-like_count', 'title')
         if self.search_by == SearchForm.SearchByChoices.owner:
             owner = get_user_model().objects.filter(username__icontains=self.search)
@@ -78,7 +79,7 @@ class ShowBookView(PaginationShowMixin, ListView):
         context['owner'] = owner
         context['title'] = 'My books' \
             if owner == self.request.user else \
-            f"{owner}'s book"
+            f"{owner.nickname}'s book"
         return context
 
     def get_queryset(self):
@@ -173,7 +174,9 @@ class DetailsBookView(DetailView):
 
     def post(self, *args, **kwargs):
         book = self.get_object()
-        book.is_available = not book.is_available
+        if not self.request.user == book.owner:
+            raise PermissionDenied
+        book.is_tradable = not book.is_tradable
         book.save()
         return self.render_to_response(context={'book': book})
 

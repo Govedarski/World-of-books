@@ -2,15 +2,11 @@
     <span>
         {% if page_obj.has_previous %}
             <a href="?page=1
-                        {% if search or ord %}
             &search={{ search }}&search_by={{ search_by }}&ord={{ ord }}&ord_by={{ ord_by }}
-            {% endif %}
 
             ">1st</a>
             <a href="?page={{ page_obj.previous_page_number }}
-                        {% if search or ord %}
             &search={{ search }}&search_by={{ search_by }}&ord={{ ord }}&ord_by={{ ord_by }}
-            {% endif %}
 
 ">&laquo;</a>
         {% else %}
@@ -25,15 +21,11 @@
         {% if page_obj.has_next %}
             <a href="?page={{ page_obj.next_page_number }}
 
-            {% if search or ord %}
             &search={{ search }}&search_by={{ search_by }}&ord={{ ord }}&ord_by={{ ord_by }}
-            {% endif %}
             "
             >&raquo;</a>
             <a href="?page={{ page_obj.paginator.num_pages }}
-                        {% if search or ord %}
             &search={{ search }}&search_by={{ search_by }}&ord={{ ord }}&ord_by={{ ord_by }}
-            {% endif %}
             "
             >last</a>
 

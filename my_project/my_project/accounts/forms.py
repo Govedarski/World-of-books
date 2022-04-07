@@ -88,3 +88,5 @@ class EditContactForm(AddCCSMixin, forms.ModelForm):
     class Meta:
         model = ContactForm
         exclude = ['user']
+
+

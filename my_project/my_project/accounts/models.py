@@ -42,6 +42,10 @@ class WorldOfBooksUser(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = 'email'
     objects = MyUserManager()
 
+    @property
+    def nickname(self):
+        return self.username if self.is_active else 'archived user'
+
     def clean(self):
         if WorldOfBooksUser.objects.filter(email=self.username).exists():
             raise ValidationError({'username': self.USERNAME_VALIDATION_ERROR_MASSAGE})

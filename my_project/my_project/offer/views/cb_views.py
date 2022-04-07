@@ -23,7 +23,6 @@ class CreateOfferView(LoginRequiredMixin, CreateView):
             return redirect(reverse_lazy('edit_contacts') + f"?next={self.request.path}#edit")
         if self.request.user == self._get_wanted_book().owner:
             raise PermissionDenied('You cannot make offer for your own book!')
-        p=1
         return result
 
     def get_initial(self):

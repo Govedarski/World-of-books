@@ -50,7 +50,7 @@
             <td>{{ book.author }}</td>
             <td>{{ book.category }}</td>
             <td>
-                <a href="{% url 'show_account_details' book.owner.pk %}">{{ book.owner }}</a>
+                <a href="{% url 'show_account_details' book.owner.pk %}">{{ book.owner.nickname }}</a>
             </td>
             <td>{{ book.likes_count }}</td>
         </tr>

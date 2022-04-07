@@ -88,7 +88,7 @@ class Book(models.Model):
         blank=True,
     )
 
-    is_available = models.BooleanField(
+    is_tradable = models.BooleanField(
         default=True,
     )
 

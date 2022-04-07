@@ -8,7 +8,7 @@
                 {% if not book.owner == request.user %}
                     {% like_book %}
                 {% endif %}
-                {% if not book.is_available %}
+                {% if not book.is_tradable %}
                     <h5>(This book is not tradable)</h5></h1>
                 {% else %}
                     <h5>(This book is tradable)</h5></h1>
@@ -17,7 +17,7 @@
                 {% csrf_token %}
                 {% if request.user == book.owner %}
 
-                    {% if book.is_available %}
+                    {% if book.is_tradable %}
                         <button class="btn btn-danger">Make it not tradable</button>
                     {% else %}
                         <button class="btn btn-success">Make it tradable</button>
@@ -39,7 +39,8 @@
 
                         {% if not book.owner == request.user %}
                             <h5><u>Owner:</u> <a
-                                    href="{% url 'show_account_details' book.owner.pk %}">{{ book.owner }}</a></h5>
+                                    href="{% url 'show_account_details' book.owner.pk %}">{{ book.owner.nickname }}</a>
+                            </h5>
 
                         {% endif %}
                     </div>
@@ -51,7 +52,7 @@
 
                 <div class="d-inline p-2 w-50 text-left margin-left-final">
 
-                    {% if book.is_available and not book.owner == request.user %}
+                    {% if book.is_tradable and not book.owner == request.user %}
                         <div class="text-center">
                             <a class="btn btn-success inline" href="{% url 'create_offer' book.pk %}">Make a offer</a>
                         </div>
@@ -61,13 +62,15 @@
                             {% if book.likes_count %}
 
                                 <details class='inline'>
-                                    <summary>by:</summary>                       {% for user in book.likes.all %}
-                                    <ul>
-                                        <li>
-                                            <a href="{% url 'show_books_dashboard' user.pk %}"><h5>{{ user }}</h5></a>
-                                        </li>
-                                    </ul>
-                                {% endfor %}</details>
+                                    <summary>by:</summary>
+                                    {% for user in book.likes.all %}
+                                        <ul>
+                                            <li>
+                                                <a href="{% url 'show_books_dashboard' user.pk %}">
+                                                    <h5>{{ user.nickname }}</h5></a>
+                                            </li>
+                                        </ul>
+                                    {% endfor %}</details>
                             {% endif %}
                             </h5>
                         {% endif %}

@@ -1,15 +1,18 @@
-from django.contrib.auth import get_user_model, login
+from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetConfirmView, \
     PasswordResetDoneView, PasswordResetCompleteView, PasswordChangeView
 # Create your views here.
+from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
+from django.views.generic import CreateView, DetailView, TemplateView, UpdateView, DeleteView
 
 from my_project.accounts.forms import CreateUserForm, ProfileForm, MyLoginForm, MySetPasswordForm, EditEmailForm, \
     MyPasswordChangeForm, EditContactForm
 from my_project.accounts.models import Profile, ContactForm
+from my_project.library.models import Book
+from my_project.offer.models import Offer
 
 
 class RegisterUserView(CreateView):
@@ -18,13 +21,12 @@ class RegisterUserView(CreateView):
     success_url = reverse_lazy('done_registration')
     template_name = 'accounts/create_user.html'
     second_form = ProfileForm
-    
-    
+
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             return redirect('show_home')
         return super().dispatch(request, *args, **kwargs)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["profile_form"] = self.second_form
@@ -143,3 +145,49 @@ class EditContactsView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         next_page = self.request.GET.get('next')
         return next_page if next_page else reverse_lazy('show_my_account_details')
+
+
+class DeactivateUserView(LoginRequiredMixin, DeleteView):
+    template_name = 'accounts/deactivate_user.html'
+    model = get_user_model()
+    fields = "__all__"
+    success_url = reverse_lazy('show_home')
+
+    def get_object(self, queryset=None):
+        return get_user_model().objects.get(pk=self.request.user.pk)
+
+    def post(self, request, *args, **kwargs):
+        result = super().post(request, *args, **kwargs)
+        logout(request)
+        return result
+
+    def form_valid(self, form):
+        user = self.object
+        user.is_active = False
+        user.save()
+        books = Book.objects.prefetch_related('owner').filter(owner=user)
+        self._make_books_untradable(books)
+        offers = Offer.objects.prefetch_related('sender', 'recipient') \
+            .filter(Q(sender=user) | Q(recipient=user), is_active=True)
+        self._make_offer_inactive(offers)
+        self._delete_information(Profile, user)
+        self._delete_information(ContactForm, user)
+        return redirect(self.success_url)
+
+    @staticmethod
+    def _make_books_untradable(books):
+        for book in books:
+            book.is_tradable = False
+            book.save()
+
+    @staticmethod
+    def _make_offer_inactive(offers):
+        for offer in offers:
+            offer.is_active = False
+            offer.save()
+
+    @staticmethod
+    def _delete_information(my_model, user):
+        obj = my_model.objects.get(pk=user.pk)
+        obj.delete()
+        my_model(user=user).save()
