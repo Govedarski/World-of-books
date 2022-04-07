@@ -130,9 +130,10 @@ class CreateBookView(LoginRequiredMixin, CreateView):
     form_class = BookForm
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.contactform.is_completed:
+        result = super().dispatch(request, *args, **kwargs)
+        if self.request.user.is_authenticated and not self.request.user.contactform.is_completed:
             return redirect(reverse_lazy('edit_contacts') + f"?next={self.request.path}#edit")
-        return super().dispatch(request, *args, **kwargs)
+        return result
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -187,7 +188,7 @@ class EditBookView(LoginRequiredMixin, AuthorizationRequiredMixin, UpdateView):
         return reverse_lazy('book_details', kwargs=self.kwargs)
 
 
-class DeleteBookView(AuthorizationRequiredMixin, DeleteView):
+class DeleteBookView(LoginRequiredMixin, AuthorizationRequiredMixin, DeleteView):
     template_name = 'library/delete_book.html'
     model = Book
     form_class = UsersListForm

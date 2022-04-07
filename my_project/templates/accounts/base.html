@@ -27,14 +27,10 @@
                 <h1>{{ user }}'s account information:</h1>
                 <div class="d-flex">
                 <div class="d-inline p-2 w-50">
-
                     <img src="{{ user.profile.picture_url }}" class="w-50 rounded d-block"
                          onerror="this.src='{% static 'images/user-avatar.png' %}';" alt="photo">
-
                 </div>
-
             {% endif %}
-
             </div>
 
             {% if request.user == user %}

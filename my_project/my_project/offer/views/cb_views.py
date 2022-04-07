@@ -19,10 +19,11 @@ class CreateOfferView(LoginRequiredMixin, CreateView):
 
     def dispatch(self, request, *args, **kwargs):
         result = super().dispatch(request, *args, **kwargs)
-        if not self.request.user.contactform.is_completed:
+        if self.request.user.is_authenticated and not self.request.user.contactform.is_completed:
             return redirect(reverse_lazy('edit_contacts') + f"?next={self.request.path}#edit")
         if self.request.user == self._get_wanted_book().owner:
             raise PermissionDenied('You cannot make offer for your own book!')
+        p=1
         return result
 
     def get_initial(self):
