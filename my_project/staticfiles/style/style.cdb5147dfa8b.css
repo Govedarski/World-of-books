@@ -1,0 +1,265 @@
+html {
+    background: black;
+}
+
+nav {
+    display: inline-block;
+    background: transparent;
+    width: 100%;
+}
+
+ul {
+    float: left;
+    width: 100%;
+}
+
+ul li {
+    margin-right: 5%;
+}
+
+
+nav a:hover {
+    background: #a79271;
+    color: white;
+}
+
+a {
+    color: black;
+}
+
+a img {
+    height: 40px;
+    width: 50px;
+    margin-bottom: 10px;
+}
+
+
+a img:hover {
+    height: 40px;
+    width: 50px;
+    margin-bottom: 10px;
+    -webkit-filter: invert(1);
+    filter: invert(1);
+}
+
+button {
+    margin: 10px;
+    font-size: larger;
+    color: black;
+    background-color: rgba(204, 204, 204, 0.2);
+}
+
+button:hover {
+    background: #a79271;
+    color: white;
+}
+
+
+body {
+    background: url('https://wallpaperaccess.com/full/4868953.jpg') no-repeat top center;
+    background-size: 100% 100%;
+    min-height: 100%;
+}
+
+main {
+    text-align: center;
+    min-height: 950px;
+}
+
+h1 {
+    margin: 3% 0 3% 0;
+}
+
+footer {
+    color: white;
+    text-align: center;
+}
+
+label {
+    width: 19%;
+}
+
+input {
+    color: black;
+    background-color: rgba(204, 204, 204, 0.2)
+}
+
+hr {
+    margin-top: -20px;
+    border-top: 5px solid black
+}
+
+table, td, th {
+    border: 1px solid;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+.align-end {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+
+.content-div {
+    align-self: center;
+    margin: 0 5% 0 5%;
+    text-align: center;
+}
+
+
+.center {
+    align-self: center;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.nav-el-style {
+    color: black;
+    font-size: medium;
+    margin: 40px 0 0 5%;
+    display: inline-block;
+    min-width: 46%;
+}
+
+.right-side {
+    text-align: right;
+    position: absolute;
+    right: 0;
+}
+
+.right-side-top {
+    position: absolute;
+    top: 2%;
+    right: 2%;
+}
+
+.opacity-format {
+    color: black;
+    background-color: rgba(204, 204, 204, 0.2)
+}
+
+.margin-right {
+    margin-right: 5%;
+    width: 100%;
+}
+
+.margin-right-final {
+    margin-right: 12%;
+}
+
+.margin-left-final {
+    margin-left: 5%;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.my_form_control {
+    text-align: center;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.width-28 {
+    width: 28%;
+}
+
+.width-60 {
+    width: 60% !important;
+}
+
+.width-100 {
+    width: 100%;
+}
+
+.btn-link {
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+    color: black;
+    padding: 0;
+    text-decoration: underline;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: bold;
+
+}
+
+.warning {
+    color: red;
+    text-align: left;
+}
+
+.a-button-big {
+    font-size: xx-large;
+    margin-top: 100px;
+}
+
+.my-books-list {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+
+.myBooks {
+    border-radius: 10px;
+    text-align: center;
+    margin: 1rem;
+    position: relative;
+    width: 25%;
+    min-height: 40%;
+    transition: all 0.3s cubic-bezier(.50, .80, .25, 1);
+    box-shadow: -8px -2px 28px -8px #000000;
+    align-items: center;
+}
+
+
+.myBooks:hover {
+    box-shadow: 30px 30px 100px 10px #000000;
+}
+
+.book-information > .img {
+    width: 60%;
+    align-items: center;
+}
+
+
+
+.book-information > .button {
+    width: 30%;
+    text-align: center;
+}
+
+.height-90 {
+    justify-content: space-around;
+    flex-wrap: wrap;
+    min-height: 100%;
+    width: 100%;
+}
+
+
