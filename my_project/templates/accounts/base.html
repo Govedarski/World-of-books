@@ -27,13 +27,10 @@
                 <h1>{{ user }}'s account information:</h1>
                 <div class="d-flex">
                 <div class="d-inline p-2 w-50">
-                    {% if user.profile.picture_upload %}
-                        <img src="{{ user.profile.picture_upload.url }}" class="w-50 rounded d-block" alt="photo">
-                    {% elif user.profile.picture_url %}
-                        <img src="{{ user.profile.picture_url }}" class="w-50 rounded d-block" alt="photo">
-                    {% else %}
-                        <img src="{% static 'images/user-avatar.png' %}" class="w-50 rounded d-block" alt="photo">
-                    {% endif %}
+
+                    <img src="{{ user.profile.picture_url }}" class="w-50 rounded d-block"
+                         onerror="this.src='{% static 'images/user-avatar.png' %}';" alt="photo">
+
                 </div>
 
             {% endif %}
@@ -45,7 +42,7 @@
                     <a href="{% url 'change_password' %} " class="btn btn-primary">Change password</a>
                 {% endif %}
                 <a href=" " class="btn btn-danger">Deactivate</a>
-                <div id ='edit' class='text-left'>
+                <div id='edit' class='text-left'>
                     <h3>Contact form:</h3>
                     {% if not request.user.contactform.is_completed %}
                         <h4><p class='warning'>
@@ -64,7 +61,7 @@
             <div class="d-inline p-2 w-50">
                 {% if request.user == user %}
 
-                <h3>Profile:</h3>
+                    <h3>Profile:</h3>
                 {% endif %}
 
                 <a href="{% url 'show_books_dashboard' user.pk %}">

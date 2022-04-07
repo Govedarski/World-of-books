@@ -10,7 +10,7 @@
                 {% endif %}
                 {% if not book.is_available %}
                     <h5>(This book is not tradable)</h5></h1>
- {% else %}
+                {% else %}
                     <h5>(This book is tradable)</h5></h1>
                 {% endif %}
             <form action="{% url 'book_details' book.pk %}" method="post">
@@ -28,12 +28,9 @@
             <div class="d-flex">
 
                 <div class="d-inline p-2 w-50">
-                    {% if book.image %}
-                        <img src="{{ book.image.url }}" class="w-50 rounded d-block" alt="photo">
-                    {% else %}
-                        <img src="{% static 'images/book-avatar.png' %}" class="w-50 rounded d-block"
-                             alt="photo">
-                    {% endif %}
+                    <img src="{{ book.image.url }}" class="w-50 rounded d-block"
+                         onerror="this.src='{% static 'images/book-avatar.png' %}';" alt="photo">
+
                     <div class="text-left">
                         <h5><u>Author:</u> {{ book.author }}</h5>
                         {% if book.category %}
