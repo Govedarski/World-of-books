@@ -18,10 +18,10 @@ class CreateOfferForm(AddCCSMixin, forms.ModelForm):
         sender = initial.get('sender')
         recipient = initial.get('recipient')
         '''filter many-to-many-field to show only books that belong to sender'''
-        self.fields['sender_books'].queryset = Book.objects.filter(owner=sender)
+        self.fields['sender_books'].queryset = Book.objects.filter(owner=sender, is_available=True)
         '''filter many-to-many-field to show only books that belong to recipient 
         but the one book that is included already'''
-        want_more_books = Book.objects.filter(owner=recipient).exclude(pk=wanted_book.pk)
+        want_more_books = Book.objects.filter(owner=recipient, is_available=True).exclude(pk=wanted_book.pk)
         self.fields['recipient_books'].queryset = want_more_books
         self.fields['recipient_books'].required = False
 
@@ -43,8 +43,8 @@ class NegotiateOfferForm(AddCCSMixin, forms.ModelForm):
         new_recipient = old_offer.sender
         self.initial['sender_books'], self.initial['recipient_books'] = self.initial['recipient_books'], self.initial[
             'sender_books']
-        self.fields['sender_books'].queryset = Book.objects.filter(owner=new_sender)
-        self.fields['recipient_books'].queryset = Book.objects.filter(owner=new_recipient)
+        self.fields['sender_books'].queryset = Book.objects.filter(owner=new_sender, is_available=True)
+        self.fields['recipient_books'].queryset = Book.objects.filter(owner=new_recipient, is_available=True)
 
     class Meta:
         model = Offer

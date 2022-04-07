@@ -2,6 +2,7 @@
 
 import cloudinary.models
 from django.db import migrations
+
 import my_project.common.helpers.custom_validators
 
 

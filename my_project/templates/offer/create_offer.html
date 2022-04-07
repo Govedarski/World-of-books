@@ -11,7 +11,14 @@
             <div class="d-flex">
                 <div class="d-inline p-2 w-50">
                     <h3>You offer:</h3>
-                    {{ form.sender_books }}
+                    {% if form.sender_books|length %}
+                        {{ form.sender_books }}
+                    {% else %}
+                        <h3>You do not have any books to offer!</h3>
+                        <input type="button" onclick="location.href='{% url "create_book" %}?next={{ request.path }}';"
+                               value="Add book"/>
+                    {% endif %}
+
                 </div>
 
                 <div class="d-inline p-2 w-50 margin-left-final">
@@ -27,7 +34,10 @@
 
             </div>
             <div class="text-center">
-                <button>Send</button>
+                {% if form.sender_books|length %}
+                    <button>Send</button>
+                {% endif %}
+
             </div>
         </div>
     </form>

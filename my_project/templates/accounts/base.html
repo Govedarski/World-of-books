@@ -45,13 +45,13 @@
                     <a href="{% url 'change_password' %} " class="btn btn-primary">Change password</a>
                 {% endif %}
                 <a href=" " class="btn btn-danger">Deactivate</a>
-                <div class='text-left'>
+                <div id ='edit' class='text-left'>
                     <h3>Contact form:</h3>
                     {% if not request.user.contactform.is_completed %}
-                        <p class='warning'>
+                        <h4><p class='warning'>
                             <strong>You have to fill city and address in the contact form to use full site
                                 functionality!</strong>
-                        </p>
+                        </p></h4>
                     {% endif %}
 
                     {% block contact %}

@@ -10,3 +10,5 @@ def handle_server_internal_error(get_response):
         return result
 
     return middleware
+
+

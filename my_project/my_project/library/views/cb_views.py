@@ -82,7 +82,7 @@ class ShowBookView(PaginationShowMixin, ListView):
         return context
 
     def get_queryset(self):
-        field = self._get_query_filter()
+        field = self._get_query_filter_field()
         owner = self._get_owner()
         search = self.request.GET.get("search", '')
         query_filter = {field: owner,
@@ -95,12 +95,12 @@ class ShowBookView(PaginationShowMixin, ListView):
         return get_object_or_404(get_user_model(), pk=pk)
 
     @staticmethod
-    def _get_query_filter():
+    def _get_query_filter_field():
         return ''
 
 
 class ShowBooksDashboardView(ShowBookView):
-    def _get_query_filter(self):
+    def _get_query_filter_field(self):
         return 'owner'
 
 
@@ -110,23 +110,29 @@ class ShowBooksOnAWayView(LoginRequiredMixin, ShowBookView):
         context['title'] = 'Books on a way to you'
         return context
 
-    def _get_query_filter(self):
+    def _get_query_filter_field(self):
         return 'next_owner'
 
 
 class ShowBooksToSendView(LoginRequiredMixin, ShowBookView):
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Books you have to send!'
         return context
 
-    def _get_query_filter(self):
+    def _get_query_filter_field(self):
         return 'previous_owner'
 
 
 class CreateBookView(LoginRequiredMixin, CreateView):
     template_name = 'library/create_book.html'
     form_class = BookForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.contactform.is_completed:
+            return redirect(reverse_lazy('edit_contacts') + f"?next={self.request.path}#edit")
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -135,7 +141,9 @@ class CreateBookView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         pk = self.request.user.pk
-        return reverse_lazy('show_books_dashboard', kwargs={'pk': pk})
+        default_redirect = reverse_lazy('show_books_dashboard', kwargs={'pk': pk})
+        next_page = self.request.GET.get('next')
+        return next_page if next_page else default_redirect
 
     @staticmethod
     def _set_category(form):

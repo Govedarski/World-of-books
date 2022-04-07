@@ -1,5 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.db.models import Q
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView, ListView
 
@@ -13,10 +15,18 @@ from my_project.offer.models import Offer
 class CreateOfferView(LoginRequiredMixin, CreateView):
     template_name = 'offer/create_offer.html'
     form_class = CreateOfferForm
-    success_url = reverse_lazy('show_home')
+    success_url = reverse_lazy('show_offer_list')
+
+    def dispatch(self, request, *args, **kwargs):
+        result = super().dispatch(request, *args, **kwargs)
+        if not self.request.user.contactform.is_completed:
+            return redirect(reverse_lazy('edit_contacts') + f"?next={self.request.path}#edit")
+        if self.request.user == self._get_wanted_book().owner:
+            raise PermissionDenied('You cannot make offer for your own book!')
+        return result
 
     def get_initial(self):
-        wanted_book = self.__get_wanted_book()
+        wanted_book = self._get_wanted_book()
         sender = self.request.user
         recipient = wanted_book.owner
         return {
@@ -27,39 +37,39 @@ class CreateOfferView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['book'] = self.__get_wanted_book()
+        context['book'] = self._get_wanted_book()
         return context
 
     def form_valid(self, form):
-        form = self.__create_valid_form(form)
+        form = self._create_valid_form(form)
         result = super().form_valid(form)
         offer = self.object
-        offer.recipient_books.add(self.__get_wanted_book())
+        offer.recipient_books.add(self._get_wanted_book())
         offer.save()
-        self.__send_notification(offer)
+        self._send_notification(offer)
         return result
 
-    def __get_wanted_book(self):
+    def _get_wanted_book(self):
         return Book.objects.get(pk=self.kwargs.get('pk'))
 
-    def __create_valid_form(self, form):
-        wanted_book = self.__get_wanted_book()
+    def _create_valid_form(self, form):
+        wanted_book = self._get_wanted_book()
         form.instance.sender = self.request.user
         form.instance.recipient = wanted_book.owner
         return form
 
-    def __send_notification(self, offer):
+    def _send_notification(self, offer):
         notification = Notification(
             sender=offer.sender,
             recipient=offer.recipient,
-            book=self.__get_wanted_book(),
+            book=self._get_wanted_book(),
             offer=offer,
-            massage=self.__get_notification_massage(offer),
+            massage=self._get_notification_massage(offer),
         )
         notification.save()
 
-    def __get_notification_massage(self, offer):
-        return f'{offer.sender} makes offer for your book {self.__get_wanted_book()}' \
+    def _get_notification_massage(self, offer):
+        return f'{offer.sender} makes offer for your book {self._get_wanted_book()}' \
                f'{" and others" if len(offer.recipient_books.all()) > 1 else ""}'
 
 
@@ -84,22 +94,22 @@ class NegotiateOfferView(LoginRequiredMixin, AuthorizationRequiredMixin, UpdateV
         return super().form_valid(form)
 
     def get_success_url(self):
-        self.__send_notification()
+        self._send_notification()
         return super().get_success_url()
 
-    def __send_notification(self):
+    def _send_notification(self):
         notification = Notification(
             sender=self.request.user,
-            recipient=self.__get_recipient(),
+            recipient=self._get_recipient(),
             offer=self.object,
-            massage=self.__get_notification_massage(),
+            massage=self._get_notification_massage(),
         )
         notification.save()
 
-    def __get_notification_massage(self):
+    def _get_notification_massage(self):
         return f'{self.request.user} makes counter offer to your offer {self.old_offer.pk}'
 
-    def __get_recipient(self):
+    def _get_recipient(self):
         return self.object.recipient if self.request.user == self.object.sender else self.object.sender
 
     @property
@@ -123,7 +133,7 @@ class ShowOfferDetailsView(LoginRequiredMixin, AuthorizationRequiredMixin, Detai
         return context
 
 
-class ShowOfferView(LoginRequiredMixin, PaginationShowMixin, ListView):
+class ShowOffersView(LoginRequiredMixin, PaginationShowMixin, ListView):
     template_name = 'offer/show_offers_list.html'
     context_object_name = 'offers'
     model = Offer

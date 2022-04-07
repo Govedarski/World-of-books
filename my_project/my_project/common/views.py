@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 # Create your views here.
 from django.views import generic as views
@@ -6,11 +6,11 @@ from django.views.generic import ListView, DetailView
 
 from my_project.common.helpers.mixins import AuthorizationRequiredMixin
 from my_project.common.models import Notification
-from my_project.library.models import Book
 
 
 class ShowHomePageView(views.TemplateView):
     template_name = 'home_page.html'
+
 
 
 class ShowNotificationsView(LoginRequiredMixin, ListView):

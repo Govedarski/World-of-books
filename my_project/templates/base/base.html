@@ -61,7 +61,7 @@
     {% else %}
         <div class="right-side  nav-el-style">
         <a href="{% url 'create_user' %}" class="opacity-format margin-right">Register</a>
-        <a href="{% url 'login_user' %}" class="opacity-format margin-right-final">Login</a>
+        <a href="{% url 'login_user' %}?next={{ request.path }}" class="opacity-format margin-right-final">Login</a>
     {% endif %}
     </div>
 </nav>

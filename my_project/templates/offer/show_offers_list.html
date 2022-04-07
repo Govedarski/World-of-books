@@ -1,7 +1,11 @@
 {% extends 'base/base.html' %}
 {% load common_tags %}
 {% block content %}
+    {% if not offers %}
+        <h1>You do not have any offers yet!</h1>
+    {% endif %}
     <div class="text-left">
+
         <ul>
             {% for offer in offers %}
                 <li>

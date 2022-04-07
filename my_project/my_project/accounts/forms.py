@@ -81,8 +81,9 @@ class EditContactForm(AddCCSMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['phone_number'].label_suffix = ':\n +359/'
-
-        self._add_ccs('my_form_control', 'width-100', 'opacity-format')
+        self._add_ccs('my_form_control', 'width-100')
+        self.fields['city'].required = True
+        self.fields['address'].required = True
 
     class Meta:
         model = ContactForm

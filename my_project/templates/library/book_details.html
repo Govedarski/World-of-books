@@ -9,14 +9,16 @@
                     {% like_book %}
                 {% endif %}
                 {% if not book.is_available %}
-                    <h5>(Not tradable)</h5></h1>
+                    <h5>(This book is not tradable)</h5></h1>
+ {% else %}
+                    <h5>(This book is tradable)</h5></h1>
                 {% endif %}
             <form action="{% url 'book_details' book.pk %}" method="post">
                 {% csrf_token %}
                 {% if request.user == book.owner %}
 
                     {% if book.is_available %}
-                        <button class="btn btn-danger">Not tradable</button>
+                        <button class="btn btn-danger">Make it not tradable</button>
                     {% else %}
                         <button class="btn btn-success">Make it tradable</button>
                     {% endif %}

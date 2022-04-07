@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetConfirmView, \
     PasswordResetDoneView, PasswordResetCompleteView, PasswordChangeView
 # Create your views here.
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
 
@@ -17,7 +18,13 @@ class RegisterUserView(CreateView):
     success_url = reverse_lazy('done_registration')
     template_name = 'accounts/create_user.html'
     second_form = ProfileForm
-
+    
+    
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('show_home')
+        return super().dispatch(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["profile_form"] = self.second_form
@@ -132,3 +139,7 @@ class EditContactsView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return ContactForm.objects.get(user_id=self.request.user.pk)
+
+    def get_success_url(self):
+        next_page = self.request.GET.get('next')
+        return next_page if next_page else reverse_lazy('show_my_account_details')

@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-lg-3"></div>
             <div class="col-lg-6">
-                <form method="POST" action="{% url 'create_book' %}" enctype="multipart/form-data">
+                <form method="POST" action="" enctype="multipart/form-data">
                     {{ form }}
                     {% csrf_token %}
                     <button type="submit">Add</button>
