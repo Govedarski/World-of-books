@@ -183,6 +183,9 @@ table {
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
+.width-20 {
+    min-width: 20%;
+}
 .width-28 {
     width: 28%;
 }

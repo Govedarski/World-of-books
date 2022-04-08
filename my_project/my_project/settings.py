@@ -20,12 +20,9 @@ from django.urls import reverse_lazy
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 APP_ENVIRONMENT = os.getenv('APP_ENVIRONMENT')
 
-
 SECRET_KEY = 'django-insecure-3&ul(x3&ze^(!f3ze3+f@=-hf7j(z1=_2a8d&&*-)avtudy5d7'
-
 
 DEBUG = False if APP_ENVIRONMENT else True
 
@@ -33,8 +30,6 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'theworldofbooks.herokuapp.com',
 ]
-
-
 
 INSTALLED_APPS = [
     # DJANGO APPS
@@ -144,8 +139,6 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-
-
 ACCOUNT_SIGNUP_REDIRECT_URL = reverse_lazy('show_home')
 
 LANGUAGE_CODE = 'en-us'
@@ -160,18 +153,14 @@ DATE_FORMAT = 'd N Y'
 
 USE_L10N = False
 
-
 BASE_DIR_2 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = '/static/'
 
-
 STATICFILES_DIRS = (
     BASE_DIR / 'static',
 )
-
 
 cloudinary.config(
     cloud_name="hvumptw7s",
@@ -179,7 +168,6 @@ cloudinary.config(
     api_secret="56veOLp5yHF6WbsQZSWinOggStE",
     secure=True
 )
-
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -189,25 +177,45 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'theworldofbooks.project@gmail.com'
 EMAIL_HOST_PASSWORD = 'lfmnleybhzboeutj'
 
+LOGS_DIR = BASE_DIR / 'Logs'
 
+try:
+    os.mkdir(LOGS_DIR)
+except:
+    pass
+
+LOGIN_LEVEL = "DEBUG" if DEBUG else "ERROR"
 LOGGING = {
     'version': 1,
-    'filters': {
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        }
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '{asctime} [{levelname}] {message}',
+            'style': '{',
+        },
+        'verbose': {
+            'format': '{asctime} [{levelname}] {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
     },
     'handlers': {
         'console': {
-            'level': 'DEBUG',
-            'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
-        }
+            'formatter': 'simple',
+
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': LOGS_DIR / 'Log.txt',
+            'formatter': 'verbose',
+        },
     },
+    'root': {'handler': ['console', 'file'],
+             'level': LOGIN_LEVEL},
     'loggers': {
         'django.db.backends': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-        }
-    }
+            'level': 'DEBUG' if DEBUG else 'ERROR',
+            'handlers': ['console'] if DEBUG else ['file'],
+        },
+    },
 }

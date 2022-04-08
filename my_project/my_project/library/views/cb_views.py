@@ -203,7 +203,7 @@ class DeleteBookView(LoginRequiredMixin, AuthorizationRequiredMixin, DeleteView)
         self.form_class.base_fields['user'].choices = choices
         return super().get(*args, **kwargs)
 
-    def post(self, *args, **kwargs):
+    def form_valid(self, form):
         user_pk = self.request.POST.get('user')
         book = self.get_object()
         book.ex_owners.add(book.owner)

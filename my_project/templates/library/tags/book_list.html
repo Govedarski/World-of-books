@@ -1,12 +1,25 @@
-<table>
+<table class="width-100">
+    <col style="width: 25%;"/>
+    <col style="width: 20%;"/>
+    <col style="width: 20%;"/>
+    <col style="width: 20%;"/>
+    <col style="width: 15%;"/>
+
     <tr>
-
         <td>
             <a href="{% url 'book_list' %}?ord=
 {% if ord == '-' %}
 {% else %}
 -
-{% endif %}&ord_by=title&search={{ search }}&search_by={{ search_by }}">title</a>
+{% endif %}&ord_by=title&search={{ search }}&search_by={{ search_by }}"><strong>TITLE</strong></a>
+        </td>
+
+        <td class='width-20'>
+            <a href="{% url 'book_list' %}?ord=
+{% if ord == '-' %}
+{% else %}
+-
+{% endif %}&ord_by=author&search={{ search }}&search_by={{ search_by }}"><strong>AUTHOR</strong></a>
         </td>
 
         <td>
@@ -14,7 +27,7 @@
 {% if ord == '-' %}
 {% else %}
 -
-{% endif %}&ord_by=author&search={{ search }}&search_by={{ search_by }}">author</a>
+{% endif %}&ord_by=category&search={{ search }}&search_by={{ search_by }}"><strong>CATEGORY</strong></a>
         </td>
 
         <td>
@@ -22,7 +35,7 @@
 {% if ord == '-' %}
 {% else %}
 -
-{% endif %}&ord_by=category&search={{ search }}&search_by={{ search_by }}">Category</a>
+{% endif %}&ord_by=owner__username&search={{ search }}&search_by={{ search_by }}"><strong>OWNER</strong></a>
         </td>
 
         <td>
@@ -30,15 +43,7 @@
 {% if ord == '-' %}
 {% else %}
 -
-{% endif %}&ord_by=owner__username&search={{ search }}&search_by={{ search_by }}">owner</a>
-        </td>
-
-        <td>
-            <a href="{% url 'book_list' %}?ord=
-{% if ord == '-' %}
-{% else %}
--
-{% endif %}&ord_by=like_count&search={{ search }}&search_by={{ search_by }}">likes</a>
+{% endif %}&ord_by=like_count&search={{ search }}&search_by={{ search_by }}"><strong>LIKES</strong></a>
         </td>
     </tr>
 

@@ -4,11 +4,11 @@
 
     <div class='content-div'>
         <h1>Welcome to the World of Books</h1>
-        <p>Your registration was successful! Now you can.... If you want to enjoy the full functionality of the site and
-            exchange books with other users, there is one more step. You should fill in the contact form. Would you like
+        <h3><p>Your registration was successful! There is one more step if you want to enjoy the full functionality of the site and
+            exchange books with other users. You should fill in the contact form. Would you like
             to
-            do it now?</p>
-        <a href="{% url 'edit_contacts' %}" class="btn btn-success margin-right-final">Yes, go ahead</a>
+            do it now?</p></h3>
+        <a href="{% url 'edit_contacts' %}#edit" class="btn btn-success margin-right-final">Yes, go ahead</a>
         <a href="{% url 'show_home' %}" class="btn btn-danger">Maybe later</a>
     </div>
 
