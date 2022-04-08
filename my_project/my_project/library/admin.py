@@ -5,9 +5,9 @@ from my_project.library.models import Book, Category
 
 
 @admin.register(Book)
-class AuthorAdmin(admin.ModelAdmin):
+class BookAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Category)
-class AuthorAdmin(admin.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin):
     pass
