@@ -50,3 +50,7 @@ class Offer(models.Model):
     class Meta:
         ordering = ['-received_date']
 
+    def __str__(self):
+        if self.previous_offer:
+            return f'Counter offer №{self.pk}'
+        return f'Offer №{self.pk}'

@@ -1,3 +1,5 @@
 <h5><u>Email:</u> {{ user.email }}
+{% if request.user == user %}
 
 <a href="{% url 'edit_email' %}">Edit</a></h5>
+{% endif %}

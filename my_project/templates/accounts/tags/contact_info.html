@@ -14,7 +14,9 @@
         {{ user.contactform.phone_number }}
     {% endif %}
 </h5>
-<div class='content-div'>
+{% if request.user == user %}
 
+<div class='content-div'>
     <a href="{% url 'edit_contacts' %}#edit" class="btn btn-primary">Edit</a>
 </div>
+ {% endif %}

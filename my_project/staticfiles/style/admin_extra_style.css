@@ -1,13 +1,25 @@
 html {
     background: url('https://wallpaperaccess.com/full/4868953.jpg') no-repeat top center;
     background-color: black;
+    background-size: 110% 110%;
+    min-height: 1500px;
 }
+
 
 .login {
     color: black;
-    background-color: rgba(204, 204, 204, 0.2) !important;
+    background-color: rgba(204, 204, 204, 0.2) !important
+}
+table{
+    max-width: 100%!important;
+}
+input{
+    font-weight: bold!important;
 }
 
+.inline-group .tabular td.original p {
+    font-size: 13px!important;
+}
 
 :root {
     --primary: #494848;
@@ -24,10 +36,10 @@ html {
     --header-link-color: white;
     --breadcrumbs-fg: white;
     --breadcrumbs-link-fg: black;
-    --breadcrumbs-bg: var(--primary);
+    --breadcrumbs-bg: rgba(128, 128, 128, 1);
     --link-fg: #000;
-    --link-hover-color: #036;
-    --link-selected-fg: #5b80b2;
+    --link-hover-color: black;
+    --link-selected-fg: black;
     --hairline-color: black;
     --border-color: black;
     --error-fg: #ba2121;

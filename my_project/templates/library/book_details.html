@@ -40,8 +40,12 @@
                         {% endif %}
 
                         {% if not book.owner == request.user %}
-                            <h5><u>Owner:</u> <a
-                                    href="{% url 'show_account_details' book.owner.pk %}">{{ book.owner.nickname }}</a>
+                            <h5><u>Owner:</u>
+                                {% if book.owner %}
+
+                                    <a href="{% url 'show_account_details' book.owner.pk %}">{{ book.owner.nickname }}</a>
+                                {% endif %}
+
                             </h5>
 
                         {% endif %}
@@ -54,7 +58,7 @@
 
                 <div class="d-inline p-2 w-50 text-left margin-left-final">
 
-                    {% if book.is_tradable and not book.owner == request.user %}
+                    {% if book.is_tradable and book.owner and not book.owner == request.user %}
                         <div class="text-center">
                             <a class="btn btn-success inline" href="{% url 'create_offer' book.pk %}">Make a offer</a>
                         </div>

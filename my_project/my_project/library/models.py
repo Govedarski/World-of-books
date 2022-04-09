@@ -4,6 +4,8 @@ from django.db import models
 # Create your models here.
 from django.db.models.functions import Lower
 from cloudinary.models import CloudinaryField
+from django.urls import reverse
+
 from my_project.common.helpers import custom_validators
 
 
@@ -97,7 +99,10 @@ class Book(models.Model):
         return len(self.likes.all())
 
     def __str__(self):
-        return f'"{self.title}" by {self.author} OWNER:{self.owner}'
+        return f'"{self.title}" by {self.author}'
 
     class Meta:
-        ordering = [Lower('title')]
+        ordering = ['title']
+
+    def get_absolute_url(self):
+        return reverse('book_details', kwargs={'pk': self.pk})

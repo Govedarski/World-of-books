@@ -1,13 +1,14 @@
 from datetime import date
 
+from cloudinary.models import CloudinaryField
 from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.core import validators
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models.functions import Lower
-from cloudinary.models import CloudinaryField
+from django.urls import reverse_lazy, reverse
+
 from my_project.accounts.managers import MyUserManager
 from my_project.common.helpers import custom_validators
 
@@ -53,8 +54,11 @@ class WorldOfBooksUser(AbstractBaseUser, PermissionsMixin):
             raise ValidationError({'email': self.EMAIL_VALIDATION_ERROR_MASSAGE})
         super().clean()
 
+    def get_absolute_url(self):
+        return reverse('show_account_details', kwargs={'pk': self.pk})
+
     class Meta:
-        ordering = [Lower('username')]
+        ordering = ('username',)
 
 
 class Profile(models.Model):
@@ -145,6 +149,9 @@ class Profile(models.Model):
                 (today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
         return age
 
+    def __str__(self):
+        return f'{self.user}: Profile id: {self.pk}'
+
 
 class ContactForm(models.Model):
     CITY_MAX_LENGTH = 32
@@ -155,7 +162,8 @@ class ContactForm(models.Model):
     user = models.OneToOneField(
         get_user_model(),
         on_delete=models.CASCADE,
-        primary_key=True)
+        primary_key=True,
+    )
 
     city = models.CharField(
         max_length=CITY_MAX_LENGTH,
@@ -182,3 +190,6 @@ class ContactForm(models.Model):
     @property
     def is_completed(self):
         return all([self.city, self.address])
+
+    def __str__(self):
+        return f'{self.user}: Contact form id: {self.pk}'

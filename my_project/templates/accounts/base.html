@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container">
         <div class="row justify-content-center">
-            {% if request.user == user %}
+            {% if request.user.is_staff or request.user == user %}
 
                 <h1>Your account information:</h1>
 
@@ -33,11 +33,15 @@
             {% endif %}
             </div>
 
-            {% if request.user == user %}
-                {% if request.user.has_usable_password %}
-                    <a href="{% url 'change_password' %} " class="btn btn-primary">Change password</a>
+            {% if request.user.is_staff or request.user == user %}
+                {% if  request.user.has_usable_password %}
+                    {% if request.user == user %}
+                        <a href="{% url 'change_password' %} " class="btn btn-primary">Change password</a>
+                    {% endif %}
                 {% endif %}
-                <a href="{% url 'deactivate_user' %}" class="btn btn-danger">Deactivate</a>
+                {% if request.user == user %}
+                    <a href="{% url 'deactivate_user' %}" class="btn btn-danger">Deactivate</a>
+                {% endif %}
                 <div id='edit' class='text-left'>
                     <h3>Contact form:</h3>
                     {% if not request.user.contactform.is_completed %}
@@ -55,7 +59,7 @@
             </div>
 
             <div class="d-inline p-2 w-50">
-                {% if request.user == user %}
+                {% if request.user.is_staff or request.user == user %}
 
                     <h3>Profile:</h3>
                 {% endif %}

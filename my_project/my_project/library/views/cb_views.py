@@ -34,7 +34,7 @@ class ShowBookListView(PaginationShowMixin, ListView):
 
     def get_queryset(self):
         query_set = Book.objects.prefetch_related('owner', 'category', 'likes').filter(
-            owner__isnull=False, owner__is_active = True).annotate(like_count=Count('likes')).order_by(
+            owner__isnull=False, owner__is_active=True).annotate(like_count=Count('likes')).order_by(
             '-like_count', 'title')
         if self.search_by == SearchForm.SearchByChoices.owner:
             owner = get_user_model().objects.filter(username__icontains=self.search)
@@ -164,7 +164,7 @@ class DetailsBookView(DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         book = self.get_object()
-        if not book.owner and not book.next_owner:
+        if not book.owner and not book.next_owner and not self.request.user.is_staff:
             raise Http404()
         if self.request.user == book.next_owner:
             self.template_name = 'library/book_to_receive_info.html'
