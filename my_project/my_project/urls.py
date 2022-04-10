@@ -18,6 +18,10 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from my_project.common.helpers.custom_wrapers import staff_required
+
+admin.site.login = staff_required(admin.site.login)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('my_project.common.urls')),
@@ -27,7 +31,6 @@ urlpatterns = [
 ]
 urlpatterns += static(settings.MEDIA_URL,
                       document_root=settings.MEDIA_ROOT)
-
 
 admin.site.index_title = 'The world of books'
 admin.site.site_header = ' Admin: The world of books'

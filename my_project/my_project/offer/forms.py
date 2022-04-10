@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from my_project.common.helpers.mixins import AddCCSMixin
+from my_project.common.helpers.custom_mixins import AddCCSMixin
 from my_project.library.models import Book
 from my_project.offer.models import Offer
 

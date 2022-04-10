@@ -3,77 +3,54 @@
 {% block content %}
     <div class="container">
         <div class="row justify-content-center">
-            {% if request.user.is_staff or request.user == user %}
-
-                <h1>Your account information:</h1>
-
-                <div class="d-flex">
-
-                <div class="d-inline p-2 w-50">
-                {% if user.profile.picture_upload %}
-                    <img src="{{ user.profile.picture_upload.url }}" class="w-50 rounded d-block" alt="photo">
-                {% elif user.profile.picture_url %}
-                    <img src="{{ user.profile.picture_url }}" class="w-50 rounded d-block" alt="photo">
-                {% else %}
-                    <img src="{% static 'images/user-avatar.png' %}" class="w-50 rounded d-block" alt="photo">
-                {% endif %}
-
-                <div class="text-left">
-
-                <h5><u>Username:</u> {{ user.nickname }}</h5>
-                {% block email %}
-                {% endblock email %}
-            {% else %}
-                <h1>{{ user.nickname }}'s account information:</h1>
-                <div class="d-flex">
+        {% if can_staff_edit %}
+                    <a href="{% url 'admin:accounts_worldofbooksuser_change' user.pk %}">Edit in administration</a>
+        {% endif %}
+            <h1>Account information:</h1>
+            <div class="d-flex">
                 <div class="d-inline p-2 w-50">
                     <img src="{{ user.profile.picture_url }}" class="w-50 rounded d-block"
                          onerror="this.src='{% static 'images/user-avatar.png' %}';" alt="photo">
-                </div>
-            {% endif %}
-            </div>
+                    <div class="text-left">
+                        <h5><u>Username:</u> {{ user.nickname }}</h5>
+                        {% if can_staff_view_user_info or request.user == user %}
+                            {% block email %}
+                            {% endblock email %}
+                        {% endif %}
+                    </div>
 
-            {% if request.user.is_staff or request.user == user %}
-                {% if  request.user.has_usable_password %}
                     {% if request.user == user %}
                         <a href="{% url 'change_password' %} " class="btn btn-primary">Change password</a>
-                    {% endif %}
-                {% endif %}
-                {% if request.user == user %}
-                    <a href="{% url 'deactivate_user' %}" class="btn btn-danger">Deactivate</a>
-                {% endif %}
-                <div id='edit' class='text-left'>
-                    <h3>Contact form:</h3>
-                    {% if not request.user.contactform.is_completed %}
-                        <h4><p class='warning'>
-                            <strong>You have to fill city and address in the contact form to use full site
-                                functionality!</strong>
-                        </p></h4>
+                        <a href="{% url 'deactivate_user' %}" class="btn btn-danger">Deactivate</a>
                     {% endif %}
 
-                    {% block contact %}
-                    {% endblock contact %}
+                    {% if can_staff_view_cf or request.user == user %}
+                        <div id='edit' class='text-left'>
+                            <h3>Contact form:</h3>
+                            {% if not request.user.contactform.is_completed %}
+                                <h4><p class='warning'>
+                                    <strong>You have to fill city and address in the contact form to use full site
+                                        functionality!</strong>
+                                </p></h4>
+                            {% endif %}
+                            {% block contact %}
+                            {% endblock contact %}
+                        </div>
+                    {% endif %}
                 </div>
-            {% endif %}
 
-            </div>
-
-            <div class="d-inline p-2 w-50">
-                {% if request.user.is_staff or request.user == user %}
-
+                <div class="d-inline p-2 w-50">
                     <h3>Profile:</h3>
-                {% endif %}
+                    <a href="{% url 'show_books_dashboard' user.pk %}">
+                        <h5 class="text-left margin-left-final"><u>Books: {{ user.own_books.all|length }}</u></h5>
+                    </a>
 
-                <a href="{% url 'show_books_dashboard' user.pk %}">
-                    <h5 class="text-left margin-left-final"><u>Books: {{ user.own_books.all|length }}</u></h5>
-                </a>
-                {% if request.user.is_authenticated %}
-                    {% block profile_info %}
-                    {% endblock profile_info %}
-                {% endif %}
+                    {% if request.user.is_authenticated %}
+                        {% block profile_info %}
+                        {% endblock profile_info %}
+                    {% endif %}
 
-            </div>
-            </div>
+                </div>
             </div>
         </div>
     </div>

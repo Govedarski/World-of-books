@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.views import generic as views
 from django.views.generic import ListView, DetailView
 
-from my_project.common.helpers.mixins import AuthorizationRequiredMixin
+from my_project.common.helpers.custom_mixins import AuthorizationRequiredMixin
 from my_project.common.models import Notification
 from my_project.library.models import Book
 

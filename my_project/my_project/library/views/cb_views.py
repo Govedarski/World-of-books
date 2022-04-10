@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 
-from my_project.common.helpers.mixins import PaginationShowMixin, AuthorizationRequiredMixin
+from my_project.common.helpers.custom_mixins import PaginationShowMixin, AuthorizationRequiredMixin
 from my_project.common.models import Notification
 from my_project.library.forms import SearchForm, BookForm, UsersListForm
 from my_project.library.models import Book, Category
@@ -164,13 +164,14 @@ class DetailsBookView(DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         book = self.get_object()
-        if not book.owner and not book.next_owner and not self.request.user.is_staff:
+        if not (book.owner or book.next_owner or self.request.user.has_perm('accounts.view_book')):
             raise Http404()
-        if self.request.user == book.next_owner:
-            self.template_name = 'library/book_to_receive_info.html'
-        if self.request.user == book.previous_owner:
-            self.template_name = 'library/book_to_send_info.html'
         return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['can_staff_edit'] = self.request.user.has_perm('accounts.view_book')
+        return context
 
     def post(self, *args, **kwargs):
         book = self.get_object()
@@ -179,6 +180,15 @@ class DetailsBookView(DetailView):
         book.is_tradable = not book.is_tradable
         book.save()
         return self.render_to_response(context={'book': book})
+
+    def get_template_names(self):
+        book = self.get_object()
+        template_name = super().get_template_names()
+        if self.request.user == book.next_owner:
+            template_name = 'library/book_to_receive_info.html'
+        if self.request.user == book.previous_owner:
+            template_name = 'library/book_to_send_info.html'
+        return template_name
 
 
 class EditBookView(LoginRequiredMixin, AuthorizationRequiredMixin, UpdateView):

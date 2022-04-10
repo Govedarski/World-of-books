@@ -1,9 +1,5 @@
-from django import forms
 from django.contrib import admin
-
-# Register your models here.
-from django.db import models
-from django.db.models import Count
+from django.db.models import Count, Q
 
 from my_project.library.models import Book, Category
 
@@ -12,13 +8,14 @@ from my_project.library.models import Book, Category
 class BookAdmin(admin.ModelAdmin):
     view_on_site = True
     list_display = ('id', 'title', 'author',
-                    'owner', 'is_tradable', 'number_of_ex_owners', 'number_of_likes')
+                    'owner', 'previous_owner', 'next_owner', 'number_of_ex_owners', 'number_of_likes', 'is_tradable')
     list_display_links = ('id', 'title',)
     list_filter = ('category', 'is_tradable')
     list_per_page = 20
-    search_fields = ('title', 'author', 'owner',)
+    search_fields = ('title', 'author',)
     sortable_by = list_display
-    readonly_fields = ['number_of_likes', 'number_of_ex_owners']
+    readonly_fields = ('number_of_likes', 'number_of_ex_owners')
+    readonly_fields_owner_info = ('owner', 'next_owner', 'previous_owner', 'ex_owners', 'likes')
     fieldsets = (
         ("Book's info",
          {'fields': (('title', 'author', 'category', 'is_tradable',),),
@@ -41,6 +38,19 @@ class BookAdmin(admin.ModelAdmin):
          ),
     )
 
+    @staticmethod
+    def lost_permission_check(func):
+        '''Admin lost his permissions if
+        he has accepted offer for this book'''
+
+        def wrapper(instance, request, obj=None, *args, **kwargs):
+            result = func(instance, request, obj=None, *args, **kwargs)
+            if obj and request.user in [obj.next_owner, obj.previous_owner]:
+                return False
+            return result
+
+        return wrapper
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.prefetch_related('likes', 'ex_owners', 'owner') \
@@ -57,10 +67,18 @@ class BookAdmin(admin.ModelAdmin):
     number_of_likes.admin_order_field = 'like_count'
 
     def get_readonly_fields(self, request, *args, **kwargs):
-        fields = super().get_readonly_fields(request, *args, **kwargs)
-        if not request.user.is_superuser:
-            fields.extend(['owner', 'next_owner', 'previous_owner', 'ex_owners', 'likes'])
-        return fields
+        book = args[0]
+        if not request.user.is_superuser or request.user == book.owner:
+            return self.readonly_fields + self.readonly_fields_owner_info
+        return self.readonly_fields
+
+    @lost_permission_check
+    def has_change_permission(self, request, obj=None):
+        return super().has_change_permission(request)
+
+    @lost_permission_check
+    def has_delete_permission(self, request, obj=None):
+        return super().has_delete_permission(request)
 
 
 @admin.register(Category)

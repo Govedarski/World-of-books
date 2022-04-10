@@ -115,6 +115,13 @@ class AccountDetailsView(DetailView):
     template_name = 'accounts/account_details.html'
     context_object_name = 'user'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['can_staff_view_user_info'] = self.request.user.has_perm('accounts.view_worldofbooksuser')
+        context['can_staff_view_cf'] = self.request.user.has_perm('accounts.view_worldofbooksuser')
+        context['can_staff_edit'] = self.request.user.has_perm('accounts.change_worldofbooksuser')
+        return context
+
 
 class EditEmailView(LoginRequiredMixin, UpdateView):
     template_name = 'accounts/edit_email.html'

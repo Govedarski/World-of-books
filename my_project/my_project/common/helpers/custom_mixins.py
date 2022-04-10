@@ -1,10 +1,4 @@
-from abc import abstractmethod
-
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
-
-class CustomLoginRequiredMixin(LoginRequiredMixin):
-    is_login_required = True
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 class RemoveHelpTextMixin:

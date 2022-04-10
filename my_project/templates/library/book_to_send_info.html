@@ -31,6 +31,7 @@
             <h3>{{ book.next_owner }}'s
                 address: {{ book.next_owner.sensitiveinformation.city }} {{ book.next_owner.sensitiveinformation.address }}</h3>
             <h3>{{ book.next_owner }}'s phone number: +359/{{ book.next_owner.sensitiveinformation.phone_number }}</h3>
+            <h3>Email:{{ book.next_owner.email }}</h3>
         </div>
     </div>
 {% endblock %}

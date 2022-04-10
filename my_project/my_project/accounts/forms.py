@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, Pass
     PasswordChangeForm
 
 from my_project.accounts.models import Profile, ContactForm
-from my_project.common.helpers.mixins import AddCCSMixin, RemoveHelpTextMixin
+from my_project.common.helpers.custom_mixins import AddCCSMixin, RemoveHelpTextMixin
 
 
 class CreateUserForm(AddCCSMixin, RemoveHelpTextMixin, UserCreationForm):

@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView, ListView
 
-from my_project.common.helpers.mixins import PaginationShowMixin, AuthorizationRequiredMixin
+from my_project.common.helpers.custom_mixins import PaginationShowMixin, AuthorizationRequiredMixin
 from my_project.common.models import Notification
 from my_project.library.models import Book
 from my_project.offer.forms import CreateOfferForm, NegotiateOfferForm

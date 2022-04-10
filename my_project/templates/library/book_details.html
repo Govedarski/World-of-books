@@ -3,9 +3,10 @@
 {% load static %}
 {% block content %}
     <div class="container">
-
         <div class="row justify-content-center">
-
+                {% if can_staff_edit %}
+                    <a href="{% url 'admin:library_book_change' book.pk %}">Edit in administration</a>
+                {% endif %}
             <h1>{{ book.title }}
                 {% if not book.owner == request.user %}
                     {% like_book %}

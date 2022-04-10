@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from my_project.common.helpers.mixins import AddCCSMixin
+from my_project.common.helpers.custom_mixins import AddCCSMixin
 from my_project.library.models import Book, Category
 
 
