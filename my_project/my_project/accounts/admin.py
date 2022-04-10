@@ -46,7 +46,7 @@ class ContactFormFilter(admin.SimpleListFilter):
 class UserModelAdmin(admin.ModelAdmin):
     view_on_site = True
     inlines = (ProfileInline, ContactFormInline)
-    list_display_staff = ('id', 'username', 'name', 'is_contact_form_done', 'books_number')
+    list_display_staff = ('id', 'username', 'name', 'is_contact_form_done', 'books_number', 'is_staff')
     list_display_superuser_extra = ('is_staff', 'is_superuser')
     list_display_links = ('id', 'username')
     list_filter_staff = ('username', ContactFormFilter)
@@ -67,7 +67,7 @@ class UserModelAdmin(admin.ModelAdmin):
     )
     fieldsets_superuser_extra = (
         ('ROLES',
-         {'fields': ('is_staff', 'is_superuser'),
+         {'fields': ('is_superuser',),
           'classes': ['collapse', ],
           }
          ),
@@ -106,6 +106,11 @@ class UserModelAdmin(admin.ModelAdmin):
         qs = qs.prefetch_related('own_books', 'profile', 'contactform') \
             .annotate(books_count=Count('own_books'))
         return qs
+
+    def has_delete_permission(self, request, obj=None):
+        if obj and obj.is_staff and not request.user.is_superuser:
+            return False
+        return super().has_delete_permission(request, obj)
 
     def books_number(self, inst):
         return inst.books_count

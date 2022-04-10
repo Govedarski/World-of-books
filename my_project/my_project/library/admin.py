@@ -74,11 +74,11 @@ class BookAdmin(admin.ModelAdmin):
 
     @lost_permission_check
     def has_change_permission(self, request, obj=None):
-        return super().has_change_permission(request)
+        return super().has_change_permission(request, obj)
 
     @lost_permission_check
     def has_delete_permission(self, request, obj=None):
-        return super().has_delete_permission(request)
+        return super().has_delete_permission(request, obj)
 
 
 @admin.register(Category)

@@ -1,6 +1,7 @@
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth import get_user_model
 from django.db.models import signals
+from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 
 from my_project.accounts.models import Profile, ContactForm
@@ -38,3 +39,14 @@ def fill_profile__with_google_account(instance, created, **kwargs):
                       nationality=nationality,
                       user=social_account.user)
     profile.save()
+
+
+def is_staff_automatically_set(sender, instance, **kwargs):
+    if instance.groups.count() > 0:
+        instance.is_staff = True
+    else:
+        instance.is_staff = False
+    instance.save()
+
+
+m2m_changed.connect(is_staff_automatically_set, sender=get_user_model().groups.through)

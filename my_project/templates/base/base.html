@@ -52,7 +52,9 @@
     <br>
     {% if not hide_notifications %}
         <a href="{% url 'show_notifications' %}" class="opacity-format margin-right-final">
-            {% if request.user.receiver_messages.all %}
+            {% if request.user.receiver_messages.unread.count %}
+                You have {{ request.user.receiver_messages.unread.count }} new notifications!
+            {% else %}
                 Notifications
             {% endif %}
         </a>

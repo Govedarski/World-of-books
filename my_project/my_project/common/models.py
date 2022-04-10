@@ -1,12 +1,21 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import QuerySet
 from django.urls import reverse_lazy
 
 from my_project.library.models import Book
 from my_project.offer.models import Offer
 
 
+
+class NotificationQueryset(QuerySet):
+    def unread(self):
+        return self.filter(is_read=False)
+
+
 class Notification(models.Model):
+    objects = NotificationQueryset.as_manager()
+
     sender = models.ForeignKey(
         get_user_model(),
         on_delete=models.DO_NOTHING,
@@ -54,3 +63,4 @@ class Notification(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('notification_details', kwargs={"pk": self.pk})
+
