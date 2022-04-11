@@ -63,7 +63,7 @@ body {
 
 main {
     text-align: center;
-    min-height: 950px;
+    min-height: 1000px;
 }
 
 h1 {
@@ -71,7 +71,8 @@ h1 {
 }
 
 footer {
-    color: white;
+    padding-bottom: 1%;
+    color: black;
     text-align: center;
 }
 

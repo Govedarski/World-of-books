@@ -16,58 +16,65 @@
     <div class='nav-el-style'>
         <ul>
             <li class="inline">
-                <a href="{% url 'show_home' %}" class='nav opacity-format margin-right'>
-                    <img src="{% static 'images\book.jpg' %}"
-                         alt="Home">
+                <a href="{% url 'show_home' %}" class='nav  margin-right'>
+                    <img src="{% static 'images\book.jpg' %}" alt="Home">
                 </a>
             </li>
-            <li class="inline"><a href="{% url 'book_list' %}" class="nav opacity-format margin-right">Library</a></li>
+            <li class="inline">
+                <a href="{% url 'book_list' %}" class="nav margin-right">
+                    Library</a>
+            </li>
+
             {% if request.user.is_authenticated %}
-
-                <li class="inline"><a href="{% url 'show_books_dashboard' request.user.pk %}"
-                                      class="nav opacity-format margin-right">My Books</a></li>
-                <li class="inline"><a href="{% url 'show_offer_list' %}" class="nav opacity-format margin-right">My
-                    offers</a></li>
-
+                <li class="inline">
+                    <a href="{% url 'show_books_dashboard' request.user.pk %}" class="nav margin-right">
+                        My Books</a>
+                </li>
+                <li class="inline">
+                    <a href="{% url 'show_offer_list' %}" class="nav margin-right">
+                        My offers</a>
+                </li>
             {% endif %}
 
         </ul>
     </div>
 
     {% if request.user.is_authenticated %}
-        {% if request.user.profile.full_name %}
-            <div class="right-side  nav-el-style">Welcome,
-            <a href="{% url 'show_my_account_details' %}"
-               class="opacity-format margin-right">{{ request.user.profile.full_name }}!</a>
-        {% else %}
-            <div class="right-side  nav-el-style">Welcome,
-            <a href="{% url 'show_my_account_details' %}"
-               class="opacity-format margin-right">{{ request.user.nickname }}!</a>
-        {% endif %}
-    {% if request.user.is_staff %}
-        <a href="{% url 'admin:index' %}">View admin</a>
-    {% endif %}
-    <a href="{% url 'logout_user' %}" class="margin-left-final margin-right-final">Logout</a>
 
-    <br>
-    {% if not hide_notifications %}
-        <a href="{% url 'show_notifications' %}" class="opacity-format margin-right-final">
-            {% if request.user.receiver_messages.unread.count %}
-                You have {{ request.user.receiver_messages.unread.count }} new notifications!
-            {% else %}
-                Notifications
-            {% endif %}
-        </a>
-    {% endif %}
-
-
-    </div>
-    {% else %}
         <div class="right-side  nav-el-style">
-        <a href="{% url 'create_user' %}" class="opacity-format margin-right">Register</a>
-        <a href="{% url 'login_user' %}?next={{ request.path }}" class="opacity-format margin-right-final">Login</a>
+            Welcome,
+            <a href="{% url 'show_my_account_details' %}" class="margin-right">
+                {% if request.user.profile.full_name %}
+                    {{ request.user.profile.first_name|capfirst }} {{ request.user.profile.last_name|capfirst }}!
+                {% else %}
+                    {{ request.user.nickname }}!
+                {% endif %}</a>
+
+            {% if request.user.is_staff %}
+                <a href="{% url 'admin:index' %}">View admin</a>
+            {% endif %}
+
+            <a href="{% url 'logout_user' %}" class="margin-left-final margin-right-final">
+                Logout</a>
+            <br>
+            <a href="{% url 'show_notifications' %}" class="opacity-format margin-right-final">
+                {% if request.user.receiver_messages.unread.count %}
+                    You have {{ request.user.receiver_messages.unread.count }} new notifications!
+                {% else %}
+                    Notifications
+                {% endif %}</a>
+        </div>
+
+    {% else %}
+
+        <div class="right-side  nav-el-style">
+            <a href="{% url 'create_user' %}" class="margin-right">
+                Register</a>
+            <a href="{% url 'login_user' %}?next={{ request.path }}" class="margin-right-final">
+                Login</a>
+        </div>
+
     {% endif %}
-    </div>
 </nav>
 
 <hr>
@@ -77,11 +84,13 @@
         {% endblock %}
     </div>
 </main>
-
-<footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
-    <p>About us</p>
-</footer>
+<hr>
 </body>
 
+
+<footer class="sticky-bottom">
+    <p>@2022 Python Web Framework Course SoftUni</p>
+    <p>Created by: Velislav Govedarski</p>
+</footer>
 
 </html>
