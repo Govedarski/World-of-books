@@ -6,11 +6,11 @@
 
         <h1>
             {% if is_my_offer %}
-                Offer to
+            {{ offer }} to
                 <a href="{% url 'show_account_details' offer.recipient.pk %}">{{ offer.recipient.nickname }}</a>
 
             {% else %}
-                Offer from
+            {{ offer }} from
                 <a href="{% url 'show_account_details' offer.sender.pk %}">{{ offer.sender.nickname }}</a>
 
             {% endif %}
@@ -102,7 +102,7 @@
             {% if offer.is_accept %}
                 <h1>This offer has been accepted!</h1>
             {% elif not offer.next_offer %}
-                <h1>This offer has been canceled/refused!</h1>
+                <h1>This offer has been canceled/rejected!</h1>
             {% endif %}
         {% endif %}
 

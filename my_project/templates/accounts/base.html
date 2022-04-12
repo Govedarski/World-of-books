@@ -3,9 +3,9 @@
 {% block content %}
     <div class="container">
         <div class="row justify-content-center">
-        {% if can_staff_edit %}
-                    <a href="{% url 'admin:accounts_worldofbooksuser_change' user.pk %}">Edit in administration</a>
-        {% endif %}
+            {% if can_staff_edit %}
+                <a href="{% url 'admin:accounts_worldofbooksuser_change' user.pk %}">Edit in administration</a>
+            {% endif %}
             <h1>Account information:</h1>
             <div class="d-flex">
                 <div class="d-inline p-2 w-50">
@@ -20,6 +20,10 @@
                     </div>
 
                     {% if request.user == user %}
+                        {% if password_change %}
+                            <h3>Password was successfully changed!</h3>
+                        {% endif %}
+
                         <a href="{% url 'change_password' %} " class="btn btn-primary">Change password</a>
                         <a href="{% url 'deactivate_user' %}" class="btn btn-danger">Deactivate</a>
                     {% endif %}

@@ -10,22 +10,18 @@ from django.views.generic import CreateView, DetailView, TemplateView, UpdateVie
 
 from my_project.accounts.forms import CreateUserForm, ProfileForm, MyLoginForm, MySetPasswordForm, EditEmailForm, \
     MyPasswordChangeForm, EditContactForm
+from my_project.accounts.helpers.custom_mixins import LogoutRequiredMixin
 from my_project.accounts.models import Profile, ContactForm
 from my_project.library.models import Book
 from my_project.offer.models import Offer
 
 
-class RegisterUserView(CreateView):
+class RegisterUserView(LogoutRequiredMixin, CreateView):
     form_class = CreateUserForm
     model = get_user_model()
     success_url = reverse_lazy('done_registration')
     template_name = 'accounts/create_user.html'
     second_form = ProfileForm
-
-    def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            return redirect('show_home')
-        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -41,7 +37,7 @@ class RegisterUserView(CreateView):
             redirect_to_success_url = super().form_valid(form)
             profile.save()
             login(self.request, self.object,
-                  backend='my_project.accounts.backend.EmailOrUsernameModelBackend')  # must addd backend
+                  backend='my_project.accounts.backend.EmailOrUsernameModelBackend')
             return redirect_to_success_url
         return self.form_invalid(form)
 
@@ -54,7 +50,7 @@ class DoneRegistrationView(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/done_registration.html'
 
 
-class LoginUserView(LoginView):
+class LoginUserView(LogoutRequiredMixin, LoginView):
     template_name = 'accounts/login_page.html'
     form_class = MyLoginForm
 
@@ -70,8 +66,7 @@ class LoginUserView(LoginView):
 
 class LogoutUserView(LogoutView):
     def get_next_page(self):
-        next_page = self.request.GET.get('next')
-        return next_page if next_page else reverse_lazy('show_home')
+        return reverse_lazy('show_home')
 
 
 class MyResetPasswordView(PasswordResetView):
@@ -91,23 +86,12 @@ class MyPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'accounts/reset_completed.html'
 
 
-class MyPasswordChangeView(PasswordChangeView):
+class MyPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     template_name = 'accounts/change_password.html'
     form_class = MyPasswordChangeForm
 
     def get_success_url(self):
-        next_page = self.request.GET.get('next')
-        return next_page if next_page else reverse_lazy('show_home')
-
-
-class MyAccountDetailsView(LoginRequiredMixin, TemplateView):
-    template_name = 'accounts/account_details.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = get_user_model().objects.get(pk=self.request.user.pk)
-        context['user'] = user
-        return context
+        return f'{self.request.user.get_absolute_url()}?password_change=done'
 
 
 class AccountDetailsView(DetailView):
@@ -120,38 +104,42 @@ class AccountDetailsView(DetailView):
         context['can_staff_view_user_info'] = self.request.user.has_perm('accounts.view_worldofbooksuser')
         context['can_staff_view_cf'] = self.request.user.has_perm('accounts.view_worldofbooksuser')
         context['can_staff_edit'] = self.request.user.has_perm('accounts.change_worldofbooksuser')
+        context['password_change'] = self.request.GET.get('password_change')
         return context
 
 
 class EditEmailView(LoginRequiredMixin, UpdateView):
     template_name = 'accounts/edit_email.html'
     form_class = EditEmailForm
-    success_url = reverse_lazy('show_my_account_details')
 
     def get_object(self, queryset=None):
         return get_user_model().objects.get(pk=self.request.user.pk)
+
+    def get_success_url(self):
+        return self.request.user.get_absolute_url()
 
 
 class EditProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'accounts/edit_profile.html'
     form_class = ProfileForm
-    success_url = reverse_lazy('show_my_account_details')
 
     def get_object(self, queryset=None):
         return Profile.objects.get(user_id=self.request.user.pk)
+
+    def get_success_url(self):
+        return self.request.user.get_absolute_url()
 
 
 class EditContactsView(LoginRequiredMixin, UpdateView):
     template_name = 'accounts/edit_contacts.html'
     form_class = EditContactForm
-    success_url = reverse_lazy('show_my_account_details')
 
     def get_object(self, queryset=None):
         return ContactForm.objects.get(user_id=self.request.user.pk)
 
     def get_success_url(self):
         next_page = self.request.GET.get('next')
-        return next_page if next_page else reverse_lazy('show_my_account_details')
+        return next_page if next_page else self.request.user.get_absolute_url()
 
 
 class DeactivateUserView(LoginRequiredMixin, DeleteView):

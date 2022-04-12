@@ -5,7 +5,7 @@ from django.urls import path, include
 
 from my_project.accounts.views import RegisterUserView, DoneRegistrationView, LoginUserView, LogoutUserView, \
     MyResetPasswordView, MyPasswordResetDoneView, MyPasswordResetConfirmView, MyPasswordResetCompleteView, \
-    MyPasswordChangeView, MyAccountDetailsView, EditEmailView, EditProfileView, EditContactsView, AccountDetailsView, \
+    MyPasswordChangeView, EditEmailView, EditProfileView, EditContactsView, AccountDetailsView, \
     DeactivateUserView
 
 urlpatterns = [
@@ -22,7 +22,6 @@ urlpatterns = [
 
     path('', include('allauth.urls')),
 
-    path('mydetails/', MyAccountDetailsView.as_view(), name='show_my_account_details'),
     path('details/<int:pk>/', AccountDetailsView.as_view(), name='show_account_details'),
     path('edit/email/', EditEmailView.as_view(), name='edit_email'),
     path('edit/profile/', EditProfileView.as_view(), name='edit_profile'),

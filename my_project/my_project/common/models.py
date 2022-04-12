@@ -7,7 +7,6 @@ from my_project.library.models import Book
 from my_project.offer.models import Offer
 
 
-
 class NotificationQueryset(QuerySet):
     def unread(self):
         return self.filter(is_read=False)
@@ -64,3 +63,45 @@ class Notification(models.Model):
     def get_absolute_url(self):
         return reverse_lazy('notification_details', kwargs={"pk": self.pk})
 
+    def answer(self):
+        self.is_answered = True
+        self.save()
+
+    @classmethod
+    def create_notification(cls, massage, **kwargs):
+        kwargs.update({'massage': massage})
+        notf = cls(**kwargs)
+        notf.full_clean()
+        notf.save()
+        return notf
+
+    @classmethod
+    def create_notification_for_offer_made(cls, kwargs):
+        offer = kwargs.get('offer')
+        sender = kwargs.get('sender')
+        massage = f'{sender} makes {offer} to you'
+        return cls.create_notification(massage, **kwargs)
+
+    @classmethod
+    def create_notification_for_offer_offer_reply(cls, kwargs):
+        offer = kwargs.get('offer')
+        sender = kwargs.get('sender')
+        massage = f"Your {offer} to {sender} was rejected or canceled"
+        if offer.is_accept:
+            massage = f"{sender} accepted your {offer}"
+
+        kwargs.update({'is_answered': True})
+        return cls.create_notification(massage, **kwargs)
+
+
+    @classmethod
+    def create_notification_for_book(cls, sender, recipient, book):
+        pass
+
+    @classmethod
+    def create_notification_for_like(cls, sender, recipient, book):
+        pass
+
+    @classmethod
+    def create_notification_for_dislike(cls, sender, recipient, book):
+        pass

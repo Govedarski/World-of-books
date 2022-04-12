@@ -6,7 +6,6 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView, ListView
 
 from my_project.common.helpers.custom_mixins import PaginationShowMixin, AuthorizationRequiredMixin
-from my_project.common.models import Notification
 from my_project.library.models import Book
 from my_project.offer.forms import CreateOfferForm, NegotiateOfferForm
 from my_project.offer.models import Offer
@@ -46,7 +45,6 @@ class CreateOfferView(LoginRequiredMixin, CreateView):
         offer = self.object
         offer.recipient_books.add(self._get_wanted_book())
         offer.save()
-        self._send_notification(offer)
         return result
 
     def _get_wanted_book(self):
@@ -58,27 +56,13 @@ class CreateOfferView(LoginRequiredMixin, CreateView):
         form.instance.recipient = wanted_book.owner
         return form
 
-    def _send_notification(self, offer):
-        notification = Notification(
-            sender=offer.sender,
-            recipient=offer.recipient,
-            book=self._get_wanted_book(),
-            offer=offer,
-            massage=self._get_notification_massage(offer),
-        )
-        notification.save()
-
-    def _get_notification_massage(self, offer):
-        return f'{offer.sender} makes offer for your book {self._get_wanted_book()}' \
-               f'{" and others" if len(offer.recipient_books.all()) > 1 else ""}'
-
 
 class NegotiateOfferView(LoginRequiredMixin, AuthorizationRequiredMixin, UpdateView):
     template_name = 'offer/negotiate_offer.html'
     form_class = NegotiateOfferForm
     model = Offer
     context_object_name = 'offer'
-    success_url = reverse_lazy('show_notifications')
+    success_url = reverse_lazy('show_offer_list')
     authorizing_fields = ['recipient']
 
     def form_valid(self, form):
@@ -88,32 +72,12 @@ class NegotiateOfferView(LoginRequiredMixin, AuthorizationRequiredMixin, UpdateV
         obj.save()
         """Create new offer"""
         obj.is_active = True
-        obj.previous_offer = self.old_offer
+        obj.previous_offer = self.get_old_offer()
         obj.sender, obj.recipient = obj.recipient, obj.sender
         obj.pk = None
         return super().form_valid(form)
 
-    def get_success_url(self):
-        self._send_notification()
-        return super().get_success_url()
-
-    def _send_notification(self):
-        notification = Notification(
-            sender=self.request.user,
-            recipient=self._get_recipient(),
-            offer=self.object,
-            massage=self._get_notification_massage(),
-        )
-        notification.save()
-
-    def _get_notification_massage(self):
-        return f'{self.request.user} makes counter offer to your offer {self.old_offer.pk}'
-
-    def _get_recipient(self):
-        return self.object.recipient if self.request.user == self.object.sender else self.object.sender
-
-    @property
-    def old_offer(self):
+    def get_old_offer(self):
         return Offer.objects.filter(pk=self.kwargs.get('pk')).first()
 
 
