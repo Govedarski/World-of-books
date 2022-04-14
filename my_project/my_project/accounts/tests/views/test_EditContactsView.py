@@ -7,14 +7,19 @@ from my_project.accounts.models import ContactForm
 UserModel = get_user_model()
 
 
-class RegisterUserViewTests(django_test.TestCase):
+class EditContactsViewTests(django_test.TestCase):
+    CREDENTIALS = {
+        'username': 'User',
+        'email': 'user@email.com',
+        'password': 'testp@ss',
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.USER = UserModel.objects.create_user(**cls.CREDENTIALS)
+
     def setUp(self) -> None:
-        self.credentials = {
-            'username': 'User',
-            'email': 'user@email.com',
-            'password': 'testp@ss',
-        }
-        self.user = UserModel.objects.create_user(**self.credentials)
         self.valid_contact_form = {
             'city': 'Sofia',
             'address': 'some street',
@@ -23,19 +28,19 @@ class RegisterUserViewTests(django_test.TestCase):
 
     def _login(self):
         self.client.login(
-            username=self.credentials.get('username'),
-            password=self.credentials.get('password'),
+            username=self.CREDENTIALS.get('username'),
+            password=self.CREDENTIALS.get('password'),
         )
 
     def _assert_success_edit(self):
-        cf_edited = ContactForm.objects.get(pk=self.user.pk)
+        cf_edited = ContactForm.objects.get(pk=self.USER.pk)
         self.assertEqual(self.valid_contact_form['city'], cf_edited.city)
         self.assertEqual(self.valid_contact_form['address'], cf_edited.address)
         self.assertEqual(self.valid_contact_form['phone_number'], cf_edited.phone_number)
         self.assertTrue(cf_edited.is_completed)
 
     def _assert_fail_edit(self, response):
-        cf_edited = ContactForm.objects.get(pk=self.user.pk)
+        cf_edited = ContactForm.objects.get(pk=self.USER.pk)
         form = response.context.get('form')
         self.assertIsNone(cf_edited.city)
         self.assertIsNone(cf_edited.city)
@@ -51,7 +56,7 @@ class RegisterUserViewTests(django_test.TestCase):
         )
         self._assert_success_edit()
         redirect_url = reverse('show_account_details',
-                               kwargs={"pk": self.user.pk})
+                               kwargs={"pk": self.USER.pk})
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_edit_cf_with_valid_email_and_next__expect_save_changed_cf_and_correct_success_url(self):
@@ -98,7 +103,7 @@ class RegisterUserViewTests(django_test.TestCase):
             data=self.valid_contact_form,
         )
 
-        cf_edited = ContactForm.objects.get(pk=self.user.pk)
+        cf_edited = ContactForm.objects.get(pk=self.USER.pk)
         self.assertEqual(self.valid_contact_form['city'], cf_edited.city)
         self.assertEqual(self.valid_contact_form['address'], cf_edited.address)
         self.assertIsNone(cf_edited.phone_number)

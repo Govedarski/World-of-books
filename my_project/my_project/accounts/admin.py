@@ -95,7 +95,7 @@ class UserModelAdmin(admin.ModelAdmin):
 
     @admin.display(empty_value='unknown')
     def name(self, obj):
-        return obj.profile.full_name
+        return obj.PROFILE.full_name
 
     @admin.display(boolean=True)
     def is_contact_form_done(self, obj):

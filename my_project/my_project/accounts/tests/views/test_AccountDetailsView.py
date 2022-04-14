@@ -7,21 +7,23 @@ from my_project.accounts.models import Profile, ContactForm
 UserModel = get_user_model()
 
 
-class RegisterUserViewTests(django_test.TestCase):
-    def setUp(self) -> None:
-        self.regular_credentials = {
-            'username': 'user',
-            'email': 'user@email.com',
-            'password': 'testp@ss',
-        }
-        self.staff_credentials = {
-            'username': 'staff_user',
-            'email': 'staff_user@email.com',
-            'password': 'testp@ss',
-        }
+class AccountDetailsViewTests(django_test.TestCase):
+    REGULAR_USER_CREDENTIALS = {
+        'username': 'user',
+        'email': 'user@email.com',
+        'password': 'testp@ss',
+    }
+    STAFF_USER_CREDENTIALS = {
+        'username': 'staff_user',
+        'email': 'staff_user@email.com',
+        'password': 'testp@ss',
+    }
 
-        self.regular_user = UserModel.objects.create_user(**self.regular_credentials)
-        self.staff_user = UserModel.objects.create_user(**self.staff_credentials)
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.REGULAR_USER = UserModel.objects.create_user(**cls.REGULAR_USER_CREDENTIALS)
+        cls.STAFF_USER = UserModel.objects.create_user(**cls.STAFF_USER_CREDENTIALS)
 
     @staticmethod
     def _adding_permission(user):
@@ -32,13 +34,12 @@ class RegisterUserViewTests(django_test.TestCase):
         user.save()
 
     def test_account_details__when_staff_user_with_permission_visit_his_another_user__expect_right_context(self):
-        self._adding_permission(self.staff_user)
+        self._adding_permission(self.STAFF_USER)
         self.client.login(
-            username=self.staff_credentials.get('username'),
-            password=self.staff_credentials.get('password'),
+            username=self.STAFF_USER_CREDENTIALS.get('username'),
+            password=self.STAFF_USER_CREDENTIALS.get('password'),
         )
-
-        target_url = reverse('show_account_details', kwargs={'pk': self.regular_user.pk, })
+        target_url = reverse('show_account_details', kwargs={'pk': self.REGULAR_USER.pk, })
         response = self.client.get(target_url)
         self.assertTrue(response.context.get('can_staff_view_user_info'))
         self.assertTrue(response.context.get('can_staff_view_cf'))
@@ -46,11 +47,11 @@ class RegisterUserViewTests(django_test.TestCase):
 
     def test_account_details__when_staff_user_without_permission_visit_his_another_user__expect_right_context(self):
         self.client.login(
-            username=self.staff_credentials.get('username'),
-            password=self.staff_credentials.get('password'),
+            username=self.STAFF_USER_CREDENTIALS.get('username'),
+            password=self.STAFF_USER_CREDENTIALS.get('password'),
         )
 
-        target_url = reverse('show_account_details', kwargs={'pk': self.regular_user.pk, })
+        target_url = reverse('show_account_details', kwargs={'pk': self.REGULAR_USER.pk, })
         response = self.client.get(target_url)
         self.assertFalse(response.context.get('can_staff_view_user_info'))
         self.assertFalse(response.context.get('can_staff_view_cf'))
@@ -58,11 +59,11 @@ class RegisterUserViewTests(django_test.TestCase):
 
     def test_account_details__when_login_user_visit_his_account__expect_user_equal_object(self):
         self.client.login(
-            username=self.regular_credentials.get('username'),
-            password=self.regular_credentials.get('password'),
+            username=self.REGULAR_USER_CREDENTIALS.get('username'),
+            password=self.REGULAR_USER_CREDENTIALS.get('password'),
         )
 
-        target_url = reverse('show_account_details', kwargs={'pk': self.regular_user.pk, })
+        target_url = reverse('show_account_details', kwargs={'pk': self.REGULAR_USER.pk, })
         response = self.client.get(target_url)
         self.assertFalse(response.context.get('can_staff_view_user_info'))
         self.assertFalse(response.context.get('can_staff_view_cf'))

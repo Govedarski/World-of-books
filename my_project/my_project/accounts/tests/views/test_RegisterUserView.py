@@ -33,14 +33,18 @@ class RegisterUserViewTests(django_test.TestCase):
         'last_name': 'a',
     }
 
-    def setUp(self) -> None:
-        self.existing_user_credentials = {
-            'username': 'ExistingUser',
-            'email': 'existing_user@email.com',
-            'password': 'testp@ss',
-        }
-        self.existing_user = UserModel.objects.create_user(**self.existing_user_credentials)
+    EXISTING_USER_CREDENTIALS = {
+        'username': 'ExistingUser',
+        'email': 'existing_user@email.com',
+        'password': 'testp@ss',
+    }
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.EXISTING_USER = UserModel.objects.create_user(**cls.EXISTING_USER_CREDENTIALS)
+
+    def setUp(self) -> None:
         self.default_profile_data = {'gender': self._get_gender_default_choice()}
 
     def _get_gender_default_choice(self):

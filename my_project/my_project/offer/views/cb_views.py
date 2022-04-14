@@ -12,6 +12,7 @@ from my_project.offer.models import Offer
 
 
 class CreateOfferView(LoginRequiredMixin, CreateView):
+    PERMISSION_DENIED_MASSAGE = 'You cannot make offer for your own book!'
     template_name = 'offer/create_offer.html'
     form_class = CreateOfferForm
     success_url = reverse_lazy('show_offer_list')
@@ -21,7 +22,7 @@ class CreateOfferView(LoginRequiredMixin, CreateView):
         if self.request.user.is_authenticated and not self.request.user.contactform.is_completed:
             return redirect(reverse_lazy('edit_contacts') + f"?next={self.request.path}#edit")
         if self.request.user == self._get_wanted_book().owner:
-            raise PermissionDenied('You cannot make offer for your own book!')
+            raise PermissionDenied(self.PERMISSION_DENIED_MASSAGE)
         return result
 
     def get_initial(self):
@@ -46,6 +47,8 @@ class CreateOfferView(LoginRequiredMixin, CreateView):
         offer.recipient_books.add(self._get_wanted_book())
         offer.save()
         return result
+    
+
 
     def _get_wanted_book(self):
         return Book.objects.get(pk=self.kwargs.get('pk'))

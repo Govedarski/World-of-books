@@ -3,7 +3,9 @@
     <h1>{{ notification }}</h1>
     <ul class="text-left">
         <li>Sender: <a href="{% url 'show_account_details' notification.sender.pk %}">{{ notification.sender }}</a></li>
+        {% if notification.book %}
         <li>Book: <a href="{% url 'book_details' notification.book.pk %}">{{ notification.book.title }}</a></li>
+        {% endif %}
         <li>Date: {{ notification.received_date }}</li>
     </ul>
     {% if not notification.is_answered %}

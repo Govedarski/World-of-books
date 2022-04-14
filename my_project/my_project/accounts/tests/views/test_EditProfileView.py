@@ -7,15 +7,19 @@ from my_project.accounts.models import ContactForm, Profile
 UserModel = get_user_model()
 
 
-class RegisterUserViewTests(django_test.TestCase):
-    def setUp(self) -> None:
-        self.credentials = {
-            'username': 'User',
-            'email': 'user@email.com',
-            'password': 'testp@ss',
-        }
-        self.user = UserModel.objects.create_user(**self.credentials)
+class EditProfileViewTests(django_test.TestCase):
+    CREDENTIALS = {
+        'username': 'User',
+        'email': 'user@email.com',
+        'password': 'testp@ss',
+    }
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.USER = UserModel.objects.create_user(**cls.CREDENTIALS)
+
+    def setUp(self) -> None:
         self.valid_profile_data = {
             'first_name': 'Test',
             'last_name': 'User',
@@ -25,8 +29,8 @@ class RegisterUserViewTests(django_test.TestCase):
 
     def _login(self):
         self.client.login(
-            username=self.credentials.get('username'),
-            password=self.credentials.get('password'),
+            username=self.CREDENTIALS.get('username'),
+            password=self.CREDENTIALS.get('password'),
         )
 
     def test_edit_profile_with_valid_data__expect_save_changed_cf_and_correct_success_url(self):
@@ -37,7 +41,7 @@ class RegisterUserViewTests(django_test.TestCase):
             data=self.valid_profile_data,
         )
 
-        profile_edited = Profile.objects.get(pk=self.user.pk)
+        profile_edited = Profile.objects.get(pk=self.USER.pk)
         self.assertEqual(self.valid_profile_data['first_name'], profile_edited.first_name)
         self.assertEqual(self.valid_profile_data['last_name'], profile_edited.last_name)
         self.assertEqual(self.valid_profile_data['description'], profile_edited.description)
@@ -53,7 +57,7 @@ class RegisterUserViewTests(django_test.TestCase):
             data=self.valid_profile_data,
         )
 
-        profile_edited = Profile.objects.get(pk=self.user.pk)
+        profile_edited = Profile.objects.get(pk=self.USER.pk)
         profile_form = response.context.get('form')
         self.assertIsNone(profile_edited.first_name)
         self.assertIsNone(profile_edited.last_name)
@@ -71,7 +75,7 @@ class RegisterUserViewTests(django_test.TestCase):
             data=self.valid_profile_data,
         )
 
-        profile_edited = Profile.objects.get(pk=self.user.pk)
+        profile_edited = Profile.objects.get(pk=self.USER.pk)
         profile_form = response.context.get('form')
         self.assertIsNone(profile_edited.first_name)
         self.assertIsNone(profile_edited.last_name)

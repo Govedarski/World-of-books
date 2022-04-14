@@ -4,13 +4,9 @@ from my_project.library.models import Book
 from my_project.offer.tests.views.cbv.test_CreateOfferView.setup import SetupCreateOfferViewTests
 
 
-class CreateOfferViewTestsInit(SetupCreateOfferViewTests):
+class CreateOfferViewTestsGet(SetupCreateOfferViewTests):
     def test_create_offer_get__when_one_on_one_books__expect_right_initial(self):
-        self._create_book(
-            title='Offered book',
-            author='Offered author',
-            owner=self.USER
-        )
+        self._create_book(self.USER)
         self._set_user_cf()
         self._login()
 
@@ -28,16 +24,8 @@ class CreateOfferViewTestsInit(SetupCreateOfferViewTests):
         self.assertQuerysetEqual(expected_init_recipient_books, result_init_recipient_books)
 
     def test_create_offer_get__when_one_on_many_books__expect_right_initial(self):
-        self._create_book(
-            title='Offered book',
-            author='Offered author',
-            owner=self.USER
-        )
-        self._create_book(
-            title='Offered book',
-            author='Offered author',
-            owner=self.SECOND_USER
-        )
+        self._create_book(self.USER)
+        self._create_book(self.SECOND_USER)
 
         self._set_user_cf()
         self._login()
@@ -57,16 +45,8 @@ class CreateOfferViewTestsInit(SetupCreateOfferViewTests):
 
     def test_create_offer_get__when_many_on_many_books__expect_right_initial(self):
         for _ in range(3):
-            self._create_book(
-                title='Offered book',
-                author='Offered author',
-                owner=self.USER
-            )
-            self._create_book(
-                title='Offered book',
-                author='Offered author',
-                owner=self.SECOND_USER
-            )
+            self._create_book(self.USER)
+            self._create_book(self.SECOND_USER)
 
         self._set_user_cf()
         self._login()
