@@ -22,14 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 APP_ENVIRONMENT = os.getenv('APP_ENVIRONMENT')
 
-SECRET_KEY = 'django-insecure-3&ul(x3&ze^(!f3ze3+f@=-hf7j(z1=_2a8d&&*-)avtudy5d7'
-
+SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = False if APP_ENVIRONMENT else True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'theworldofbooks.herokuapp.com',
-    'admin',
+    'https://www.theworldofbooks.herokuapp.com/',
 ]
 
 INSTALLED_APPS = [

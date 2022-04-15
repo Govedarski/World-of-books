@@ -1,17 +1,20 @@
 {% if user.is_active %}
 
-<div class="d-flex flex-column text-left margin-left-final">
-    <h5><u>Name:</u> {{ user.profile.full_name }}</h5>
-    {% if user.profile.nationality %}
-        <h5><u>Nationality:</u> {{ user.profile.nationality }}</h5>
+    <div class="d-flex flex-column text-left margin-left-final">
+        <h5><u>Name:</u> {{ user.profile.full_name }}</h5>
+        {% if user.profile.nationality %}
+            <h5><u>Nationality:</u> {{ user.profile.nationality }}</h5>
+        {% endif %}
+        <h5><u>Date of birth:</u> {{ user.profile.date_of_birth|date:'d N Y' }}</h5>
+        {% if not user.profile.gender == 'Do not show' %}
+            <h5><u>Gender:</u> {{ user.profile.gender }}</h5>
+        {% endif %}
+        {% if user.profile.description %}
+            <h5><u>Description:</u> {{ user.profile.description }}</h5>
+        {% endif %}
+
+    </div>
+    {% if request.user == user %}
+        <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit</a>
     {% endif %}
-    <h5><u>Date of birth:</u> {{ user.profile.date_of_birth|date:'d N Y' }}</h5>
-    {% if not user.profile.gender == 'Do not show' %}
-        <h5><u>Gender:</u> {{ user.profile.gender }}</h5>
-    {% endif %}
-    <h5><u>Description:</u> {{ user.profile.description }}</h5>
-</div>
-{% if request.user == user %}
-    <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit</a>
-{% endif %}
 {% endif %}
