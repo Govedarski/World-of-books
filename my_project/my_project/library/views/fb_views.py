@@ -3,15 +3,9 @@ from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 
+from my_project.common.helpers.custom_wrapers import access_required
 from my_project.common.models import Notification
 from my_project.library.models import Book
-
-
-def get_object_or_raise_exception(my_model, pk, user, field):
-    my_obj = get_object_or_404(my_model, pk=pk)
-    if not user == getattr(my_obj, field):
-        raise PermissionDenied()
-    return my_obj
 
 
 def is_answer_already(notification):
@@ -40,9 +34,8 @@ def like_book_view(request, pk):
 
 
 @login_required()
-def accept_delete_book_view(request, pk):
-    access_grant_field = 'recipient'
-    notification = get_object_or_raise_exception(Notification, pk, request.user, access_grant_field)
+@access_required(Notification, 'recipient')
+def accept_delete_book_view(request, pk, notification):
     book = notification.book
     if not book:
         raise Http404
@@ -59,9 +52,8 @@ def accept_delete_book_view(request, pk):
 
 
 @login_required()
-def reject_delete_book_view(request, pk):
-    access_grant_field = 'recipient'
-    notification = get_object_or_raise_exception(Notification, pk, request.user, access_grant_field)
+@access_required(Notification, 'recipient')
+def reject_delete_book_view(request, pk, notification):
     book = notification.book
     if not book:
         raise Http404
@@ -73,10 +65,8 @@ def reject_delete_book_view(request, pk):
 
 
 @login_required()
-def receive_book_view(request, pk):
-    access_grant_field = 'next_owner'
-    book = get_object_or_raise_exception(Book, pk, request.user, access_grant_field)
-
+@access_required(Book, 'next_owner')
+def receive_book_view(request, pk, book):
     book.owner = book.next_owner
     book.previous_owner = None
     book.next_owner = None

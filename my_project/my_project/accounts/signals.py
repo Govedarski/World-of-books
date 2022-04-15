@@ -24,7 +24,7 @@ def create_contact_form_with_registration(instance, created, **kwargs):
 
 
 @receiver(signals.post_save, sender=SocialAccount)
-def fill_profile__with_google_account(instance, created, **kwargs):
+def fill_profile_with_google_account(instance, created, **kwargs):
     if not created:
         return None
 

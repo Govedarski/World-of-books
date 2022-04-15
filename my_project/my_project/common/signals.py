@@ -46,7 +46,7 @@ def notification_on_offer_reply(instance, **kwargs):
 
 @receiver(m2m_changed, sender=Book.likes.through)
 def notification_on_like_dislike(instance, action, pk_set, **kwargs):
-    if not instance.owner:
+    if not instance.owner or not pk_set:
         return
     signal, signal_action = action.split('_')
     if signal == 'post':
