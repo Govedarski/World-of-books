@@ -95,11 +95,19 @@ class Notification(models.Model):
 
 
     @classmethod
-    def create_notification_for_book(cls, sender, recipient, book):
-        pass
+    def create_notification_for_deleted_book(cls, kwargs):
+        book = kwargs.get('book')
+        sender = kwargs.get('sender')
+        massage = f'{sender} send {book} to you without deal between you?'
+        return cls.create_notification(massage, **kwargs)
 
     @classmethod
-    def create_notification_for_like_or_dislike(cls, sender, recipient, book):
-        pass
+    def create_notification_for_like_or_dislike(cls, action, kwargs):
+        book = kwargs.get('book')
+        sender = kwargs.get('sender')
+        massage = f'{sender} {action} your book {book}'
+        kwargs.update({'is_answered': True})
+
+        return cls.create_notification(massage, **kwargs)
 
 

@@ -29,23 +29,12 @@ def like_book_view(request, pk):
     if request.user == book.owner:
         raise PermissionDenied(access_denied_massage)
 
-    notification = Notification(
-        sender=request.user,
-        recipient=book.owner,
-        book=book,
-        is_answered=True,
-    )
-
     if request.user in book.likes.all():
-        action = 'dislikes'
         book.likes.remove(request.user)
     else:
-        action = 'likes'
         book.likes.add(request.user)
 
-    notification.massage = f'{request.user} {action} your book {book}'
     book.save()
-    notification.save()
 
     return redirect(back)
 

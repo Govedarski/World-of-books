@@ -224,18 +224,14 @@ class DeleteBookView(LoginRequiredMixin, AuthorizationRequiredMixin, DeleteView)
         book.save()
         if not user_pk == '0':
             user = get_user_model().objects.get(pk=user_pk)
-            notification = Notification(
-                sender=self.request.user,
-                recipient=user,
-                book=book,
-                massage=self.__get_notification_massage()
+            Notification.create_notification_for_deleted_book(
+                kwargs={ 'sender':self.request.user,
+                'recipient':user,
+                'book':book,}
             )
-            notification.save()
         return redirect(self.get_success_url())
 
     def get_success_url(self):
         pk = self.request.user.pk
         return reverse_lazy('show_books_dashboard', kwargs={'pk': pk})
 
-    def __get_notification_massage(self):
-        return f'{self.request.user} send {self.get_object()} to you without deal between you?'
