@@ -106,9 +106,11 @@ class ShowBooksDashboardView(ShowBookView):
 
 
 class ShowBooksOnAWayView(LoginRequiredMixin, ShowBookView):
+    TITLE = 'Books on a way to you'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Books on a way to you'
+        context['title'] = self.TITLE
         return context
 
     def _get_query_filter_field(self):
@@ -116,10 +118,11 @@ class ShowBooksOnAWayView(LoginRequiredMixin, ShowBookView):
 
 
 class ShowBooksToSendView(LoginRequiredMixin, ShowBookView):
+    TITLE = 'Books you have to send!'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Books you have to send!'
+        context['title'] = self.TITLE
         return context
 
     def _get_query_filter_field(self):
@@ -164,13 +167,13 @@ class DetailsBookView(DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         book = self.get_object()
-        if not (book.owner or book.next_owner or self.request.user.has_perm('accounts.view_book')):
+        if not (book.owner or book.next_owner or self.request.user.has_perm('library.view_book')):
             raise Http404()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['can_staff_edit'] = self.request.user.has_perm('accounts.view_book')
+        context['can_staff_edit'] = self.request.user.has_perm('library.view_book')
         return context
 
     def post(self, *args, **kwargs):
@@ -179,7 +182,7 @@ class DetailsBookView(DetailView):
             raise PermissionDenied
         book.is_tradable = not book.is_tradable
         book.save()
-        return self.render_to_response(context={'book': book})
+        return redirect(self.request.path)
 
     def get_template_names(self):
         book = self.get_object()

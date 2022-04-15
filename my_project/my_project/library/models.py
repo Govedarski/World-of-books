@@ -41,8 +41,7 @@ class Book(models.Model):
         to=Category,
         null=True,
         blank=True,
-        default='',
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.SET_NULL,
     )
 
     image = CloudinaryField(

@@ -3,9 +3,7 @@
 {% load library_tags %}
 {% block content %}
     <h1>All books:</h1>
-    {% if request.GET %}
-    {% endif %}
-    <form action="{% url 'book_list' %}">
+    <form action="{% url 'book_list' %}" method="get">
         {{ form }}
         <input type="hidden" name="ord" value="{{ ord }}">
         <input type="hidden" name="ord_by" value="{{ ord_by }}">

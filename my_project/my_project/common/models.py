@@ -99,9 +99,7 @@ class Notification(models.Model):
         pass
 
     @classmethod
-    def create_notification_for_like(cls, sender, recipient, book):
+    def create_notification_for_like_or_dislike(cls, sender, recipient, book):
         pass
 
-    @classmethod
-    def create_notification_for_dislike(cls, sender, recipient, book):
-        pass
+
