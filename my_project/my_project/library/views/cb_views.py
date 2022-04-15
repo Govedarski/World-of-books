@@ -106,7 +106,7 @@ class ShowBooksDashboardView(ShowBookView):
 
 
 class ShowBooksOnAWayView(LoginRequiredMixin, ShowBookView):
-    TITLE = 'Books on a way to you'
+    TITLE = 'Books on the way to you'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -5,7 +5,7 @@
     {% if user.profile.nationality %}
         <h5><u>Nationality:</u> {{ user.profile.nationality }}</h5>
     {% endif %}
-    <h5><u>Birthdate:</u> {{ user.profile.date_of_birth|date:'d N Y' }}</h5>
+    <h5><u>Date of birth:</u> {{ user.profile.date_of_birth|date:'d N Y' }}</h5>
     {% if not user.profile.gender == 'Do not show' %}
         <h5><u>Gender:</u> {{ user.profile.gender }}</h5>
     {% endif %}

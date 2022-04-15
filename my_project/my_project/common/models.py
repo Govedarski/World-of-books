@@ -105,7 +105,7 @@ class Notification(models.Model):
     def create_notification_for_like_or_dislike(cls, action, kwargs):
         book = kwargs.get('book')
         sender = kwargs.get('sender')
-        massage = f'{sender} {action} your book {book}'
+        massage = f'{sender} {action}s your book {book}'
         kwargs.update({'is_answered': True})
 
         return cls.create_notification(massage, **kwargs)

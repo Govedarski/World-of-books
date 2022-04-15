@@ -7,7 +7,7 @@
         <div class="text-left margin-left-final">
             {% if s_missing_books %}
 
-                <h3>This books are not more part of {{ offer.sender }}'s collection:</h3>
+                <h3>These books are no longer part of {{ offer.sender }}'s collection:</h3>
                 <ul>
                     {% for book in s_missing_books %}
                         <li><a href="{% url 'book_details' book.pk %}">{{ book }}</a></li>
@@ -20,7 +20,7 @@
 
             {% if r_missing_books %}
 
-                <h3>This books are not more part of {{ offer.recipient }}'s collection:</h3>
+                <h3>These books are no longer part of {{ offer.recipient }}'s collection:</h3>
                 <ul>
 
                     {% for book in r_missing_books %}

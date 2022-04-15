@@ -27,12 +27,12 @@
                         {{ book.previous_owner }}</a></h3>
                     <h3>{{ book.previous_owner }}'s phone number:
                         +359/{{ book.previous_owner.contactform.phone_number }}</h3>
-                    <h3>Email:{{ book.previous_owner.email }}</h3>
+                    <h3>Email: {{ book.previous_owner.email }}</h3>
 
                 </div>
             </div>
         </div>
-        <h2>Do you receive it?</h2>
+        <h2>Have you received it?</h2>
         <input type="button" onclick="location.href='{% url 'receive_book' book.pk %}';"
                value="Confirm"/>
     </div>
