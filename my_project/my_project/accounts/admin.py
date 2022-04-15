@@ -34,7 +34,6 @@ class ContactFormFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         contact_forms = ContactForm.objects.all()
-        print(self.value())
         if self.value() == 'True':
             contact_forms = [cf for cf in contact_forms if cf.is_completed]
         elif self.value() == 'False':
@@ -52,7 +51,7 @@ class UserModelAdmin(admin.ModelAdmin):
     list_filter_staff = ('username', ContactFormFilter)
     list_filter_superuser_extra = ('is_staff', 'is_superuser')
     list_per_page = 20
-    search_fields = ('username', 'profile__first_name', 'last__first_name')
+    search_fields = ('username', 'profile__first_name', 'profile__last_name')
     sortable_by = ('id', 'username', 'name', 'books_number')
 
     PRIMARY_FIELDS_DESCRIPTION = 'Very important fields'

@@ -12,7 +12,7 @@ class OfferAdmin(admin.ModelAdmin):
 
     list_filter = ('is_accept', 'is_active',)
     list_per_page = 20
-    search_fields = ('sender', 'recipient',)
+    search_fields = ('sender__username', 'recipient__username')
     sortable_by = ('__str__', 'received_date', 'sender', 'recipient', 'previous_offer')
 
     def get_queryset(self, request):
