@@ -22,36 +22,34 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 APP_ENVIRONMENT = os.getenv('APP_ENVIRONMENT')
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY', 'sk')
 DEBUG = False if APP_ENVIRONMENT else True
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'theworldofbooks.herokuapp.com',
-]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split()
 
-INSTALLED_APPS = [
-    # DJANGO APPS
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
+    'django.contrib.sites', ]
 
-    # THIRD PARTY APPS
+THIRD_PARTY_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-
-    # MY APPS
-    'my_project.common',
-    'my_project.accounts',
-    'my_project.library',
-    'my_project.offer',
 ]
+
+MY_APPS = ['my_project.common',
+           'my_project.accounts',
+           'my_project.library',
+           'my_project.offer',
+           ]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + MY_APPS
 
 MIDDLEWARE = [
     'my_project.middlewares.handle_server_internal_error',
@@ -162,19 +160,19 @@ STATICFILES_DIRS = (
 )
 
 cloudinary.config(
-    cloud_name="hvumptw7s",
-    api_key="331815575835463",
-    api_secret="56veOLp5yHF6WbsQZSWinOggStE",
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME', None),
+    api_key=os.getenv('CLOUDINARY_API_KEY', None),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET', None),
     secure=True
 )
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_PORT = os.getenv('EMAIL_PORT')
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'theworldofbooks.project@gmail.com'
-EMAIL_HOST_PASSWORD = 'lfmnleybhzboeutj'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 LOGS_DIR = BASE_DIR / 'Logs'
 
