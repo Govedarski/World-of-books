@@ -6,7 +6,6 @@ from my_project.library.models import Book, Category
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    view_on_site = True
     list_display = ('id', 'title', 'author',
                     'owner', 'previous_owner', 'next_owner', 'number_of_ex_owners', 'number_of_likes', 'is_tradable')
     list_display_links = ('id', 'title',)
@@ -37,6 +36,9 @@ class BookAdmin(admin.ModelAdmin):
           }
          ),
     )
+
+    def view_on_site(self, obj):
+        return obj.get_absolute_url()
 
     @staticmethod
     def lost_permission_check(func):
