@@ -3,6 +3,9 @@
 {% block content %}
     <div class="text-left">
         <ul>
+        {% if not notifications %}
+        <h1>There are no notifications</h1>
+        {% endif %}
             {% for notification in notifications %}
                 <li>
                     {% if not notification.is_read %}

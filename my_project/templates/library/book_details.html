@@ -61,7 +61,7 @@
 
                     {% if book.is_tradable and book.owner and not book.owner == request.user %}
                         <div class="text-center">
-                            <a class="btn btn-success inline" href="{% url 'create_offer' book.pk %}">Make a offer</a>
+                            <a class="btn btn-success inline" href="{% url 'create_offer' book.pk %}">Make an offer</a>
                         </div>
                     {% endif %}
                     <h5><u>Likes: {{ book.likes_count }} times</u>

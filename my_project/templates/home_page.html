@@ -3,8 +3,8 @@
 {% load static %}
 {% block content %}
     <div>
-        <h1>The world of books</h1>
-        <h3><p>“A reader lives a thousand lives before he dies . . . The man who never reads lives only one.”
+        <h1>The World of Books</h1>
+        <h3><p>“A reader lives a thousand lives before he dies . . . The man who never reads lives only once.”
         </p>
             <p>— George R.R. Martin</p>
         </h3>
@@ -15,7 +15,7 @@
         <input value="-" type="hidden" name="ord">
         <button class="opacity-format">Search</button>
     </form>
-    <h1>Top most liked books:</h1>
+    <h1>Most liked books:</h1>
     <div class='my-books-list'>
         {% for book in books_to_show %}
             <div class="book-information myBooks">
