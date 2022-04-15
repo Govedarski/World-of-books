@@ -29,6 +29,7 @@ DEBUG = False if APP_ENVIRONMENT else True
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'theworldofbooks.herokuapp.com',
+    'admin',
 ]
 
 INSTALLED_APPS = [
