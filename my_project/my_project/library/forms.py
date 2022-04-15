@@ -5,6 +5,8 @@ from django.db import models
 from my_project.common.helpers.custom_mixins import AddCCSMixin
 from my_project.library.models import Book, Category
 
+UserModel = get_user_model()
+
 
 class BookForm(AddCCSMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):

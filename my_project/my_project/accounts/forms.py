@@ -1,13 +1,14 @@
-import os
 from datetime import date
 
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm, SetPasswordForm, \
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, SetPasswordForm, \
     PasswordChangeForm
 
 from my_project.accounts.models import Profile, ContactForm
 from my_project.common.helpers.custom_mixins import AddCCSMixin, RemoveHelpTextMixin
+
+UserModel = get_user_model()
 
 
 class CreateUserForm(AddCCSMixin, RemoveHelpTextMixin, UserCreationForm):
@@ -21,7 +22,7 @@ class CreateUserForm(AddCCSMixin, RemoveHelpTextMixin, UserCreationForm):
         self.fields['password2'].label = "Confirm Password"
 
     class Meta:
-        model = get_user_model()
+        model = UserModel
         fields = ['username', 'email']
 
 
@@ -73,7 +74,7 @@ class EditEmailForm(AddCCSMixin, forms.ModelForm):
         self._add_ccs('my_form_control', 'width-75', 'opacity-format')
 
     class Meta:
-        model = get_user_model()
+        model = UserModel
         fields = ['email']
 
 
@@ -88,5 +89,3 @@ class EditContactForm(AddCCSMixin, forms.ModelForm):
     class Meta:
         model = ContactForm
         exclude = ['user']
-
-

@@ -26,6 +26,7 @@ class OnlyLetterValidator:
         if not value.isalpha():
             raise ValidationError(self.ERROR_MESSAGE)
 
+
 @deconstructible
 class OnlyNumberValidator:
     ERROR_MESSAGE = 'The field should consist of numbers only!'

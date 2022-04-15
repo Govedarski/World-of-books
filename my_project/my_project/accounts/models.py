@@ -1,13 +1,12 @@
 from datetime import date
 
 from cloudinary.models import CloudinaryField
-from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.core import validators
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 
 from my_project.accounts.managers import MyUserManager
 from my_project.common.helpers import custom_validators
@@ -75,7 +74,7 @@ class Profile(models.Model):
         DO_NOT_SHOW = "Do not show", "Do not show"
 
     user = models.OneToOneField(
-        get_user_model(),
+        WorldOfBooksUser,
         on_delete=models.CASCADE,
         primary_key=True,
     )
@@ -160,7 +159,7 @@ class ContactForm(models.Model):
     PHONE_NUMBER_MAX_LENGTH = 9
 
     user = models.OneToOneField(
-        get_user_model(),
+        WorldOfBooksUser,
         on_delete=models.CASCADE,
         primary_key=True,
     )

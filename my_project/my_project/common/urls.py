@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.urls import path
 
 from my_project.common.views import ShowHomePageView, ShowNotificationsView, DetailsNotificationView

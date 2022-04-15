@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.db.models import Count, Q
+from django.db.models import Count
 
 from my_project.library.models import Book, Category
 

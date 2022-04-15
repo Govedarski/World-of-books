@@ -51,7 +51,6 @@ class NegotiateOfferForm(AddCCSMixin, forms.ModelForm):
         fields = ['recipient_books', 'sender_books']
 
     def clean(self):
-        p=1
         if all(self.initial[field] == list(self.cleaned_data[field]) for field in self.initial):
             raise ValidationError(self.NOT_CHANGE_ERROR)
         return super().clean()

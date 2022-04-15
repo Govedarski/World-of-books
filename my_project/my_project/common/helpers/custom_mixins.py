@@ -31,4 +31,3 @@ class AuthorizationRequiredMixin(UserPassesTestMixin):
         obj = self.get_object()
         authorized_users = [getattr(obj, field) for field in self.authorizing_fields]
         return self.request.user in authorized_users
-

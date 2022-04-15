@@ -47,8 +47,6 @@ class CreateOfferView(LoginRequiredMixin, CreateView):
         offer.recipient_books.add(self._get_wanted_book())
         offer.save()
         return result
-    
-
 
     def _get_wanted_book(self):
         return Book.objects.get(pk=self.kwargs.get('pk'))

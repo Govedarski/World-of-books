@@ -4,15 +4,15 @@ from django.db import models
 # Create your models here.
 from my_project.library.models import Book
 
-
+UserModel = get_user_model()
 class Offer(models.Model):
     sender = models.ForeignKey(
-        get_user_model(),
+        UserModel,
         on_delete=models.DO_NOTHING,
         related_name='sender_offer',
     )
     recipient = models.ForeignKey(
-        get_user_model(),
+        UserModel,
         on_delete=models.DO_NOTHING,
         related_name='receiver_offer',
     )

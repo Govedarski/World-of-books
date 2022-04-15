@@ -6,4 +6,3 @@ class LogoutRequiredMixin:
         if request.user.is_authenticated:
             return redirect('show_home')
         return super().dispatch(request, *args, **kwargs)
-

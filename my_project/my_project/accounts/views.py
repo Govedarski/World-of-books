@@ -15,10 +15,12 @@ from my_project.accounts.models import Profile, ContactForm
 from my_project.library.models import Book
 from my_project.offer.models import Offer
 
+UserModel = get_user_model()
+
 
 class RegisterUserView(LogoutRequiredMixin, CreateView):
     form_class = CreateUserForm
-    model = get_user_model()
+    model = UserModel
     success_url = reverse_lazy('done_registration')
     template_name = 'accounts/create_user.html'
     second_form = ProfileForm
@@ -95,7 +97,7 @@ class MyPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
 
 
 class AccountDetailsView(DetailView):
-    model = get_user_model()
+    model = UserModel
     template_name = 'accounts/account_details.html'
     context_object_name = 'user'
 
@@ -113,7 +115,7 @@ class EditEmailView(LoginRequiredMixin, UpdateView):
     form_class = EditEmailForm
 
     def get_object(self, queryset=None):
-        return get_user_model().objects.get(pk=self.request.user.pk)
+        return UserModel.objects.get(pk=self.request.user.pk)
 
     def get_success_url(self):
         return self.request.user.get_absolute_url()
@@ -144,12 +146,12 @@ class EditContactsView(LoginRequiredMixin, UpdateView):
 
 class DeactivateUserView(LoginRequiredMixin, DeleteView):
     template_name = 'accounts/deactivate_user.html'
-    model = get_user_model()
+    model = UserModel
     fields = "__all__"
     success_url = reverse_lazy('show_home')
 
     def get_object(self, queryset=None):
-        return get_user_model().objects.get(pk=self.request.user.pk)
+        return UserModel.objects.get(pk=self.request.user.pk)
 
     def post(self, request, *args, **kwargs):
         result = super().post(request, *args, **kwargs)

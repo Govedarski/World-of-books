@@ -1,12 +1,10 @@
+# Create your models here.
+from cloudinary.models import CloudinaryField
 from django.contrib.auth import get_user_model
 from django.db import models
-
-# Create your models here.
-from django.db.models.functions import Lower
-from cloudinary.models import CloudinaryField
 from django.urls import reverse
 
-from my_project.common.helpers import custom_validators
+UserModel = get_user_model()
 
 
 class Category(models.Model):
@@ -53,7 +51,7 @@ class Book(models.Model):
     )
 
     owner = models.ForeignKey(
-        to=get_user_model(),
+        to=UserModel,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -61,14 +59,14 @@ class Book(models.Model):
     )
 
     ex_owners = models.ManyToManyField(
-        to=get_user_model(),
+        to=UserModel,
         related_name='ex_books',
         blank=True,
 
     )
 
     previous_owner = models.ForeignKey(
-        to=get_user_model(),
+        to=UserModel,
         related_name='books_to_send',
         null=True,
         blank=True,
@@ -76,7 +74,7 @@ class Book(models.Model):
     )
 
     next_owner = models.ForeignKey(
-        to=get_user_model(),
+        to=UserModel,
         related_name='book_on_a_way',
         null=True,
         blank=True,
@@ -84,7 +82,7 @@ class Book(models.Model):
     )
 
     likes = models.ManyToManyField(
-        to=get_user_model(),
+        to=UserModel,
         related_name='liked_books',
         blank=True,
     )
@@ -95,7 +93,7 @@ class Book(models.Model):
 
     @property
     def likes_count(self):
-        return len(self.likes.all())
+        return self.likes.count()
 
     def __str__(self):
         return f'"{self.title}" by {self.author}'

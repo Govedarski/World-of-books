@@ -12,6 +12,8 @@ from my_project.common.models import Notification
 from my_project.library.forms import SearchForm, BookForm, UsersListForm
 from my_project.library.models import Book, Category
 
+UserModel = get_user_model()
+
 
 class ShowBookListView(PaginationShowMixin, ListView):
     template_name = 'library/book_list.html'
@@ -37,7 +39,7 @@ class ShowBookListView(PaginationShowMixin, ListView):
             owner__isnull=False, owner__is_active=True).annotate(like_count=Count('likes')).order_by(
             '-like_count', 'title')
         if self.search_by == SearchForm.SearchByChoices.owner:
-            owner = get_user_model().objects.filter(username__icontains=self.search)
+            owner = UserModel.objects.filter(username__icontains=self.search)
             query_set = query_set.filter(owner__in=owner)
         elif self.search_by:
             query_filter = {f'{self.search_by}__icontains': self.search}
@@ -93,7 +95,7 @@ class ShowBookView(PaginationShowMixin, ListView):
 
     def _get_owner(self):
         pk = self.kwargs.get('pk', self.request.user.pk)
-        return get_object_or_404(get_user_model(), pk=pk)
+        return get_object_or_404(UserModel, pk=pk)
 
     @staticmethod
     def _get_query_filter_field():
@@ -212,7 +214,7 @@ class DeleteBookView(LoginRequiredMixin, AuthorizationRequiredMixin, DeleteView)
 
     def get(self, *args, **kwargs):
         choices = [(0, 'nobody')] + [(user.pk, user.username) for user in
-                                     get_user_model().objects.exclude(pk=self.request.user.pk)]
+                                     UserModel.objects.exclude(pk=self.request.user.pk)]
         self.form_class.base_fields['user'].choices = choices
         return super().get(*args, **kwargs)
 
@@ -223,15 +225,14 @@ class DeleteBookView(LoginRequiredMixin, AuthorizationRequiredMixin, DeleteView)
         book.owner = None
         book.save()
         if not user_pk == '0':
-            user = get_user_model().objects.get(pk=user_pk)
+            user = UserModel.objects.get(pk=user_pk)
             Notification.create_notification_for_deleted_book(
-                kwargs={ 'sender':self.request.user,
-                'recipient':user,
-                'book':book,}
+                kwargs={'sender': self.request.user,
+                        'recipient': user,
+                        'book': book, }
             )
         return redirect(self.get_success_url())
 
     def get_success_url(self):
         pk = self.request.user.pk
         return reverse_lazy('show_books_dashboard', kwargs={'pk': pk})
-

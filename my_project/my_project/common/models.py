@@ -6,6 +6,8 @@ from django.urls import reverse_lazy
 from my_project.library.models import Book
 from my_project.offer.models import Offer
 
+UserModel = get_user_model()
+
 
 class NotificationQueryset(QuerySet):
     def unread(self):
@@ -16,12 +18,12 @@ class Notification(models.Model):
     objects = NotificationQueryset.as_manager()
 
     sender = models.ForeignKey(
-        get_user_model(),
+        UserModel,
         on_delete=models.DO_NOTHING,
         related_name='sender_messages',
     )
     recipient = models.ForeignKey(
-        get_user_model(),
+        UserModel,
         on_delete=models.DO_NOTHING,
         related_name='receiver_messages',
     )
@@ -93,7 +95,6 @@ class Notification(models.Model):
         kwargs.update({'is_answered': True})
         return cls.create_notification(massage, **kwargs)
 
-
     @classmethod
     def create_notification_for_deleted_book(cls, kwargs):
         book = kwargs.get('book')
@@ -109,5 +110,3 @@ class Notification(models.Model):
         kwargs.update({'is_answered': True})
 
         return cls.create_notification(massage, **kwargs)
-
-
