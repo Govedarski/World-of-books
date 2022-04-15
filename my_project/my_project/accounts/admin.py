@@ -44,7 +44,6 @@ class ContactFormFilter(admin.SimpleListFilter):
 
 @admin.register(get_user_model())
 class UserModelAdmin(admin.ModelAdmin):
-    view_on_site = True
     inlines = (ProfileInline, ContactFormInline)
     list_display_staff = ('id', 'username', 'name', 'is_contact_form_done', 'books_number', 'is_staff')
     list_display_superuser_extra = ('is_staff', 'is_superuser')
@@ -77,6 +76,9 @@ class UserModelAdmin(admin.ModelAdmin):
           }
          ),
     )
+
+    def view_on_site(self, obj):
+        return obj.get_absolute_url()
 
     def get_list_display(self, request, ):
         if request.user.is_superuser:
