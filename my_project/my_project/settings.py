@@ -84,19 +84,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'my_project.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'project_db',
-        'USER': 'postgres',
-        'PASSWORD': '1123QwER',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'project_db',
+#         'USER': 'postgres',
+#         'PASSWORD': '1123QwER',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     }
+# }
+#
+# db_from_env = dj_database_url.config()
+# DATABASES['default'].update(db_from_env)
 
-db_from_env = dj_database_url.config()
-DATABASES['default'].update(db_from_env)
+DATABASES = {
+    'default': dj_database_url.parse("postgres://project_db_ymy7_user:Sl5e8t5gAW2o6vRpDKuWhO6wdwMhJzva@dpg-ch9o1j1jvhtimr9olks0-a.frankfurt-postgres.render.com/project_db_ymy7")
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -154,6 +158,8 @@ BASE_DIR_2 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATICFILES_DIRS = (
     BASE_DIR / 'static',

@@ -17,6 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from my_project.common.helpers.custom_wrapers import staff_required
 
@@ -35,3 +36,5 @@ urlpatterns += static(settings.MEDIA_URL,
 admin.site.index_title = 'The world of books'
 admin.site.site_header = ' Admin: The world of books'
 admin.site.site_title = 'Admin'
+
+urlpatterns += staticfiles_urlpatterns()
