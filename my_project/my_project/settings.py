@@ -165,20 +165,13 @@ STATICFILES_DIRS = (
     BASE_DIR / 'static',
 )
 
-# cloudinary.config(
-#     cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME', None),
-#     api_key=os.getenv('CLOUDINARY_API_KEY', None),
-#     api_secret=os.getenv('CLOUDINARY_API_SECRET', None),
-#     secure=True
-# )
-#
-# // Config
 cloudinary.config(
-  cloud_name = "dubwhljzo",
-  api_key = "529584757844257",
-  api_secret = "a9Y6IVHaDgAKQ3ky6qD0GQZxZ5I",
-  secure = False
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME', None),
+    api_key=os.getenv('CLOUDINARY_API_KEY', None),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET', None),
+    secure=True
 )
+
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
