@@ -4,6 +4,18 @@ from django.db.models import Count
 from my_project.library.models import Book, Category
 
 
+def lost_permission_check(func):
+    '''Admin lost his permissions if
+    he has accepted offer for this book'''
+
+    def wrapper(instance, request, obj=None, *args, **kwargs):
+        result = func(instance, request, obj=None, *args, **kwargs)
+        if obj and request.user in [obj.next_owner, obj.previous_owner]:
+            return False
+        return result
+
+    return wrapper
+
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'author',
@@ -40,18 +52,7 @@ class BookAdmin(admin.ModelAdmin):
     def view_on_site(self, obj):
         return obj.get_absolute_url()
 
-    @staticmethod
-    def lost_permission_check(func):
-        '''Admin lost his permissions if
-        he has accepted offer for this book'''
 
-        def wrapper(instance, request, obj=None, *args, **kwargs):
-            result = func(instance, request, obj=None, *args, **kwargs)
-            if obj and request.user in [obj.next_owner, obj.previous_owner]:
-                return False
-            return result
-
-        return wrapper
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
