@@ -99,7 +99,7 @@ WSGI_APPLICATION = 'my_project.wsgi.application'
 # DATABASES['default'].update(db_from_env)
 
 DATABASES = {
-    'default': dj_database_url.parse("postgres://project_db_ymy7_user:Sl5e8t5gAW2o6vRpDKuWhO6wdwMhJzva@dpg-ch9o1j1jvhtimr9olks0-a.frankfurt-postgres.render.com/project_db_ymy7")
+    'default': dj_database_url.parse("postgres://project_db_c78f_user:2BwR84ydAqMGz1C9qTD1XgVcBr5ZOgUb@dpg-cjauibpitvpc73cd16o0-a.oregon-postgres.render.com/project_db_c78f")
 }
 
 AUTH_PASSWORD_VALIDATORS = [
